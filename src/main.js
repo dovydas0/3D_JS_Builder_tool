@@ -1,6 +1,6 @@
 import { Scene } from "./scene"
 import { World } from "./world"
-
+import { printingCanvas } from "./mouse"
 
 const sceneObject = new Scene(75, window.innerWidth / window.innerHeight, 0.1, 1000)
 const worldObject = new World(sceneObject)
@@ -33,3 +33,5 @@ window.addEventListener('resize', () => {
   sceneObject.camera.updateProjectionMatrix();
   sceneObject.renderer.setSize(window.innerWidth, window.innerHeight);
 })
+
+printingCanvas(sceneObject)

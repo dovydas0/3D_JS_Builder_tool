@@ -1,13 +1,14 @@
 import * as THREE from 'three';
 
 export class Scene {
-  #axesHelper = new THREE.AxesHelper( 3 )
+  #axesHelper = new THREE.AxesHelper(10)
+  #gridHelper = new THREE.GridHelper(200, 200)
   #cameraHelper = null;
   
   constructor(fov, aspect, near, far) {
     this.scene = new THREE.Scene();
     this.camera = new THREE.PerspectiveCamera(fov, aspect, near, far );
-    this.renderer = new THREE.WebGLRenderer();
+    this.renderer = new THREE.WebGLRenderer({ antialias: true });
 
     this.#cameraHelper = new THREE.CameraHelper( this.camera );
   }
@@ -27,5 +28,9 @@ export class Scene {
 
   cameraHelper() {
     this.addObject(this.#cameraHelper)
+  }
+
+  gridHelper() {
+    this.addObject(this.#gridHelper)
   }
 }

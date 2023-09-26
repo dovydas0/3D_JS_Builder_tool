@@ -1,30 +1,24 @@
 import * as THREE from 'three';
+import { Entity } from '../entity';
 
-export class Floor {
-  constructor(width, depth, height = 1, color = 0xff0000, material = "Basic") {
+export class Floor extends Entity {
+  constructor(width = 20, height = 20, material = "Basic", color = 0xFFFFFF) {
+    super(null, null, width, null, height, null, null, null, null, null, color)
+    
     const threeMaterial = {
       Basic: THREE.MeshBasicMaterial,
       Phong: THREE.MeshPhongMaterial,
       Lambert: THREE.MeshLambertMaterial
     }
     const finalMaterial = threeMaterial[material]
-    
+
     this.width = width;
-    this.depth = depth;
     this.height = height;
     this.color = color;
-    this.geometry = new THREE.BoxGeometry( width, height, depth );
-    this.material = new finalMaterial({ color });
+    this.geometry = new THREE.PlaneGeometry(width, height);
+    this.material = new finalMaterial({ color: color, side: THREE.DoubleSide });
 
-    this.brick = new THREE.Mesh( this.geometry, this.material );
-  }
-
-  addObject(scene) {
-    scene.add( this.brick );
-  }
-
-  rotate(x, y, speed) {
-    this.brick.rotation.x += x
-    this.brick.rotation.y += y
+    this.mesh = new THREE.Mesh( this.geometry, this.material );
+    this.mesh.rotation.x = Math.PI / 2
   }
 }

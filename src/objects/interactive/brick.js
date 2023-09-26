@@ -11,7 +11,7 @@ export class Brick extends Entity {
    * @param {number} depth - The depth of the brick.
    * @param {number} [height=1] - The height of the brick.
    * @param {number} [color=0xff0000] - The color of the brick.
-   * @param {"Basic" | "Phong" | "Lambert"} [material="basic"] - The material type for the brick.
+   * @param {"Basic" | "Phong" | "Lambert"} [material="Basic"] - The material type for the brick.
    */
   constructor(
     x = 0,
@@ -36,12 +36,12 @@ export class Brick extends Entity {
     
     this.geometry = new THREE.BoxGeometry( width, height, depth );
     this.material = new finalMaterial({ color });
-    this.brick = new THREE.Mesh( this.geometry, this.material );
-    this.brickHelper = new THREE.BoxHelper(this.brick, 0xffff00)
+    this.mesh = new THREE.Mesh( this.geometry, this.material );
+    this.meshHelper = new THREE.BoxHelper(this.mesh, 0xffff00)
   }
 
   update(deltaTime) {
-      this.brick.rotation.x += 0.6 * deltaTime
-      this.brick.rotation.y += 0.6 * deltaTime
+      this.mesh.rotation.x += 0.6 * deltaTime
+      this.mesh.rotation.y += 0.6 * deltaTime
   }
 }
