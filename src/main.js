@@ -1,7 +1,7 @@
 import * as THREE from 'three'
 import { Scene } from "./scene"
 import { World } from "./world"
-import { onPointerMove, raycasterIntersections } from "./raycasting"
+import { onPointerUp, onPointerMove, raycasterIntersections } from "./raycasting"
 import Stats from 'three/examples/jsm/libs/stats.module'
 
 // Performance monitor
@@ -43,10 +43,13 @@ let previousTime = performance.now();
 
 animate()
 
+// REMEMBER TO REMOVE EVENT LISTENERS ON DIFFERENT MODES
 if (currentMode === modes.edit) {
   window.addEventListener("pointermove", event => {
     onPointerMove(event, pointer)
   })
+
+  window.addEventListener("pointerdown", (e) => onPointerUp(e, pointer, raycaster, sceneObject, worldObject))
 }
 
 window.addEventListener('resize', () => {

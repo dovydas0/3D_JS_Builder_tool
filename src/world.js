@@ -52,6 +52,7 @@ export class World {
   }
 
   addBuildableObject(object) {
+    this.sceneObject.addObject(object)
     this.buildableObjects.push(object)
   }
 
