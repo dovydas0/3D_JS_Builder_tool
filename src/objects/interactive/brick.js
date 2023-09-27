@@ -38,6 +38,9 @@ export class Brick extends Entity {
     this.material = new finalMaterial({ color });
     this.mesh = new THREE.Mesh( this.geometry, this.material );
     this.meshHelper = new THREE.BoxHelper(this.mesh, 0xffff00)
+    
+    this.mesh.translateX(x)
+    this.mesh.translateY(y)
   }
 
   update(deltaTime) {
