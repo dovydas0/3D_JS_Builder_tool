@@ -1,7 +1,7 @@
 import * as THREE from 'three'
 import { Scene } from "./scene"
 import { World } from "./world"
-import { onPointerUp, onPointerMove, raycasterIntersections } from "./raycasting"
+import { onPointerDown, onPointerMove, raycasterIntersections } from "./raycasting"
 import Stats from 'three/examples/jsm/libs/stats.module'
 
 // Performance monitor
@@ -49,7 +49,7 @@ if (currentMode === modes.edit) {
     onPointerMove(event, pointer)
   })
 
-  window.addEventListener("pointerdown", (e) => onPointerUp(e, pointer, raycaster, sceneObject, worldObject))
+  window.addEventListener("pointerdown", (e) => onPointerDown(e, pointer, raycaster, sceneObject, worldObject))
 }
 
 window.addEventListener('resize', () => {

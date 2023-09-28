@@ -1,5 +1,5 @@
 import * as THREE from 'three'
-import { Brick } from "./objects/interactive/brick"
+import { Block } from "./objects/interactive/block"
 import { Floor } from './objects/non-interactive/floor'
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js'
 
@@ -8,29 +8,40 @@ export class World {
     // Initializing world objects
     this.buildableObjects = []
     this.sceneObject = sceneObject
-    this.brickObject = new Brick(null, null, 10, 10, 10, 0x5511AA, "Lambert")
-    this.brickObject2 = new Brick(5, 5, 10, 2, 5, 0xFF11AA, "Basic")
-    this.floorObject = new Floor(500, 500, "Lambert")
+    this.blockObject = new Block(null, null, 10, 10, 10, 0x5511AA, "Lambert")
+    this.blockObject2 = new Block(5, 5, 10, 2, 5, 0xFF11AA, "Basic")
+    this.floorObject = new Floor(500, 500, "Basic")
+    this.floorObject.mesh.name = "floor"
     this.ambientLight = new THREE.AmbientLight(0xFFFFFF, 1)
-    this.spotLight = new THREE.SpotLight(0xFFFFFF, 10000000, 1000000, Math.PI / 4, 1, 3.6)
+    this.spotLight = new THREE.SpotLight(0xFFFFFF, 1000000, 1000000, Math.PI, 1, 2.5)
     this.controls = new OrbitControls(sceneObject.camera, sceneObject.renderer.domElement)
     // this.controls.enableDamping = true
     // this.controls.dampingFactor = 0.2
     
-    const rollOverGeo = new THREE.BoxGeometry( 1, 1, 1 );
-    this.rollOverMaterial = new THREE.MeshBasicMaterial( { color: 0x5544AA, opacity: 0.5, transparent: true } );
-    this.rollOverMesh = new THREE.Mesh( rollOverGeo, this.rollOverMaterial );
-    this.rollOverMesh.position.addScalar(0.5)
-    sceneObject.addObject( this.rollOverMesh );
+    this.placeholderBlock = new Block(null, null, 1, 1, 1, 0x5544AA, "Basic", true)
+    sceneObject.addObject( this.placeholderBlock.mesh );
 
     // adjusting objects
-    this.spotLight.translateY(100)
+    this.spotLight.position.set(0, 100, 0)
+    // this.spotLight.castShadow = true
+    
+    // this.spotLight.shadow.mapSize.width = 1024;
+    // this.spotLight.shadow.mapSize.height = 1024;
+
+    // this.spotLight.shadow.camera.near = 500;
+    // this.spotLight.shadow.camera.far = 4000;
+    // this.spotLight.shadow.camera.fov = 30;
+    // this.floorObject.mesh.receiveShadow = true
+    // this.spotLight.rotateX(10)
+    // this.spotLight.rotation.z
 
     // Initializing the scene
     sceneObject.initScene()
 
     // Placing initial objects in the scene
     sceneObject.addObject(this.floorObject.mesh)
+
+    // TEST OBJECTS
     // sceneObject.addObject(this.brickObject.mesh)
     // sceneObject.addObject(this.brickObject2.mesh)
 
@@ -45,6 +56,7 @@ export class World {
     // sceneObject.axesHelper()
     sceneObject.gridHelper(this.floorObject)
     
+    
     // Initial camera position
     sceneObject.camera.position.z = 10
     sceneObject.camera.position.y = 10
@@ -56,8 +68,12 @@ export class World {
     this.buildableObjects.push(object)
   }
 
+  getBuildableObjectArr() {
+    return this.buildableObjects
+  }
+
   update(deltaTime) {
     this.controls.update()
-    this.brickObject.update(deltaTime)
+    this.blockObject.update(deltaTime)
   }
 }

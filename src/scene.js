@@ -3,6 +3,7 @@ import * as THREE from 'three';
 export class Scene {
   #axesHelper = new THREE.AxesHelper(10)
   #gridHelper = new THREE.GridHelper(500, 500)
+  // gridHelper;
   #cameraHelper = null;
   
   constructor(fov, aspect, near, far) {
@@ -10,7 +11,7 @@ export class Scene {
     this.scene.background = new THREE.Color( 0xf0f0f0 );
     this.camera = new THREE.PerspectiveCamera(fov, aspect, near, far );
     this.renderer = new THREE.WebGLRenderer({ antialias: true });
-
+    // this.gridHelper = new THREE.GridHelper(500, 500)
     this.#cameraHelper = new THREE.CameraHelper( this.camera );
   }
 

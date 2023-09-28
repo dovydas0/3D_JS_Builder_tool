@@ -1,9 +1,8 @@
 import * as THREE from 'three'
+import { Block } from './objects/interactive/block';
 
-export const onPointerUp = (e, pointer, raycaster, sceneObject, worldObject) => {
+export const onPointerDown = (e, pointer, raycaster, sceneObject, worldObject) => {
   const initialPos = { x: e.clientX, y: e.clientY }
-
-  console.log('click');
 
   let movedDuringClick = false;
 
@@ -14,7 +13,6 @@ export const onPointerUp = (e, pointer, raycaster, sceneObject, worldObject) => 
 
     // If the mouse has moved more than a certain threshold, set the flag
     if (deltaX > 5 || deltaY > 5) {
-      console.log('moving');
       movedDuringClick = true;
     }
   };
@@ -26,15 +24,12 @@ export const onPointerUp = (e, pointer, raycaster, sceneObject, worldObject) => 
 
     if (!movedDuringClick) {
       // Mouse was clicked without movement
-      console.log('click released');
-      pointerUpEvent();
+      handlePointerUp();
     }
   };
 
-  const pointerUpEvent = () => {
+  const handlePointerUp = () => {
     raycaster.setFromCamera(pointer, sceneObject.camera)
-
-    console.log('click up executed');
 
     const intersects = raycaster.intersectObjects(worldObject.buildableObjects, false)
 
@@ -43,19 +38,18 @@ export const onPointerUp = (e, pointer, raycaster, sceneObject, worldObject) => 
         
       // adjusting the point to exactly match mouse pointer position
       let intersectLoc = intersect.point
-      intersectLoc.y += 0.5
-      intersectLoc.z -= 1
-
-      // Adding a block
+      intersectLoc.y += 0.0000001
       
-      const rollGeo = new THREE.BoxGeometry( 1, 1, 1 );
-      const rollMaterial = new THREE.MeshBasicMaterial( { color: 0x5544AA, opacity: 1 } );
-      const rollMesh = new THREE.Mesh( rollGeo, rollMaterial );
-      // rollMesh.position.addScalar(0.5)
+      // Adding a block
+      const newBlock = new Block(null, null, 1, 1, 1, 0x5544AA, "Lambert")
+      
+      newBlock.mesh.position.copy( intersectLoc )
+      newBlock.mesh.position.divideScalar(1).floor().multiplyScalar(1).addScalar( 0.5 )
+      newBlock.mesh.position.y += 0.001
+      // newBlock.mesh.castShadow = true
 
-      rollMesh.position.copy( intersectLoc ).add( intersect.face.normal );
-      rollMesh.position.divideScalar(1).floor().multiplyScalar(1).addScalar( 0.5 )
-      worldObject.addBuildableObject(rollMesh)
+      worldObject.addBuildableObject(newBlock.mesh)
+      console.log(worldObject.getBuildableObjectArr())
     }
   }
   
@@ -73,7 +67,7 @@ export const onPointerMove = (event, pointer) => {
 
 export const raycasterIntersections = (currentMode, raycaster, pointer, sceneObject, worldObject) => {
   if (currentMode === "edit") {
-    worldObject.rollOverMaterial.opacity = 0.5
+    worldObject.placeholderBlock.material.opacity = 0.5
   
     // update the picking ray with the camera and pointer position
     raycaster.setFromCamera( pointer, sceneObject.camera );
@@ -87,14 +81,19 @@ export const raycasterIntersections = (currentMode, raycaster, pointer, sceneObj
       
       // adjusting the point to exactly match mouse pointer position
       let intersectLoc = intersect.point
-      intersectLoc.y += 0.5
-      intersectLoc.z -= 1
+      intersectLoc.y += 0.0000001
+      // intersectLoc.x += 1.5
+      // intersectLoc.z += 1.5
+
+      // CHECK THE INTERSECTION COORDS
+      // console.log("intersection:", intersect.point);
+      // console.log("objects:", sceneObject.scene.children);
 
       // Rendering block's placeholder
-      worldObject.rollOverMesh.position.copy( intersectLoc ).add( intersect.face.normal );
-      worldObject.rollOverMesh.position.divideScalar(1).floor().addScalar( 0.5 )
+      worldObject.placeholderBlock.mesh.position.copy( intersectLoc )
+      worldObject.placeholderBlock.mesh.position.divideScalar(1).floor().addScalar( 0.5 )
     }
   } else {
-    worldObject.rollOverMaterial.opacity = 0
+    // worldObject.placeholderBlock.material.opacity = 0
   }
 }

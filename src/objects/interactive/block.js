@@ -4,7 +4,7 @@ import { Entity } from '../entity';
 /**
  * Represents a Brick object.
  */
-export class Brick extends Entity {
+export class Block extends Entity {
   /**
    * Create a Brick object.
    * @param {number} width - The width of the brick.
@@ -21,6 +21,7 @@ export class Brick extends Entity {
     height = 1,
     color = 0xff0000,
     material = "Basic",
+    placeholderObj = false,
     segmentsWidth = 1,
     segmentsDepth = 1,
     segmentsheight = 1,
@@ -33,12 +34,18 @@ export class Brick extends Entity {
       Lambert: THREE.MeshLambertMaterial
     }
     const finalMaterial = threeMaterial[material]
+
+    const materialProperties = placeholderObj ? {
+      color: color,
+      opacity: 0.5,
+      transparent: true
+    } : { color: color }
     
-    this.geometry = new THREE.BoxGeometry( width, height, depth );
-    this.material = new finalMaterial({ color });
+    this.geometry = new THREE.BoxGeometry( width + 0.00006, height + 0.00006, depth + 0.00006 );
+    this.material = new finalMaterial(materialProperties);
     this.mesh = new THREE.Mesh( this.geometry, this.material );
     this.meshHelper = new THREE.BoxHelper(this.mesh, 0xffff00)
-    
+
     this.mesh.translateX(x)
     this.mesh.translateY(y)
   }
