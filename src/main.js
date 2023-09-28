@@ -46,7 +46,7 @@ animate()
 // REMEMBER TO REMOVE EVENT LISTENERS ON DIFFERENT MODES
 if (currentMode === modes.edit) {
   window.addEventListener("pointermove", event => {
-    onPointerMove(event, pointer)
+    onPointerMove(event, pointer, worldObject)
   })
 
   window.addEventListener("pointerdown", (e) => onPointerDown(e, pointer, raycaster, sceneObject, worldObject))

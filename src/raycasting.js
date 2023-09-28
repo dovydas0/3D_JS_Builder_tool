@@ -39,17 +39,14 @@ export const onPointerDown = (e, pointer, raycaster, sceneObject, worldObject) =
       // adjusting the point to exactly match mouse pointer position
       let intersectLoc = intersect.point
       intersectLoc.y += 0.0000001
-      
+
       // Adding a block
       const newBlock = new Block(null, null, 1, 1, 1, 0x5544AA, "Lambert")
       
       newBlock.mesh.position.copy( intersectLoc )
       newBlock.mesh.position.divideScalar(1).floor().multiplyScalar(1).addScalar( 0.5 )
-      newBlock.mesh.position.y += 0.001
-      // newBlock.mesh.castShadow = true
 
       worldObject.addBuildableObject(newBlock.mesh)
-      console.log(worldObject.getBuildableObjectArr())
     }
   }
   
@@ -58,7 +55,9 @@ export const onPointerDown = (e, pointer, raycaster, sceneObject, worldObject) =
 }
 
 
-export const onPointerMove = (event, pointer) => {
+export const onPointerMove = (event, pointer, worldObject) => {
+  worldObject.placeholderBlock.mesh.visible = true
+
   // calculate pointer position in normalized device coordinates
   // (-1 to +1) for both components
   pointer.x = ( event.clientX / window.innerWidth ) * 2 - 1;
@@ -66,34 +65,28 @@ export const onPointerMove = (event, pointer) => {
 }
 
 export const raycasterIntersections = (currentMode, raycaster, pointer, sceneObject, worldObject) => {
-  if (currentMode === "edit") {
-    worldObject.placeholderBlock.material.opacity = 0.5
-  
+  if (currentMode === "edit") {  
     // update the picking ray with the camera and pointer position
     raycaster.setFromCamera( pointer, sceneObject.camera );
 
     // calculate objects intersecting the picking ray
     const intersects = raycaster.intersectObjects( worldObject.buildableObjects, false );
-
     
     if (intersects.length > 0) {
+
       const intersect = intersects[0]
       
       // adjusting the point to exactly match mouse pointer position
       let intersectLoc = intersect.point
       intersectLoc.y += 0.0000001
-      // intersectLoc.x += 1.5
-      // intersectLoc.z += 1.5
 
-      // CHECK THE INTERSECTION COORDS
-      // console.log("intersection:", intersect.point);
-      // console.log("objects:", sceneObject.scene.children);
+      // MAKE A CHECK FOR A SOLID SUBSTANCE BELOW THE POINT (REALISTIC BUILDING)
 
       // Rendering block's placeholder
       worldObject.placeholderBlock.mesh.position.copy( intersectLoc )
       worldObject.placeholderBlock.mesh.position.divideScalar(1).floor().addScalar( 0.5 )
     }
   } else {
-    // worldObject.placeholderBlock.material.opacity = 0
+    worldObject.placeholderBlock.mesh.visible = false
   }
 }

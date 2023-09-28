@@ -8,54 +8,52 @@ export class World {
     // Initializing world objects
     this.buildableObjects = []
     this.sceneObject = sceneObject
-    this.blockObject = new Block(null, null, 10, 10, 10, 0x5511AA, "Lambert")
-    this.blockObject2 = new Block(5, 5, 10, 2, 5, 0xFF11AA, "Basic")
-    this.floorObject = new Floor(500, 500, "Basic")
-    this.floorObject.mesh.name = "floor"
-    this.ambientLight = new THREE.AmbientLight(0xFFFFFF, 1)
-    this.spotLight = new THREE.SpotLight(0xFFFFFF, 1000000, 1000000, Math.PI, 1, 2.5)
-    this.controls = new OrbitControls(sceneObject.camera, sceneObject.renderer.domElement)
-    // this.controls.enableDamping = true
-    // this.controls.dampingFactor = 0.2
-    
     this.placeholderBlock = new Block(null, null, 1, 1, 1, 0x5544AA, "Basic", true)
-    sceneObject.addObject( this.placeholderBlock.mesh );
+    this.floorObject = new Floor(200, 200)
+    this.floorObject.mesh.name = "floor"
+    this.ambientLight = new THREE.AmbientLight(0xFFFFFF, 6)
+    this.dirLight = new THREE.DirectionalLight(0xFFFFFF, 3)
+    this.controls = new OrbitControls(sceneObject.camera, sceneObject.renderer.domElement)
+    // this.spotLight = new THREE.SpotLight(0xFFFFFF, 10000000, 1000000, Math.PI, 1, 2.5)
+    this.lightHelper = new THREE.CameraHelper(this.dirLight.shadow.camera)
+
+    // EXAMPLE OBJECTS
+    // this.blockObject = new Block(null, null, 10, 10, 10, 0x5511AA, "Lambert")
+    // this.blockObject2 = new Block(5, 5, 10, 2, 5, 0xFF11AA, "Basic")
+    // sceneObject.addObject(this.blockObject.mesh)
+    // sceneObject.addObject(this.blockObject2.mesh)
 
     // adjusting objects
-    this.spotLight.position.set(0, 100, 0)
-    // this.spotLight.castShadow = true
-    
-    // this.spotLight.shadow.mapSize.width = 1024;
-    // this.spotLight.shadow.mapSize.height = 1024;
-
-    // this.spotLight.shadow.camera.near = 500;
-    // this.spotLight.shadow.camera.far = 4000;
-    // this.spotLight.shadow.camera.fov = 30;
-    // this.floorObject.mesh.receiveShadow = true
-    // this.spotLight.rotateX(10)
-    // this.spotLight.rotation.z
+    this.dirLight.position.set(300, 300, 30)
+    this.dirLight.target.position.set(0, 0, 0)
+    this.dirLight.castShadow = true
+    this.dirLight.shadow.mapSize = new THREE.Vector2(2048, 2048)
+    this.dirLight.shadow.camera.top = 130
+    this.dirLight.shadow.camera.bottom = -130
+    this.dirLight.shadow.camera.left = -130
+    this.dirLight.shadow.camera.right = 130
+    this.placeholderBlock.mesh.visible = false
+    // this.controls.enableDamping = true
+    // this.controls.dampingFactor = 0.2
 
     // Initializing the scene
     sceneObject.initScene()
 
     // Placing initial objects in the scene
     sceneObject.addObject(this.floorObject.mesh)
-
-    // TEST OBJECTS
-    // sceneObject.addObject(this.brickObject.mesh)
-    // sceneObject.addObject(this.brickObject2.mesh)
-
+    sceneObject.addObject(this.placeholderBlock.mesh)
+    
     // constructing array of objects which will be scanned by raycaster
     this.buildableObjects.push(this.floorObject.mesh)
-
+    
     // Placing light
-    sceneObject.addObject(this.spotLight)
+    sceneObject.addObject(this.dirLight)
     sceneObject.addObject(this.ambientLight)
-
+    
     // Drawing helpers
     // sceneObject.axesHelper()
-    sceneObject.gridHelper(this.floorObject)
-    
+    // sceneObject.addObject(this.lightHelper)
+    sceneObject.gridHelper(this.floorObject)    
     
     // Initial camera position
     sceneObject.camera.position.z = 10
@@ -74,6 +72,6 @@ export class World {
 
   update(deltaTime) {
     this.controls.update()
-    this.blockObject.update(deltaTime)
+    // this.blockObject.update(deltaTime)
   }
 }

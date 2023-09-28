@@ -28,6 +28,8 @@ export class Block extends Entity {
   ) {
     super(x, y, width, depth, height, null, null, segmentsWidth, segmentsDepth, segmentsheight, color )
     
+    this.materialProperties
+
     const threeMaterial = {
       Basic: THREE.MeshBasicMaterial,
       Phong: THREE.MeshPhongMaterial,
@@ -35,16 +37,19 @@ export class Block extends Entity {
     }
     const finalMaterial = threeMaterial[material]
 
-    const materialProperties = placeholderObj ? {
-      color: color,
-      opacity: 0.5,
-      transparent: true
-    } : { color: color }
+    placeholderObj ? 
+      this.materialProperties = { color: color, opacity: 0.5, transparent: true }
+      : 
+      this.materialProperties = { color: color }
     
     this.geometry = new THREE.BoxGeometry( width + 0.00006, height + 0.00006, depth + 0.00006 );
-    this.material = new finalMaterial(materialProperties);
+    this.material = new finalMaterial(this.materialProperties);
     this.mesh = new THREE.Mesh( this.geometry, this.material );
-    this.meshHelper = new THREE.BoxHelper(this.mesh, 0xffff00)
+
+    if (!placeholderObj) {
+      this.mesh.castShadow = true;
+      this.mesh.receiveShadow = true;
+    }
 
     this.mesh.translateX(x)
     this.mesh.translateY(y)
