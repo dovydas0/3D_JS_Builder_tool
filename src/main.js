@@ -1,3 +1,5 @@
+import "./UI/Menu"
+
 import * as THREE from 'three'
 import { Scene } from "./scene"
 import { World } from "./world"
