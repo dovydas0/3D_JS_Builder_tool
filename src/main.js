@@ -47,11 +47,11 @@ animate()
 
 // REMEMBER TO REMOVE EVENT LISTENERS ON DIFFERENT MODES
 if (currentMode === modes.edit) {
-  window.addEventListener("pointermove", event => {
+  sceneObject.renderer.domElement.addEventListener("pointermove", event => {
     onPointerMove(event, pointer, worldObject)
   })
 
-  window.addEventListener("pointerdown", (e) => onPointerDown(e, pointer, raycaster, sceneObject, worldObject))
+  sceneObject.renderer.domElement.addEventListener("pointerdown", (e) => onPointerDown(e, pointer, raycaster, sceneObject, worldObject))
 }
 
 window.addEventListener('resize', () => {

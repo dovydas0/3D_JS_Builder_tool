@@ -53,7 +53,7 @@ export class World {
     // Drawing helpers
     // sceneObject.axesHelper()
     // sceneObject.addObject(this.lightHelper)
-    sceneObject.gridHelper(this.floorObject)    
+    // sceneObject.gridHelper(this.floorObject)
     
     // Initial camera position
     sceneObject.camera.position.z = 10
@@ -72,6 +72,15 @@ export class World {
 
   update(deltaTime) {
     this.controls.update()
+    const floorTiles = document.getElementById("floor-tile").checked
+    
+    if (floorTiles) {
+      this.sceneObject.gridHelper(this.floorObject)
+    } else {
+      // Remove
+      this.sceneObject.gridHelper(this.floorObject)
+    }
+    // console.log(floor);
     // this.blockObject.update(deltaTime)
   }
 }
