@@ -4,10 +4,11 @@ import { Floor } from './objects/non-interactive/floor'
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js'
 
 export class World {
-  constructor(sceneObject) {
+  constructor(sceneObject, menu) {
     // Initializing world objects
-    this.buildableObjects = []
+    this.raycastableObjects = []
     this.sceneObject = sceneObject
+    this.menu = menu
     this.placeholderBlock = new Block(null, null, 1, 1, 1, 0x5544AA, "Basic", true)
     this.floorObject = new Floor(200, 200)
     this.floorObject.mesh.name = "floor"
@@ -44,16 +45,11 @@ export class World {
     sceneObject.addObject(this.placeholderBlock.mesh)
     
     // constructing array of objects which will be scanned by raycaster
-    this.buildableObjects.push(this.floorObject.mesh)
+    this.raycastableObjects.push(this.floorObject.mesh)
     
     // Placing light
     sceneObject.addObject(this.dirLight)
     sceneObject.addObject(this.ambientLight)
-    
-    // Drawing helpers
-    // sceneObject.axesHelper()
-    // sceneObject.addObject(this.lightHelper)
-    // sceneObject.gridHelper(this.floorObject)
     
     // Initial camera position
     sceneObject.camera.position.z = 10
@@ -61,26 +57,60 @@ export class World {
     sceneObject.camera.rotation.x = -0.8
   }
 
-  addBuildableObject(object) {
+  addRaycastableObject(object) {
     this.sceneObject.addObject(object)
-    this.buildableObjects.push(object)
+    this.raycastableObjects.push(object)
   }
 
-  getBuildableObjectArr() {
-    return this.buildableObjects
+  getRaycastableObjectArr() {
+    return this.raycastableObjects
   }
 
+  
+  /**
+   * OPTIMISATION IDEA 1:
+   * Have menu handles in an object which contains:
+   *   handle: {
+   *     boolean: [floorHelper, camerHelper, ...],
+   *     slider: [lightPosition, worldSize, ...]
+   *     mode: [blockColor, ...]
+   *  }
+   *  objectExample: floorHelper: {
+   *    object: this.sceneObject.gridHelper,
+   *    state: false,
+   *  }
+   */
   update(deltaTime) {
     this.controls.update()
-    const floorTiles = document.getElementById("floor-tile").checked
     
-    if (floorTiles) {
-      this.sceneObject.gridHelper(this.floorObject)
+    // elements should only be accessed once 
+    // (in update method they're refreshed constantly)
+    // const floorTiles = document.getElementById("floor-tile").checked
+    const axisHelper = document.getElementById("axis-helper").checked
+    const lightHelper = document.getElementById("light-helper").checked
+    const cameraHelper = document.getElementById("camera-helper").checked
+    // console.log(this.menu.floorTiles);
+    
+    // Objects are also constantly being added
+    
+
+    if (axisHelper) {
+      this.sceneObject.addObject(this.sceneObject.axesHelper)
     } else {
-      // Remove
-      this.sceneObject.gridHelper(this.floorObject)
+      this.sceneObject.removeObject(this.sceneObject.axesHelper)
     }
-    // console.log(floor);
+    
+    if (lightHelper) {
+      this.sceneObject.addObject(this.lightHelper)
+    } else {
+      this.sceneObject.removeObject(this.lightHelper)
+    }
+
+    if (cameraHelper) {
+      this.sceneObject.addObject(this.sceneObject.cameraHelper)
+    } else {
+      this.sceneObject.removeObject(this.sceneObject.cameraHelper)
+    }
     // this.blockObject.update(deltaTime)
   }
 }

@@ -5,16 +5,23 @@
   font-size: 12px;
   opacity: 85%;
   height: 92vh;
-  width: 192px;
+  width: 178px;
   margin-top: 4vh;
   margin-left: 2vw;
-  padding: 0 0.5rem;
+  padding: 0 0.8rem;
   z-index: 10;
+}
+
+.helpers {
+  display: flex;
+  flex-direction: column;
 }
 
 .checkbox {
   display: flex;
-  gap: 0.5rem;
+  align-items: center;
+  justify-content: space-between;
+  margin: -0.4rem 0;
 }
 
 .modes {

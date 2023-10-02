@@ -1,8 +1,6 @@
 import * as THREE from 'three';
 
 export class Scene {
-  #axesHelper = new THREE.AxesHelper(10)
-  #gridHelper = new THREE.GridHelper(200, 200)
   #cameraHelper = null;
   
   constructor(fov, aspect, near, far) {
@@ -10,13 +8,18 @@ export class Scene {
     this.scene.background = new THREE.Color( 0xf0f0f0 );
     this.camera = new THREE.PerspectiveCamera(fov, aspect, near, far );
     this.renderer = new THREE.WebGLRenderer({ antialias: true });
-    this.#cameraHelper = new THREE.CameraHelper( this.camera );
-
+    
+    // Helpers
+    this.gridHelper = new THREE.GridHelper(200, 200)
+    this.axesHelper = new THREE.AxesHelper(10)
+    this.cameraHelper = new THREE.CameraHelper( this.camera );
+    
+    // Renderer config
     this.renderer.shadowMap.enabled = true
+    this.renderer.shadowMap.type = THREE.PCFShadowMap
     // this.renderer.shadowMap.type = THREE.BasicShadowMap
     // this.renderer.shadowMap.type = THREE.VSMShadowMap
     // this.renderer.shadowMap.type = THREE.PCFSoftShadowMap
-    this.renderer.shadowMap.type = THREE.PCFShadowMap
   }
 
   initScene() {
@@ -27,16 +30,8 @@ export class Scene {
   addObject(object) {
     this.scene.add(object)
   }
-
-  axesHelper() {
-    this.addObject(this.#axesHelper)
-  }
-
-  cameraHelper() {
-    this.addObject(this.#cameraHelper)
-  }
-
-  gridHelper() {
-    this.addObject(this.#gridHelper)
+  
+  removeObject(object) {
+    this.scene.remove(object)
   }
 }

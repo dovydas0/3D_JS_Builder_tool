@@ -6,24 +6,49 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="stylesheet" href="styles/main.css">
     <link rel="stylesheet" href="styles/ui.css">
+    <link rel="stylesheet" href="styles/checkbox.css">
     <script defer type="module" src="src/main.js"></script>
     <title>Blocks</title>
   </head>
   <body>
     <div class="menu">
       <p>Menu</p>
-      <div>
+      <div class="helpers">
         <div class="checkbox">
           <p>Floor Tiles</p>
-          <input type="checkbox" id="floor-tile">
+          <label class="el-switch el-switch-sm">
+            <input type="checkbox" name="switch" id="floor-tile" checked>
+            <span class="el-switch-style"></span>
+          </label>
+        </div>
+        <div class="checkbox">
+          <p>Axis Helper</p>
+          <label class="el-switch el-switch-sm">
+            <input type="checkbox" name="switch" id="axis-helper">
+            <span class="el-switch-style"></span>
+          </label>
+        </div>
+        <div class="checkbox">
+          <p>Light Helper</p>
+          <label class="el-switch el-switch-sm">
+            <input type="checkbox" name="switch" id="light-helper">
+            <span class="el-switch-style"></span>
+          </label>
+        </div>
+        <div class="checkbox">
+          <p>Camera Helper</p>
+          <label class="el-switch el-switch-sm">
+            <input type="checkbox" name="switch" id="camera-helper">
+            <span class="el-switch-style"></span>
+          </label>
         </div>
       </div>
     </div>
     <div class="modes">
-      <p>STUDY</p>
-      <p class="selected-mode">EDITOR</p>
-      <p>PLAY</p>
-      <p>CRAFT</p>
+      <p id="study">STUDY</p>
+      <p id="editor" class="selected-mode">EDITOR</p>
+      <p id="play">PLAY</p>
+      <p id="craft">CRAFT</p>
     </div>
     <div class="info"></div>
   </body>
