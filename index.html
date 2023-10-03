@@ -11,40 +11,51 @@
     <title>Blocks</title>
   </head>
   <body>
-    <div class="menu">
+    <div class="menu" id="menu-ui">
       <p>Menu</p>
       <div class="helpers">
         <div class="checkbox">
           <p>Floor Tiles</p>
           <label class="el-switch el-switch-sm">
-            <input type="checkbox" name="switch" id="floor-tile" checked>
+            <input type="checkbox" name="floor-grid" id="floor-tile" checked>
             <span class="el-switch-style"></span>
           </label>
         </div>
         <div class="checkbox">
           <p>Axis Helper</p>
           <label class="el-switch el-switch-sm">
-            <input type="checkbox" name="switch" id="axis-helper">
-            <span class="el-switch-style"></span>
-          </label>
-        </div>
-        <div class="checkbox">
-          <p>Light Helper</p>
-          <label class="el-switch el-switch-sm">
-            <input type="checkbox" name="switch" id="light-helper">
-            <span class="el-switch-style"></span>
-          </label>
-        </div>
-        <div class="checkbox">
-          <p>Camera Helper</p>
-          <label class="el-switch el-switch-sm">
-            <input type="checkbox" name="switch" id="camera-helper">
+            <input type="checkbox" name="axis-helper" id="axis-helper">
             <span class="el-switch-style"></span>
           </label>
         </div>
       </div>
+      <div class="objects">
+        <p>Object</p>
+        <select class="objects-dropdown" name="objects" id="objects">
+          <option value="cube">Cube</option>
+          <option value="circle">Circle</option>
+          <option value="cylinder">Cylinder</option>
+        </select>
+      </div>
+      <div class="dimensions">
+        <p>Dimensions</p>
+        <div class="dimension-inputs" id="dimension-inputs">
+          <div class="dim-input">
+            <label for="x-dim">X</label>
+            <input type="number" name="dimensions" id="x-dim" value="1" min="1" max="50">
+          </div>
+          <div class="dim-input">
+            <label for="y-dim">Y</label>
+            <input type="number" name="dimensions" id="y-dim" value="1" min="1" max="50">
+          </div>
+          <div class="dim-input">
+            <label for="z-dim">Z</label>
+            <input type="number" name="dimensions" id="z-dim" value="1" min="1" max="50">
+          </div>
+        </div>
+      </div>
     </div>
-    <div class="modes">
+    <div class="modes" id="mode-ui">
       <p id="study">STUDY</p>
       <p id="editor" class="selected-mode">EDITOR</p>
       <p id="play">PLAY</p>

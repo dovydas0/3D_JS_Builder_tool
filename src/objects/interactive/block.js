@@ -27,7 +27,6 @@ export class Block extends Entity {
     segmentsheight = 1,
   ) {
     super(x, y, width, depth, height, null, null, segmentsWidth, segmentsDepth, segmentsheight, color )
-    
     this.materialProperties
 
     const threeMaterial = {

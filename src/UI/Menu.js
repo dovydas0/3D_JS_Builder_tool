@@ -1,40 +1,61 @@
+import { Block } from "../objects/interactive/block";
+
 export class Menu {
   constructor(sceneObject) {
+    // STORE ALL BLOCKS IN AN ARRAY HERE
+
     this.currentMode = "editor";
     this.sceneObject = sceneObject
-
+    this.currentBlock = new Block(null, null, 1, 1, 1, 0x5544AA, "Basic", true)
+  
     // Accessing all necessary handles in the menu 
     const menuWindow = document.querySelector(".menu")
     const modeSection = document.querySelector(".modes")
     this.floorTiles = document.getElementById("floor-tile").checked
+    this.axisHelper = document.getElementById("axis-helper").checked
 
     if (this.floorTiles) {
       sceneObject.addObject(this.sceneObject.gridHelper)
     }
-
-    modeSection.childNodes.forEach((item) => {
-      if (item.tagName) {
-        item.addEventListener('click', (e) => {
-          e.target.parentNode.childNodes.forEach(element => {
-            element.className = ''
-          })
-          this.currentMode = item.id
-          e.target.className = "selected-mode"
-        })
-      }
-    })
+    if (this.axisHelper) {
+      sceneObject.addObject(this.sceneObject.axesHelper)
+    }
   }
 
-  // Fix double running this method on click
-  update() {
-    this.floorTiles = document.getElementById("floor-tile").checked
+  action(eventData, worldObject) {
+    switch (eventData.name) {
+      case "floor-grid":
+        eventData.checked === true ? 
+          this.sceneObject.addObject(this.sceneObject.gridHelper)
+          :
+          this.sceneObject.removeObject(this.sceneObject.gridHelper)
+        break;
+      case "axis-helper":
+        eventData.checked === true ? 
+          this.sceneObject.addObject(this.sceneObject.axesHelper)
+          :
+          this.sceneObject.removeObject(this.sceneObject.axesHelper)
+        break;
+      case "dimensions":
+      case "objects":
+        let newBlock
+        const x = Number(document.getElementById("x-dim").value)
+        const y = Number(document.getElementById("y-dim").value)
+        const z = Number(document.getElementById("z-dim").value)
+        const object = document.getElementById("objects").value
 
-    if (this.floorTiles) {
-      console.log('adding floor grid');
-      this.sceneObject.addObject(this.sceneObject.gridHelper)
-    } else {
-      console.log('removing floor grid');
-      this.sceneObject.removeObject(this.sceneObject.gridHelper)
+        switch (object) {
+          case "cube":
+            newBlock = new Block(null, null, x, y, z, 0x5544AA, "Basic", true)
+        }
+        // Removing old placeholder object and adding a new one
+        this.sceneObject.scene.remove(worldObject.placeholderBlock.mesh)
+
+        this.currentBlock = newBlock
+        worldObject.updatePlaceholderBlock(newBlock)
+        
+        this.sceneObject.addObject(newBlock.mesh)
+        break;
     }
   }
 }

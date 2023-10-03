@@ -43,6 +43,10 @@ let previousTime = performance.now();
 
 animate()
 
+
+
+// EVENT LISTENERS FOR MOUSE INTERACTIONS
+
 // REMEMBER TO REMOVE EVENT LISTENERS ON DIFFERENT MODES
 if (menu.currentMode === modes.editor) {
   sceneObject.renderer.domElement.addEventListener("pointermove", event => {
@@ -50,13 +54,43 @@ if (menu.currentMode === modes.editor) {
   })
 
   sceneObject.renderer.domElement.addEventListener("pointerdown", (e) => {
-    onPointerDown(e, pointer, raycaster, sceneObject, worldObject, menu.currentMode)
+    onPointerDown(e, pointer, raycaster, sceneObject, worldObject, menu)
   })
 }
 
-document.querySelector('.menu').addEventListener('click', () => {
-  console.log("click");
-  menu.update()
+
+
+// UI EVENT LISTENERS
+
+document.getElementById('dimension-inputs').addEventListener('input', e => {
+  e.target.value <= 0 ? e.target.value = 1 : null
+  e.target.value >= 50 ? e.target.value = 50 : null
+    
+  menu.action({ 
+    name: "dimensions", 
+    checked: null,
+    value: e.target.value,
+  }, worldObject);
+}) 
+
+document.getElementById('menu-ui').addEventListener('click', (e) => {
+  // IF NOT ROBUST ENOUGH ADD AN HTML TAG CHECK BEFORE PASSING INFO
+
+  if (e.target.name !== "dimensions") {
+    menu.action({ 
+      name: e.target.name, 
+      checked: e.target.checked,
+      value: e.target.value,
+    }, worldObject);
+  }
+})
+
+document.getElementById('mode-ui').addEventListener('click', (e) => {
+  e.target.parentNode.childNodes.forEach(element => {
+    element.className = ''
+  })
+  menu.currentMode = e.target.id
+  e.target.className = "selected-mode"
 })
 
 window.addEventListener('resize', () => {

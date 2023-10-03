@@ -1,8 +1,8 @@
 import * as THREE from 'three'
 import { Block } from './objects/interactive/block';
 
-export const onPointerDown = (e, pointer, raycaster, sceneObject, worldObject, currentMode) => {
-  if (currentMode === "editor") {
+export const onPointerDown = (e, pointer, raycaster, sceneObject, worldObject, menu) => {
+  if (menu.currentMode === "editor") {
     const initialPos = { x: e.clientX, y: e.clientY }
   
     let movedDuringClick = false;
@@ -40,12 +40,22 @@ export const onPointerDown = (e, pointer, raycaster, sceneObject, worldObject, c
         // adjusting the point to exactly match mouse pointer position
         let intersectLoc = intersect.point
         intersectLoc.y += 0.0000001
-  
+
+        // ~~~ IMPLEMENT A CHECK FOR EXISTING BLOCKS IN THE PLACEHOLDER'S AREA
+        console.log(intersect);
+
+
         // Adding a block
-        const newBlock = new Block(null, null, 1, 1, 1, 0x5544AA, "Lambert")
-        
+        const currentBlock = {
+          depth: Math.floor(menu.currentBlock.geometry.parameters.depth),
+          height: Math.floor(menu.currentBlock.geometry.parameters.height),
+          width: Math.floor(menu.currentBlock.geometry.parameters.width)
+        }
+        const newBlock = new Block(null, null, currentBlock.width, currentBlock.depth, currentBlock.height, 0x5544AA, "Lambert")
+        const positionVector = new THREE.Vector3( Math.floor(worldObject.placeholderBlock.geometry.parameters.width) / 2, Math.floor(worldObject.placeholderBlock.geometry.parameters.height) / 2, Math.floor(worldObject.placeholderBlock.geometry.parameters.depth) / 2)
+
         newBlock.mesh.position.copy( intersectLoc )
-        newBlock.mesh.position.divideScalar(1).floor().multiplyScalar(1).addScalar( 0.5 )
+        newBlock.mesh.position.divideScalar(1).floor().add(positionVector)
   
         worldObject.addRaycastableObject(newBlock.mesh)
       }
@@ -84,11 +94,10 @@ export const raycasterIntersections = (currentMode, raycaster, pointer, sceneObj
       let intersectLoc = intersect.point
       intersectLoc.y += 0.0000001
 
-      // MAKE A CHECK FOR A SOLID SUBSTANCE BELOW THE POINT (REALISTIC BUILDING)
-
       // Rendering block's placeholder
       worldObject.placeholderBlock.mesh.position.copy( intersectLoc )
-      worldObject.placeholderBlock.mesh.position.divideScalar(1).floor().addScalar( 0.5 )
+      worldObject.placeholderBlock.mesh.position.divideScalar(1).floor()
+      .add(new THREE.Vector3( Math.floor(worldObject.placeholderBlock.geometry.parameters.width) / 2, Math.floor(worldObject.placeholderBlock.geometry.parameters.height) / 2, Math.floor(worldObject.placeholderBlock.geometry.parameters.depth) / 2))
     }
   } else {
     worldObject.placeholderBlock.mesh.visible = false

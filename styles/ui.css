@@ -1,9 +1,14 @@
+:root {
+  --menu-color: #202020;
+  --controllers-color: #3f3f3f;
+}
+
 .menu {
   position: absolute;
-  background: #000;
+  background: var(--menu-color);
   color: rgba(255, 255, 255, 1);
   font-size: 12px;
-  opacity: 85%;
+  opacity: 98%;
   height: 92vh;
   width: 178px;
   margin-top: 4vh;
@@ -11,6 +16,12 @@
   padding: 0 0.8rem;
   z-index: 10;
 }
+
+.menu > p {
+  font-size: 18px;
+  text-transform: uppercase;
+}
+
 
 .helpers {
   display: flex;
@@ -24,12 +35,64 @@
   margin: -0.4rem 0;
 }
 
+.objects {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.objects-dropdown {
+  background: var(--controllers-color);
+  color: #fff;
+  width: 7rem;
+  border: none;
+}
+
+.dimensions {
+  margin-top: -0.4rem;
+}
+
+.dimensions > p {
+  margin-bottom: 8px;
+}
+
+.dimension-inputs {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  max-width: 100%;
+  color: #fff;
+}
+
+.dim-input {
+  display: flex;
+  gap: 5px;
+  margin-left: 15px;
+}
+
+.dim-input:last-child {
+  padding-left: 1px;
+}
+
+.dim-input > label {
+  font-size: 12px;
+  color: #fff;
+  margin-right: 10px;
+}
+
+.dim-input > input {
+  overflow: hidden;
+  background: var(--controllers-color);
+  border: none;
+  color: #fff;
+}
+
 .modes {
   display: flex;
   position: absolute;
-  background: #000;
+  background: var(--menu-color);
   color: rgba(255, 255, 255, 0.6);
-  opacity: 85%;
+  opacity: 98%;
   width: 302.5px;
   bottom: 4vh;
   font-size: 14px;
