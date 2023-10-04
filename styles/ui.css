@@ -1,5 +1,6 @@
 :root {
   --menu-color: #202020;
+  --menu-color-2: #303030;
   --controllers-color: #3f3f3f;
   --dimmed-text-color: #bbb;
 }
@@ -145,6 +146,7 @@
   cursor: pointer;
   padding: 0 0.3rem;
   overflow: hidden;
+  user-select: none;
 }
 
 .info div {
@@ -166,15 +168,122 @@
 }
 
 .info-window {
+  display: block;
   position: absolute;
-  background: #625a82;
+  background: var(--menu-color-2);
   opacity: 98%;
   color: #fff;
   left: 50%;
   top: 50%;
-  transform: translate(-50%, -50%);
-  width: 328px;
-  height: 480px;
+  transform: translate(-50%, -50%) scale(1);
+  width: 30vw;
+  height: 70vh;
+  padding: 5px 25px;
   border-radius: 10px;
   z-index: 20;
+  overflow-y: auto;
+  transition: 
+    opacity 0.1s,
+    transform 0.2s,
+    visibility 0.1s;
+}
+
+.info-window.invisible {
+  opacity: 0;
+  transform: translate(-50%, -50%) scale(0.9);
+  visibility: hidden;
+  transition: 
+    opacity 0.1s,
+    transform 0.2s,
+    visibility 0.1s;
+}
+
+.info-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.info-title-div {
+  margin: auto;
+  padding-left: 22px;
+}
+
+.info-close {
+  font-size: 28px;
+  margin: 0;
+  margin-top: 10px;
+  color: #aaa;
+  user-select: none;
+  cursor: pointer;
+}
+
+.info-close:hover {
+  color: #fff;
+}
+
+.info-title {
+  display: flex;
+  justify-content: center;
+  margin-top: 1.5rem;
+  margin-bottom: 0.7rem;
+  text-align: center;
+  font-size: 26px;
+  font-weight: 600;
+  text-transform: capitalize;
+}
+
+.info-window hr {
+  border: 1px solid #444;
+}
+
+.info-q {
+  font-weight: 600;
+  font-size: 16px;
+  margin-bottom: -0.2rem;
+}
+
+.info-ans {
+  font-size: 13px;
+  margin-bottom: 2rem;
+  padding-left: 2rem;
+  color: #ccc;
+  font-style: italic;
+}
+
+.info-ans > p {
+  margin-bottom: -0.5rem;
+}
+
+.info-ans span {
+  font-size: 13px;
+  margin-bottom: 2rem;
+  color: #fff;
+  font-weight: 600;
+  /* text-transform: uppercase; */
+  font-style: normal;
+}
+
+
+
+/* Responsive design */
+@media screen and (min-width: 2000px) {
+  .info-window {
+    width: 25vw;
+    height: 60vh;
+  }
+
+  .info-title {
+    font-size: 36px;
+  }
+  
+  .info-q {
+    font-size: 24px;
+  }
+  
+  .info-ans {
+    font-size: 16px;
+    margin-bottom: 2rem;
+    font-style: italic;
+  }
 }
