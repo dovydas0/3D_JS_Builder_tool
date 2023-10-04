@@ -13,6 +13,7 @@ document.body.appendChild(stats.dom)
 const modes = { editor: "editor", study: "study", play: "play", craft: "craft"}
 
 const sceneObject = new Scene(75, window.innerWidth / window.innerHeight, 0.1, 1000)
+const studyScene = new Scene(75, window.innerWidth / window.innerHeight, 0.1, 1000)
 const menu = new Menu(sceneObject)
 const worldObject = new World(sceneObject, menu)
 const raycaster = new THREE.Raycaster();
@@ -31,7 +32,7 @@ const animate = () => {
   raycasterIntersections(menu.currentMode, raycaster, pointer, sceneObject, worldObject)
 
   // Render the scene
-  sceneObject.renderer.render(sceneObject.scene, sceneObject.camera)
+  menu.currentScene.renderer.render(menu.currentScene.scene, menu.currentScene.camera)
 
   // Store the current time for the next frame
   previousTime = currentTime;
@@ -45,12 +46,12 @@ animate()
 
 
 
-// EVENT LISTENERS FOR MOUSE INTERACTIONS
+// EVENT LISTENERS FOR INTERACTIONS
 
 // REMEMBER TO REMOVE EVENT LISTENERS ON DIFFERENT MODES
 if (menu.currentMode === modes.editor) {
   sceneObject.renderer.domElement.addEventListener("pointermove", event => {
-    onPointerMove(event, pointer, worldObject)
+    onPointerMove(event, pointer)
   })
 
   sceneObject.renderer.domElement.addEventListener("pointerdown", (e) => {
@@ -89,8 +90,17 @@ document.getElementById('mode-ui').addEventListener('click', (e) => {
   e.target.parentNode.childNodes.forEach(element => {
     element.className = ''
   })
-  menu.currentMode = e.target.id
   e.target.className = "selected-mode"
+  
+  // Changing the mode
+  menu.modeChange(e.target.id, studyScene)
+
+  // Adding/removing placeholder block depending on the selected mode
+  if (e.target.id === "editor") {
+    menu.action({name: "objects"}, worldObject);
+  } else {
+    sceneObject.removeObject(worldObject.placeholderObject.mesh)
+  }
 })
 
 window.addEventListener('resize', () => {

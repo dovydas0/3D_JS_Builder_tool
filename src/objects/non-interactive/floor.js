@@ -20,6 +20,7 @@ export class Floor extends Entity {
     this.material = new finalMaterial({ color: color, side: THREE.DoubleSide });
 
     this.mesh = new THREE.Mesh( this.geometry, this.material );
+    this.mesh.name = "floor"
     this.mesh.rotation.x = -Math.PI  / 2
     this.mesh.castShadow = false
     this.mesh.receiveShadow = true

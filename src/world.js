@@ -1,5 +1,4 @@
 import * as THREE from 'three'
-import { Block } from "./objects/interactive/block"
 import { Floor } from './objects/non-interactive/floor'
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js'
 
@@ -9,9 +8,9 @@ export class World {
     this.raycastableObjects = []
     this.sceneObject = sceneObject
     this.menu = menu
-    this.placeholderBlock = menu.currentBlock
+    this.placeholderObject = menu.currentObject
+
     this.floorObject = new Floor(200, 200)
-    this.floorObject.mesh.name = "floor"
     this.ambientLight = new THREE.AmbientLight(0xFFFFFF, 6)
     this.dirLight = new THREE.DirectionalLight(0xFFFFFF, 3)
     this.controls = new OrbitControls(sceneObject.camera, sceneObject.renderer.domElement)
@@ -32,7 +31,7 @@ export class World {
     this.dirLight.shadow.camera.bottom = -130
     this.dirLight.shadow.camera.left = -130
     this.dirLight.shadow.camera.right = 130
-    this.placeholderBlock.mesh.visible = false
+    // this.placeholderBlock.mesh.visible = false
     // this.controls.enableDamping = true
     // this.controls.dampingFactor = 0.2
 
@@ -46,7 +45,7 @@ export class World {
 
     // Placing initial objects in the scene
     sceneObject.addObject(this.floorObject.mesh)
-    sceneObject.addObject(this.placeholderBlock.mesh)
+    sceneObject.addObject(this.placeholderObject.mesh)
     
     // Placing light
     sceneObject.addObject(this.dirLight)
@@ -65,8 +64,8 @@ export class World {
     return this.raycastableObjects
   }
 
-  updatePlaceholderBlock(block) {
-    this.placeholderBlock = block
+  updatePlaceholderObject(object) {
+    this.placeholderObject = object
   }
 
   update(deltaTime) {

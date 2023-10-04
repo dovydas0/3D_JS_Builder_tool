@@ -1,6 +1,7 @@
 :root {
   --menu-color: #202020;
   --controllers-color: #3f3f3f;
+  --dimmed-text-color: #bbb;
 }
 
 .menu {
@@ -14,6 +15,7 @@
   margin-top: 4vh;
   margin-left: 2vw;
   padding: 0 0.8rem;
+  border-radius: 10px;
   z-index: 10;
 }
 
@@ -46,6 +48,8 @@
   color: #fff;
   width: 7rem;
   border: none;
+  cursor: pointer;
+  user-select: none;
 }
 
 .dimensions {
@@ -60,12 +64,12 @@
   display: flex;
   flex-direction: column;
   gap: 0.5rem;
-  max-width: 100%;
   color: #fff;
 }
 
 .dim-input {
   display: flex;
+  align-items: center;
   gap: 5px;
   margin-left: 15px;
 }
@@ -77,13 +81,14 @@
 .dim-input > label {
   font-size: 12px;
   color: #fff;
-  margin-right: 10px;
+  margin-right: 5px;
 }
 
 .dim-input > input {
   overflow: hidden;
   background: var(--controllers-color);
   border: none;
+  width: 100%;
   color: #fff;
 }
 
@@ -91,7 +96,7 @@
   display: flex;
   position: absolute;
   background: var(--menu-color);
-  color: rgba(255, 255, 255, 0.6);
+  color: var(--dimmed-text-color);
   opacity: 98%;
   width: 302.5px;
   bottom: 4vh;
@@ -124,4 +129,52 @@
 
 .modes p:hover {
   color:#fff;
+}
+
+.info {
+  display: flex;
+  gap: 6px;
+  align-items: center;
+  position: absolute;
+  height: 30px;
+  bottom: 4vh;
+  right: 2vw;
+  font-size: 16px;
+  overflow: hidden;
+  z-index: 10;
+  cursor: pointer;
+  padding: 0 0.3rem;
+  overflow: hidden;
+}
+
+.info div {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 14px;
+  background: var(--menu-color);
+  color: #fff;
+  border-radius: 50%;
+  width: 20px;
+  height: 20px;
+}
+
+.info p {
+  background: transparent;
+  font-weight: 600;
+  color: var(--menu-color);
+}
+
+.info-window {
+  position: absolute;
+  background: #625a82;
+  opacity: 98%;
+  color: #fff;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  width: 328px;
+  height: 480px;
+  border-radius: 10px;
+  z-index: 20;
 }

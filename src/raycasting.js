@@ -1,5 +1,5 @@
 import * as THREE from 'three'
-import { Block } from './objects/interactive/block';
+import { Cube } from './objects/interactive/Cube';
 
 export const onPointerDown = (e, pointer, raycaster, sceneObject, worldObject, menu) => {
   if (menu.currentMode === "editor") {
@@ -13,15 +13,18 @@ export const onPointerDown = (e, pointer, raycaster, sceneObject, worldObject, m
       const deltaY = Math.abs(moveEvent.clientY - initialPos.y);
   
       // If the mouse has moved more than a certain threshold, set the flag
-      if (deltaX > 5 || deltaY > 5) {
+      if (deltaX > 1.5 || deltaY > 1.5) {
+        document.getElementsByTagName("body")[0].style.cursor = "crosshair"
         movedDuringClick = true;
       }
     };
   
     const upListener = () => {
+      document.getElementsByTagName("body")[0].style.cursor = "default"
       // Remove the move and up listeners
       window.removeEventListener("pointermove", moveListener);
       window.removeEventListener("pointerup", upListener);
+
   
       if (!movedDuringClick) {
         // Mouse was clicked without movement
@@ -42,22 +45,36 @@ export const onPointerDown = (e, pointer, raycaster, sceneObject, worldObject, m
         intersectLoc.y += 0.0000001
 
         // ~~~ IMPLEMENT A CHECK FOR EXISTING BLOCKS IN THE PLACEHOLDER'S AREA
-        console.log(intersect);
+        
+        
+        if (e.shiftKey) {
+          // Removing an object
+          if (intersect.object.name === 'object') {
+            sceneObject.removeObject(intersect.object)
 
+            worldObject.raycastableObjects.forEach((el, index) => {
+              if (el === intersect.object) {
+                worldObject.raycastableObjects.splice(index, 1)
+              }
+            })
+          }
+        } else {
+          // Adding an object
 
-        // Adding a block
-        const currentBlock = {
-          depth: Math.floor(menu.currentBlock.geometry.parameters.depth),
-          height: Math.floor(menu.currentBlock.geometry.parameters.height),
-          width: Math.floor(menu.currentBlock.geometry.parameters.width)
-        }
-        const newBlock = new Block(null, null, currentBlock.width, currentBlock.depth, currentBlock.height, 0x5544AA, "Lambert")
-        const positionVector = new THREE.Vector3( Math.floor(worldObject.placeholderBlock.geometry.parameters.width) / 2, Math.floor(worldObject.placeholderBlock.geometry.parameters.height) / 2, Math.floor(worldObject.placeholderBlock.geometry.parameters.depth) / 2)
-
-        newBlock.mesh.position.copy( intersectLoc )
-        newBlock.mesh.position.divideScalar(1).floor().add(positionVector)
+          console.log(menu.currentObject);
+          const currentObject = {
+            depth: Math.floor(menu.currentObject.geometry.parameters.depth),
+            height: Math.floor(menu.currentObject.geometry.parameters.height),
+            width: Math.floor(menu.currentObject.geometry.parameters.width)
+          }
+          const newObject = new Cube("object", currentObject.width, currentObject.depth, currentObject.height, 0x5544AA, "Lambert")
+          const positionVector = new THREE.Vector3( Math.floor(worldObject.placeholderObject.geometry.parameters.width) / 2, Math.floor(worldObject.placeholderObject.geometry.parameters.height) / 2, Math.floor(worldObject.placeholderObject.geometry.parameters.depth) / 2)
   
-        worldObject.addRaycastableObject(newBlock.mesh)
+          newObject.mesh.position.copy( intersectLoc )
+          newObject.mesh.position.divideScalar(1).floor().add(positionVector)
+    
+          worldObject.addRaycastableObject(newObject.mesh)
+        }
       }
     }
     
@@ -67,18 +84,14 @@ export const onPointerDown = (e, pointer, raycaster, sceneObject, worldObject, m
 }
 
 
-export const onPointerMove = (event, pointer, worldObject) => {
-  worldObject.placeholderBlock.mesh.visible = true
-
+export const onPointerMove = (event, pointer) => {
   // calculate pointer position in normalized device coordinates
   // (-1 to +1) for both components
   pointer.x = ( event.clientX / window.innerWidth ) * 2 - 1;
   pointer.y = - ( event.clientY / window.innerHeight ) * 2 + 1;
 }
 
-export const raycasterIntersections = (currentMode, raycaster, pointer, sceneObject, worldObject) => {
-  // console.log(currentMode);
-  
+export const raycasterIntersections = (currentMode, raycaster, pointer, sceneObject, worldObject) => {  
   if (currentMode === "editor") {  
     // update the picking ray with the camera and pointer position
     raycaster.setFromCamera( pointer, sceneObject.camera );
@@ -94,12 +107,12 @@ export const raycasterIntersections = (currentMode, raycaster, pointer, sceneObj
       let intersectLoc = intersect.point
       intersectLoc.y += 0.0000001
 
+      // console.log(worldObject.placeholderObject.mesh.position);
+
       // Rendering block's placeholder
-      worldObject.placeholderBlock.mesh.position.copy( intersectLoc )
-      worldObject.placeholderBlock.mesh.position.divideScalar(1).floor()
-      .add(new THREE.Vector3( Math.floor(worldObject.placeholderBlock.geometry.parameters.width) / 2, Math.floor(worldObject.placeholderBlock.geometry.parameters.height) / 2, Math.floor(worldObject.placeholderBlock.geometry.parameters.depth) / 2))
+      worldObject.placeholderObject.mesh.position.copy( intersectLoc )
+      worldObject.placeholderObject.mesh.position.divideScalar(1).floor()
+      .add(new THREE.Vector3( Math.floor(worldObject.placeholderObject.geometry.parameters.width) / 2, Math.floor(worldObject.placeholderObject.geometry.parameters.height) / 2, Math.floor(worldObject.placeholderObject.geometry.parameters.depth) / 2))
     }
-  } else {
-    worldObject.placeholderBlock.mesh.visible = false
   }
 }

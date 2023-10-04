@@ -12,7 +12,7 @@
   </head>
   <body>
     <div class="menu" id="menu-ui">
-      <p>Menu</p>
+      <p id="menu-title">EDITOR</p>
       <div class="helpers">
         <div class="checkbox">
           <p>Floor Tiles</p>
@@ -33,7 +33,7 @@
         <p>Object</p>
         <select class="objects-dropdown" name="objects" id="objects">
           <option value="cube">Cube</option>
-          <option value="circle">Circle</option>
+          <option value="sphere">Sphere</option>
           <option value="cylinder">Cylinder</option>
         </select>
       </div>
@@ -61,6 +61,32 @@
       <p id="play">PLAY</p>
       <p id="craft">CRAFT</p>
     </div>
-    <div class="info"></div>
+    <div class="info">
+      <div>i</div>
+      <p>Info</p>
+    </div>
+    <div class="info-window">
+      <p>~~mode~~</p>
+      <div>
+        <p>
+          This mode allows you to interactively build structures with the given objects
+
+          Keyboard/Mouse commands:
+
+          Mouse click - adding selected object in the world
+          Left mouse press and drag - rotating the camera
+          Right mouse press and drag - Translating the camera
+          Mouse scroll wheel - Zooming in/out
+          Shift + mouse click - With mouse pointer pointing to an object in the world removes that particular object
+
+          UI:
+          Object
+          This dropbox option enables you to switch between different objects
+
+          Dimensions
+          There are 3 input fields which let you
+        </p>
+      </div>
+    </div>
   </body>
 </html>
