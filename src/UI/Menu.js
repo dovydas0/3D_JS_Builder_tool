@@ -7,7 +7,7 @@ export class Menu {
     // STORE ALL BLOCKS IN AN ARRAY HERE
 
     this.currentMode = "editor";
-    this.sceneObject = sceneObject
+    // this.sceneObject = sceneObject
     this.currentScene = sceneObject
     this.currentObject = new Cube("object", 1, 1, 1, 0x5544AA, "Basic", true)
   
@@ -16,10 +16,10 @@ export class Menu {
     this.axisHelper = document.getElementById("axis-helper").checked
 
     if (this.floorTiles) {
-      sceneObject.addObject(this.sceneObject.gridHelper)
+      this.currentScene.addObject(this.currentScene.gridHelper)
     }
     if (this.axisHelper) {
-      sceneObject.addObject(this.sceneObject.axesHelper)
+      this.currentScene.addObject(this.currentScene.axesHelper)
     }
   }
 
@@ -44,15 +44,15 @@ export class Menu {
     switch (eventData.name) {
       case "floor-grid":
         eventData.checked === true ? 
-          this.sceneObject.addObject(this.sceneObject.gridHelper)
+          this.currentScene.addObject(this.currentScene.gridHelper)
           :
-          this.sceneObject.removeObject(this.sceneObject.gridHelper)
+          this.currentScene.removeObject(this.currentScene.gridHelper)
         break;
       case "axis-helper":
         eventData.checked === true ? 
-          this.sceneObject.addObject(this.sceneObject.axesHelper)
+          this.currentScene.addObject(this.currentScene.axesHelper)
           :
-          this.sceneObject.removeObject(this.sceneObject.axesHelper)
+          this.currentScene.removeObject(this.currentScene.axesHelper)
         break;
       case "dimensions":
       case "objects":
@@ -86,12 +86,12 @@ export class Menu {
           if (newObject?.mesh) {
             // newObject.mesh.position.set(0, 0, 0)
             // Removing old placeholder object and adding a new one
-            this.sceneObject.scene.remove(worldObject.placeholderObject.mesh)
+            this.currentScene.scene.remove(worldObject.placeholderObject.mesh)
   
             this.currentObject = newObject
             worldObject.updatePlaceholderObject(newObject)
-            this.sceneObject.addObject(newObject.mesh)
-            console.log(this.currentObject);
+            this.currentScene.addObject(newObject.mesh)
+            // console.log(this.currentObject);
             // this.currentObject.mesh.position.x = 0
             // this.currentObject.mesh.position.y = 0
             // this.currentObject.mesh.position.z = 0

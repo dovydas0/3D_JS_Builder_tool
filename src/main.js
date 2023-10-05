@@ -5,6 +5,7 @@ import { World } from "./world"
 import { onPointerDown, onPointerMove, raycasterIntersections } from "./raycasting"
 import populateEventListeners from './utilities/populateEventListeners'
 import Stats from 'three/examples/jsm/libs/stats.module'
+import { Canvas } from './canvas'
 
 // Performance monitor
 const stats = new Stats()
@@ -13,12 +14,24 @@ document.body.appendChild(stats.dom)
 // MODES
 const modes = { editor: "editor", study: "study", play: "play", craft: "craft"}
 
-const sceneObject = new Scene(75, window.innerWidth / window.innerHeight, 0.1, 1000)
-const studyScene = new Scene(75, window.innerWidth / window.innerHeight, 0.1, 1000)
-const menu = new Menu(sceneObject)
-const worldObject = new World(sceneObject, menu)
+const canvas = new Canvas(75, window.innerWidth / window.innerHeight, 0.1, 1000)
+const editorScene = new Scene("editor")
+const studyScene = new Scene("study")
+const craftScene = new Scene("craft")
+const scenes = {
+  study: studyScene,
+  editor: editorScene,
+  play: editorScene,
+  craft: craftScene
+}
+const menu = new Menu(scenes.editor)
+const worldObject = new World(canvas, menu)
 const raycaster = new THREE.Raycaster();
 const pointer = new THREE.Vector2();
+
+worldObject.initWorld(scenes.study)
+worldObject.initWorld(scenes.editor)
+// worldObject.initWorld(scenes.craft)
 
 const animate = () => {
   // Request next frame
@@ -29,11 +42,15 @@ const animate = () => {
   const deltaTime = (currentTime - previousTime) / 1000; // Convert to seconds
 
   // Update game objects based on deltaTime
-  worldObject.update(deltaTime)
-  raycasterIntersections(menu.currentMode, raycaster, pointer, sceneObject, worldObject)
+  if (menu.currentMode === modes.editor) {
+    raycasterIntersections(menu.currentMode, raycaster, pointer, canvas, worldObject)
+  }
+
+  // CALL UPDATE CONTROLS AFTER ANY MANUAL CAMERA TRANSFORM
+  worldObject.updateControls(deltaTime)
 
   // Render the scene
-  menu.currentScene.renderer.render(menu.currentScene.scene, menu.currentScene.camera)
+  canvas.renderer.render(menu.currentScene.scene, canvas.camera)
 
   // Store the current time for the next frame
   previousTime = currentTime;
@@ -51,13 +68,13 @@ animate()
 
 // REMEMBER TO REMOVE EVENT LISTENERS ON DIFFERENT MODES
 if (menu.currentMode === modes.editor) {
-  sceneObject.renderer.domElement.addEventListener("pointermove", event => {
+  canvas.renderer.domElement.addEventListener("pointermove", event => {
     onPointerMove(event, pointer)
   })
 
-  sceneObject.renderer.domElement.addEventListener("pointerdown", (e) => {
-    onPointerDown(e, pointer, raycaster, sceneObject, worldObject, menu)
+  canvas.renderer.domElement.addEventListener("pointerdown", (e) => {
+    onPointerDown(e, pointer, raycaster, canvas, worldObject, menu)
   })
 }
 
-populateEventListeners(menu, worldObject, sceneObject, studyScene)
+populateEventListeners(menu, worldObject, canvas, scenes)

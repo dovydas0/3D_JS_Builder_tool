@@ -1,4 +1,4 @@
-export default (menu, worldObject, sceneObject, studyScene) => {
+export default (menu, worldObject, canvas, scenes) => {
   document.getElementById('dimension-inputs').addEventListener('input', e => {
     e.target.value <= 0 ? e.target.value = 1 : null
     e.target.value >= 50 ? e.target.value = 50 : null
@@ -23,19 +23,23 @@ export default (menu, worldObject, sceneObject, studyScene) => {
   })
   
   document.getElementById('mode-ui').addEventListener('click', (e) => {
+    const buttonId = e.target.id
+
     e.target.parentNode.childNodes.forEach(element => {
       element.className = ''
     })
     e.target.className = "selected-mode"
-    
+
     // Changing the mode
-    menu.modeChange(e.target.id, studyScene)
+    menu.modeChange(buttonId, scenes[buttonId])
+    // worldObject.initWorld(scenes[buttonId])
+    // console.log(menu.currentScene.scene.children);
   
     // Adding/removing placeholder block depending on the selected mode
-    if (e.target.id === "editor") {
+    if (buttonId === "editor") {
       menu.action({name: "objects"}, worldObject);
     } else {
-      sceneObject.removeObject(worldObject.placeholderObject.mesh)
+      menu.currentScene.removeObject(worldObject.placeholderObject.mesh)
     }
 
     // Readding info window close event listener
@@ -53,8 +57,8 @@ export default (menu, worldObject, sceneObject, studyScene) => {
   })
   
   window.addEventListener('resize', () => {
-    sceneObject.camera.aspect = window.innerWidth / window.innerHeight;
-    sceneObject.camera.updateProjectionMatrix();
-    sceneObject.renderer.setSize(window.innerWidth, window.innerHeight);
+    canvas.camera.aspect = window.innerWidth / window.innerHeight;
+    canvas.camera.updateProjectionMatrix();
+    canvas.renderer.setSize(window.innerWidth, window.innerHeight);
   })  
 }

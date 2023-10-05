@@ -1,7 +1,7 @@
 import * as THREE from 'three'
 import { Cube } from './objects/interactive/Cube';
 
-export const onPointerDown = (e, pointer, raycaster, sceneObject, worldObject, menu) => {
+export const onPointerDown = (e, pointer, raycaster, canvas, worldObject, menu) => {
   if (menu.currentMode === "editor") {
     const initialPos = { x: e.clientX, y: e.clientY }
   
@@ -33,7 +33,7 @@ export const onPointerDown = (e, pointer, raycaster, sceneObject, worldObject, m
     };
   
     const handlePointerUp = () => {
-      raycaster.setFromCamera(pointer, sceneObject.camera)
+      raycaster.setFromCamera(pointer, canvas.camera)
   
       const intersects = raycaster.intersectObjects(worldObject.raycastableObjects, false)
   
@@ -50,7 +50,7 @@ export const onPointerDown = (e, pointer, raycaster, sceneObject, worldObject, m
         if (e.shiftKey) {
           // Removing an object
           if (intersect.object.name === 'object') {
-            sceneObject.removeObject(intersect.object)
+            menu.currentScene.removeObject(intersect.object)
 
             worldObject.raycastableObjects.forEach((el, index) => {
               if (el === intersect.object) {
@@ -91,10 +91,10 @@ export const onPointerMove = (event, pointer) => {
   pointer.y = - ( event.clientY / window.innerHeight ) * 2 + 1;
 }
 
-export const raycasterIntersections = (currentMode, raycaster, pointer, sceneObject, worldObject) => {  
+export const raycasterIntersections = (currentMode, raycaster, pointer, canvas, worldObject) => {  
   if (currentMode === "editor") {  
     // update the picking ray with the camera and pointer position
-    raycaster.setFromCamera( pointer, sceneObject.camera );
+    raycaster.setFromCamera( pointer, canvas.camera );
 
     // calculate objects intersecting the picking ray
     const intersects = raycaster.intersectObjects( worldObject.raycastableObjects, false );
