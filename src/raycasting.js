@@ -1,7 +1,7 @@
 import * as THREE from 'three'
 import { Cube } from './objects/interactive/Cube';
 
-export const onPointerDown = (e, pointer, raycaster, canvas, worldObject, menu) => {
+export const onPointerDown = (e, pointer, raycaster, worldObject, menu) => {
   if (menu.currentMode === "editor") {
     const initialPos = { x: e.clientX, y: e.clientY }
   
@@ -33,9 +33,9 @@ export const onPointerDown = (e, pointer, raycaster, canvas, worldObject, menu) 
     };
   
     const handlePointerUp = () => {
-      raycaster.setFromCamera(pointer, canvas.camera)
+      raycaster.setFromCamera(pointer, worldObject.camera)
   
-      const intersects = raycaster.intersectObjects(worldObject.raycastableObjects, false)
+      const intersects = raycaster.intersectObjects(menu.currentWorld.raycastableObjects, false)
   
       if (intersects.length > 0) {
         const intersect = intersects[0]
@@ -50,30 +50,29 @@ export const onPointerDown = (e, pointer, raycaster, canvas, worldObject, menu) 
         if (e.shiftKey) {
           // Removing an object
           if (intersect.object.name === 'object') {
-            menu.currentScene.removeObject(intersect.object)
+            menu.currentWorld.removeObject(intersect.object)
 
-            worldObject.raycastableObjects.forEach((el, index) => {
+            menu.currentWorld.raycastableObjects.forEach((el, index) => {
               if (el === intersect.object) {
-                worldObject.raycastableObjects.splice(index, 1)
+                menu.currentWorld.raycastableObjects.splice(index, 1)
               }
             })
           }
         } else {
           // Adding an object
 
-          console.log(menu.currentObject);
           const currentObject = {
             depth: Math.floor(menu.currentObject.geometry.parameters.depth),
             height: Math.floor(menu.currentObject.geometry.parameters.height),
             width: Math.floor(menu.currentObject.geometry.parameters.width)
           }
           const newObject = new Cube("object", currentObject.width, currentObject.depth, currentObject.height, 0x5544AA, "Lambert")
-          const positionVector = new THREE.Vector3( Math.floor(worldObject.placeholderObject.geometry.parameters.width) / 2, Math.floor(worldObject.placeholderObject.geometry.parameters.height) / 2, Math.floor(worldObject.placeholderObject.geometry.parameters.depth) / 2)
+          const positionVector = new THREE.Vector3( Math.floor(menu.currentWorld.placeholderObject.geometry.parameters.width) / 2, Math.floor(menu.currentWorld.placeholderObject.geometry.parameters.height) / 2, Math.floor(menu.currentWorld.placeholderObject.geometry.parameters.depth) / 2)
   
           newObject.mesh.position.copy( intersectLoc )
           newObject.mesh.position.divideScalar(1).floor().add(positionVector)
-    
-          worldObject.addRaycastableObject(newObject.mesh)
+          
+          menu.currentWorld.addRaycastableObject(newObject.mesh)
         }
       }
     }
@@ -91,14 +90,14 @@ export const onPointerMove = (event, pointer) => {
   pointer.y = - ( event.clientY / window.innerHeight ) * 2 + 1;
 }
 
-export const raycasterIntersections = (currentMode, raycaster, pointer, canvas, worldObject) => {  
-  if (currentMode === "editor") {  
+export const raycasterIntersections = (currentMode, raycaster, pointer, worldObject) => {  
+  if (currentMode === "editor") {
     // update the picking ray with the camera and pointer position
-    raycaster.setFromCamera( pointer, canvas.camera );
+    raycaster.setFromCamera( pointer, worldObject.camera );
 
     // calculate objects intersecting the picking ray
     const intersects = raycaster.intersectObjects( worldObject.raycastableObjects, false );
-    
+
     if (intersects.length > 0) {
 
       const intersect = intersects[0]
@@ -108,7 +107,7 @@ export const raycasterIntersections = (currentMode, raycaster, pointer, canvas, 
       intersectLoc.y += 0.0000001
 
       // console.log(worldObject.placeholderObject.mesh.position);
-
+      // console.log(worldObject.placeholderObject);
       // Rendering block's placeholder
       worldObject.placeholderObject.mesh.position.copy( intersectLoc )
       worldObject.placeholderObject.mesh.position.divideScalar(1).floor()

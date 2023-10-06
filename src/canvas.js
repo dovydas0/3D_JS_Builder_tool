@@ -2,9 +2,9 @@ import * as THREE from 'three'
 
 export class Canvas {
   constructor(fov, aspect, near, far) {
-    this.camera = new THREE.PerspectiveCamera(fov, aspect, near, far );
+    // this.camera = new THREE.PerspectiveCamera(fov, aspect, near, far );
     this.renderer = new THREE.WebGLRenderer({ antialias: true });
-    this.cameraHelper = new THREE.CameraHelper( this.camera );
+    // this.cameraHelper = new THREE.CameraHelper( this.camera );
 
     // Renderer config
     this.renderer.shadowMap.enabled = true
