@@ -1,5 +1,6 @@
 import * as THREE from 'three'
 import { Cube } from './objects/interactive/Cube';
+import { Sphere } from './objects/interactive/Sphere';
 
 export const onPointerDown = (e, pointer, raycaster, worldObject, menu) => {
   if (menu.currentMode === "editor") {
@@ -40,8 +41,8 @@ export const onPointerDown = (e, pointer, raycaster, worldObject, menu) => {
       if (intersects.length > 0) {
         const intersect = intersects[0]
           
-        // adjusting the point to exactly match mouse pointer position
         let intersectLoc = intersect.point
+        // Slight change in parameters to prevent visual inadequacy
         intersectLoc.y += 0.0000001
 
         // ~~~ IMPLEMENT A CHECK FOR EXISTING BLOCKS IN THE PLACEHOLDER'S AREA
@@ -60,19 +61,45 @@ export const onPointerDown = (e, pointer, raycaster, worldObject, menu) => {
           }
         } else {
           // Adding an object
+          let newObject
 
-          const currentObject = {
-            depth: Math.floor(menu.currentObject.geometry.parameters.depth),
-            height: Math.floor(menu.currentObject.geometry.parameters.height),
-            width: Math.floor(menu.currentObject.geometry.parameters.width)
+          switch(menu.currentObject.mesh.geometry.type) {
+            case "BoxGeometry":
+              const currentObject = {
+                depth: Math.floor(menu.currentObject.geometry.parameters.depth),
+                height: Math.floor(menu.currentObject.geometry.parameters.height),
+                width: Math.floor(menu.currentObject.geometry.parameters.width)
+              }
+              newObject = new Cube("object", currentObject.width, currentObject.depth, currentObject.height, 0x5544AA, "Lambert")
+              break;
+            case "SphereGeometry":
+              newObject = new Sphere("object", menu.currentObject.radius, 0x5544AA, "Lambert", false, 32, 16)
+              break;
+            case "CylinderGeometry":
+              break;
           }
-          const newObject = new Cube("object", currentObject.width, currentObject.depth, currentObject.height, 0x5544AA, "Lambert")
-          const positionVector = new THREE.Vector3( Math.floor(menu.currentWorld.placeholderObject.geometry.parameters.width) / 2, Math.floor(menu.currentWorld.placeholderObject.geometry.parameters.height) / 2, Math.floor(menu.currentWorld.placeholderObject.geometry.parameters.depth) / 2)
-  
-          newObject.mesh.position.copy( intersectLoc )
-          newObject.mesh.position.divideScalar(1).floor().add(positionVector)
-          
-          menu.currentWorld.addRaycastableObject(newObject.mesh)
+
+          if (newObject?.mesh) {
+            const positionVector = new THREE.Vector3( Math.floor(worldObject.placeholderObject.geometry.parameters.width) / 2, Math.floor(worldObject.placeholderObject.geometry.parameters.height) / 2, Math.floor(worldObject.placeholderObject.geometry.parameters.depth) / 2)
+            
+            newObject.mesh.position.copy( intersectLoc )
+
+            switch (newObject.geometry.type) {
+              case "BoxGeometry":
+                newObject.mesh.position.divideScalar(1).floor()
+                .add(positionVector)
+                break;
+              case "SphereGeometry":
+                newObject.mesh.position.divideScalar(1).floor()
+                .add(new THREE.Vector3(0.5, worldObject.placeholderObject.radius, 0.5))
+                break;
+              case "CylinderGeometry":
+      
+                break;
+            }
+            
+            menu.currentWorld.addRaycastableObject(newObject.mesh)
+          }
         }
       }
     }
@@ -106,12 +133,22 @@ export const raycasterIntersections = (currentMode, raycaster, pointer, worldObj
       let intersectLoc = intersect.point
       intersectLoc.y += 0.0000001
 
-      // console.log(worldObject.placeholderObject.mesh.position);
-      // console.log(worldObject.placeholderObject);
-      // Rendering block's placeholder
+      // Rendering different object's placeholder
       worldObject.placeholderObject.mesh.position.copy( intersectLoc )
-      worldObject.placeholderObject.mesh.position.divideScalar(1).floor()
-      .add(new THREE.Vector3( Math.floor(worldObject.placeholderObject.geometry.parameters.width) / 2, Math.floor(worldObject.placeholderObject.geometry.parameters.height) / 2, Math.floor(worldObject.placeholderObject.geometry.parameters.depth) / 2))
+
+      switch (worldObject.placeholderObject.geometry.type) {
+        case "BoxGeometry":
+          worldObject.placeholderObject.mesh.position.divideScalar(1).floor()
+          .add(new THREE.Vector3( Math.floor(worldObject.placeholderObject.geometry.parameters.width) / 2, Math.floor(worldObject.placeholderObject.geometry.parameters.height) / 2, Math.floor(worldObject.placeholderObject.geometry.parameters.depth) / 2))
+          break;
+        case "SphereGeometry":
+          worldObject.placeholderObject.mesh.position.divideScalar(1).floor()
+          .add(new THREE.Vector3(0.5, worldObject.placeholderObject.radius, 0.5))
+          break;
+        case "CylinderGeometry":
+
+          break;
+      }
     }
   }
 }

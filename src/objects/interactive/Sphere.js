@@ -33,18 +33,15 @@ export class Sphere extends Entity {
     }
     const finalMaterial = threeMaterial[material]
 
-    // placeholderObj ? 
-    //   this.materialProperties = { color: color, opacity: 0.5, transparent: true }
-    //   : 
-    //   this.materialProperties = { color: color }
+    placeholderObj ? 
+      this.materialProperties = { color: color, opacity: 0.5, transparent: true }
+      : 
+      this.materialProperties = { color: color }
     
-    this.geometry = new THREE.SphereGeometry(4);
-    this.material = new THREE.MeshBasicMaterial({ color: 0x5544AA })
-    // this.geometry = new THREE.SphereGeometry(radius, segmentsWidth, segmentsheight);
-    // this.material = new finalMaterial(this.materialProperties);
-    this.mesh = new THREE.Mesh( this.geometry, this.material );
+    this.geometry = new THREE.SphereGeometry(radius, segmentsWidth, segmentsheight);
+    this.material = new finalMaterial(this.materialProperties);
+    this.mesh = new THREE.Mesh( this.geometry, this.material ); 
     this.mesh.name = name
-    // this.mesh.position.set(new THREE.Vector3(0, 0, 0))
     
     if (!placeholderObj) {
       this.mesh.castShadow = true;

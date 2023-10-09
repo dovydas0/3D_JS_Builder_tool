@@ -1,7 +1,8 @@
 :root {
   --menu-color: #202020;
   --menu-color-2: #303030;
-  --controllers-color: #3f3f3f;
+  --controllers-color: #4a4a4a;
+  --controllers-color2: #333;
   --dimmed-text-color: #bbb;
 }
 
@@ -17,12 +18,23 @@
   margin-left: 2vw;
   padding: 0 0.8rem;
   border-radius: 10px;
+  overflow-y: auto;
   z-index: 10;
 }
 
 .menu > p {
   font-size: 18px;
   text-transform: uppercase;
+}
+
+.selected-obj {
+  padding-left: 0.5rem;
+  padding-right: 0.5rem;
+  padding-bottom: 1rem;
+  padding-top: 1px;
+  margin-top: 0.5rem;
+  background: var(--controllers-color2);
+  border-radius: 10px;
 }
 
 
@@ -42,6 +54,7 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
+  margin-top: 1rem;
 }
 
 .objects-dropdown {
@@ -53,8 +66,16 @@
   user-select: none;
 }
 
-.dimensions {
-  margin-top: -0.4rem;
+.selected-obj-p {
+  font-size: 14px;
+  font-weight: 600;
+  text-transform: uppercase;
+  margin-top: 0.8rem;
+  margin-bottom: -0.2rem;
+}
+
+.eye-dim {
+  margin-bottom: 1.5rem;
 }
 
 .dimensions > p {

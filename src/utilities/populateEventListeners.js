@@ -1,18 +1,7 @@
-export default (menu, canvas, worlds) => {
-  document.getElementById('dimension-inputs').addEventListener('input', e => {
-    e.target.value <= 0 ? e.target.value = 1 : null
-    e.target.value >= 50 ? e.target.value = 50 : null
-
-    menu.action({ 
-      name: "dimensions", 
-      checked: null,
-      value: e.target.value,
-    }, menu.currentWorld);
-  }) 
-  
+export default (menu, canvas, worlds) => {  
   document.getElementById('menu-ui').addEventListener('click', (e) => {
     // IF NOT ROBUST ENOUGH ADD AN HTML TAG CHECK BEFORE PASSING INFO
-  
+
     if (
       e.target.name !== "dimensions" ||
       e.target.name !== "eye" ||
@@ -39,7 +28,19 @@ export default (menu, canvas, worlds) => {
 
     reassigningEventListeners(menu)
   })
-  
+
+  document.getElementById('selected-obj').addEventListener('input', e => {
+    e.target.value <= 0 ? e.target.value = 1 : null
+    e.target.value >= 50 ? e.target.value = 50 : null
+
+    menu.action({ 
+      name: e.target.name, 
+      checked: null,
+      dimension: e.target.id,
+      value: e.target.value,
+    }, menu.currentWorld);
+  }) 
+
   document.getElementById("info").addEventListener('click', e => {
     menu.showInfo()
   })
@@ -62,13 +63,14 @@ const reassigningEventListeners = (menu) => {
   })
 
   // Readding editor mode dimension input change event listener 
-  document.getElementById('dimension-inputs')?.addEventListener('input', e => {
+  document.getElementById('selected-obj')?.addEventListener('input', e => {
     e.target.value <= 0 ? e.target.value = 1 : null
     e.target.value >= 50 ? e.target.value = 50 : null
     
     menu.action({ 
-      name: "dimensions", 
+      name: e.target.name, 
       checked: null,
+      dimension: e.target.id,
       value: e.target.value,
     }, menu.currentWorld);
   })

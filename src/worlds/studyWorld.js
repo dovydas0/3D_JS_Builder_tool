@@ -10,7 +10,7 @@ export class StudyWorld extends World {
     this.camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
     this.controls = new OrbitControls(this.camera, canvas.renderer.domElement)
     this.scene = new THREE.Scene();
-    this.scene.background = new THREE.Color( 0x2020f0 );
+    this.scene.background = new THREE.Color( 0xf0f0f0 );
     this.scene.name = "study"
     this.studyObject = new Cube("object", 1, 1, 1, 0x5544AA, "Lambert")
 
@@ -19,7 +19,7 @@ export class StudyWorld extends World {
   }
 
   initWorld(world, menu, canvas) {
-    const floorObject = new Floor(200, 200)
+    // const floorObject = new Floor(200, 200)
     const ambientLight = new THREE.AmbientLight(0xFFFFFF, 6)
     const dirLight = new THREE.DirectionalLight(0xFFFFFF, 3)
     // const lightHelper = new THREE.CameraHelper(this.dirLight.shadow.camera)
@@ -38,11 +38,12 @@ export class StudyWorld extends World {
     this.studyObject.mesh.position.setScalar(0.5)
     this.controls.enabled = false
     this.controls.autoRotate = false
+    this.controls.autoRotateSpeed = 6
     this.camera.position.set(0, 10, 10)
     this.camera.rotation.set(-0.8, 0, 0)
 
     // Placing initial objects in the scene
-    world.addObject(floorObject.mesh)
+    // world.addObject(floorObject.mesh)
     
     // Placing light
     world.addObject(dirLight)

@@ -40,9 +40,8 @@ export class Cylinder extends Entity {
       : 
       this.materialProperties = { color: color }
     
-    this.geometry = new THREE.CylinderGeometry();
-    this.material = new THREE.MeshBasicMaterial()
-    this.material = new finalMaterial(this.materialProperties);
+    this.geometry = new THREE.CylinderGeometry(radiusTop, radiusBottom, height, radialSegments, heightSegments);
+    this.material = new finalMaterial(this.materialProperties)
     this.mesh = new THREE.Mesh( this.geometry, this.material );
     this.mesh.name = name
     // this.mesh.position.set(new THREE.Vector3(0, 0, 0))

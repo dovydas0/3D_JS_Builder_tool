@@ -66,6 +66,14 @@ export class EditorWorld extends World {
     world.addObject(dirLight)
     world.addObject(ambientLight)
 
+    // ~~~ TEST
+    // this.geometry = new THREE.SphereGeometry(4);
+    // this.material = new THREE.MeshBasicMaterial({ color: 0x5544AA })
+    // this.mesh = new THREE.Mesh( this.geometry, this.material );
+
+    // this.addObject(this.mesh)
+    // ~~~ TEST
+
     this.raycastableObjects.push(floorObject.mesh)
   }
 
