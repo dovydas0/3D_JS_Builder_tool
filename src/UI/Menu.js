@@ -4,6 +4,7 @@ import { Sphere } from "../objects/interactive/Sphere";
 import { changeInfo } from "./changeInfo"
 import { changeMenu } from "./changeMenu"
 import { changeObjectMenu } from "./changeObjectMenu"
+import { reassigningObjectEventListeners } from "../utilities/populateEventListeners"
 
 export class Menu {
   constructor(worldObject, placeholderObject) {
@@ -108,7 +109,7 @@ export class Menu {
           this.currentWorld.controls.autoRotate = true
           :
           this.currentWorld.controls.autoRotate = false
-          this.currentWorld.camera.rotation.set(-0.8, 0, 0)
+          this.currentWorld.camera.rotation.set(-0.642, 0, 0)
           const EyeX = Number(document.getElementById("eye-x").value)
           const EyeY = Number(document.getElementById("eye-y").value)
           const EyeZ = Number(document.getElementById("eye-z").value)
@@ -211,14 +212,17 @@ export class Menu {
           const z = Number(document.getElementById("transform-z")?.value)
           let newObject
 
-          console.log(x, y, z);
+          // x === 0 ? x = 1 : null
+          // y === 0 ? y = 1 : null
+          // z === 0 ? z = 1 : null
           
           switch (eventData.value) {
             case "cube":
               changeObjectMenu(eventData.value, this.currentMode, this.menuParameterCapture)
               
+              
               // Creating a new object and placing it into the grid, on the floor
-              newObject = new Cube("object", x, y, z, 0x5544AA, "Lambert")
+              newObject = new Cube("object", 1, 1, 1, 0x5544AA, "Lambert")
               newObject.mesh.position.set(0.5, 0.5, 0.5)
               break;
             case "sphere":
@@ -236,6 +240,9 @@ export class Menu {
               newObject.mesh.position.set(0.5, 0.5, 0.5)
               break;
           }
+
+          // Reassinging parameter buttons event listeners
+          reassigningObjectEventListeners(this)
 
           // If new object created successfully
           if (newObject?.mesh) {

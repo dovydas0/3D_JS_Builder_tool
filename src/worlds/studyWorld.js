@@ -39,8 +39,8 @@ export class StudyWorld extends World {
     this.controls.enabled = false
     this.controls.autoRotate = false
     this.controls.autoRotateSpeed = 6
-    this.camera.position.set(0, 10, 10)
-    this.camera.rotation.set(-0.8, 0, 0)
+    this.camera.position.set(0, 6, 8)
+    this.camera.rotation.set(-0.642, 0, 0)
 
     // Placing initial objects in the scene
     // world.addObject(floorObject.mesh)

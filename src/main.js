@@ -3,7 +3,7 @@ import { Menu } from "./UI/menu"
 import { Scene } from "./scene"
 import { World } from "./worlds/world"
 import { onPointerDown, onPointerMove, raycasterIntersections } from "./raycasting"
-import populateEventListeners from './utilities/populateEventListeners'
+import { eventListeners } from './utilities/populateEventListeners'
 import Stats from 'three/examples/jsm/libs/stats.module'
 import { Canvas } from './canvas'
 import { EditorWorld } from './worlds/editorWorld'
@@ -84,4 +84,4 @@ if (menu.currentMode === modes.editor) {
   })
 }
 
-populateEventListeners(menu, canvas, worlds)
+eventListeners(menu, canvas, worlds)

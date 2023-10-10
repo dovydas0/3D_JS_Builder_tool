@@ -31,11 +31,11 @@ export const changeMenu = (mode, menuParameterCapture) => {
             </div>
             <div class="dim-input">
               <label>Y</label>
-              <input type="number" name="eye" id="eye-y" value="${menuParameterCapture[mode]?.eye?.y ? menuParameterCapture[mode]?.eye?.y : "10"}" step="0.1" min="-50" max="50">
+              <input type="number" name="eye" id="eye-y" value="${menuParameterCapture[mode]?.eye?.y ? menuParameterCapture[mode]?.eye?.y : "6"}" step="0.1" min="-50" max="50">
             </div>
             <div class="dim-input">
               <label>Z</label>
-              <input type="number" name="eye" id="eye-z" value="${menuParameterCapture[mode]?.eye?.z ? menuParameterCapture[mode]?.eye?.z : "10"}" step="0.1" min="-50" max="50">
+              <input type="number" name="eye" id="eye-z" value="${menuParameterCapture[mode]?.eye?.z ? menuParameterCapture[mode]?.eye?.z : "8"}" step="0.1" min="-50" max="50">
             </div>
           </div>
         </div>
@@ -55,15 +55,15 @@ export const changeMenu = (mode, menuParameterCapture) => {
               <div class="dimension-inputs" id="transform-inputs">
                 <div class="dim-input">
                   <label>X</label>
-                  <input type="number" name="transforms" id="transform-x" value="${menuParameterCapture[mode]?.transform?.x ? menuParameterCapture[mode]?.transform?.x : "1"}" min="-50" max="50">
+                  <input type="number" name="transforms" id="transform-x" value="${menuParameterCapture[mode]?.transform?.x ? menuParameterCapture[mode]?.transform?.x : "0"}" step="0.1" min="-50" max="50">
                 </div>
                 <div class="dim-input">
                   <label>Y</label>
-                  <input type="number" name="transforms" id="transform-y" value="${menuParameterCapture[mode]?.transform?.y ? menuParameterCapture[mode]?.transform?.y : "1"}" min="-50" max="50">
+                  <input type="number" name="transforms" id="transform-y" value="${menuParameterCapture[mode]?.transform?.y ? menuParameterCapture[mode]?.transform?.y : "0"}" step="0.1" min="-50" max="50">
                 </div>
                 <div class="dim-input">
                   <label>Z</label>
-                  <input type="number" name="transforms" id="transform-z" value="${menuParameterCapture[mode]?.transform?.z ? menuParameterCapture[mode]?.transform?.z : "1"}" min="-50" max="50">
+                  <input type="number" name="transforms" id="transform-z" value="${menuParameterCapture[mode]?.transform?.z ? menuParameterCapture[mode]?.transform?.z : "0"}" step="0.1" min="-50" max="50">
                 </div>
               </div>
               <div class="transform-btns">

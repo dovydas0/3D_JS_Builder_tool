@@ -1,4 +1,4 @@
-export const  changeObjectMenu = (object, currentMode, menuParameterCapture) => {
+export const changeObjectMenu = (object, currentMode, menuParameterCapture) => {
   if (currentMode === "editor") {
     let html
     const parentDiv = document.getElementById("selected-obj")
@@ -58,15 +58,15 @@ export const  changeObjectMenu = (object, currentMode, menuParameterCapture) => 
             <div class="dimension-inputs" id="dimension-inputs">
               <div class="dim-input">
                 <label>X</label>
-                <input type="number" name="transforms" id="transform-x" value="${menuParameterCapture[object]?.transform?.x ? menuParameterCapture[object]?.transform?.x : "1"}" step="0.1" min="1" max="50">
+                <input type="number" name="transforms" id="transform-x" value="${menuParameterCapture[object]?.transform?.x ? menuParameterCapture[object]?.transform?.x : "0"}" step="0.1" min="-50" max="50">
               </div>
               <div class="dim-input">
                 <label>Y</label>
-                <input type="number" name="transforms" id="transform-y" value="${menuParameterCapture[object]?.transform?.y ? menuParameterCapture[object]?.transform?.y : "1"}" step="0.1" min="1" max="50">
+                <input type="number" name="transforms" id="transform-y" value="${menuParameterCapture[object]?.transform?.y ? menuParameterCapture[object]?.transform?.y : "0"}" step="0.1" min="-50" max="50">
               </div>
               <div class="dim-input">
                 <label>Z</label>
-                <input type="number" name="transforms" id="transform-z" value="${menuParameterCapture[object]?.transform?.z ? menuParameterCapture[object]?.transform?.z : "1"}" step="0.1" min="1" max="50">
+                <input type="number" name="transforms" id="transform-z" value="${menuParameterCapture[object]?.transform?.z ? menuParameterCapture[object]?.transform?.z : "0"}" step="0.1" min="-50" max="50">
               </div>
             </div>
             <div class="transform-btns">
@@ -87,15 +87,15 @@ export const  changeObjectMenu = (object, currentMode, menuParameterCapture) => 
               <div class="dimension-inputs" id="dimension-inputs">
                 <div class="dim-input">
                   <label>X</label>
-                  <input type="number" name="transforms" id="transform-x" value="${menuParameterCapture[object]?.transform?.x ? menuParameterCapture[object]?.transform?.x : "1"}" step="0.1" min="1" max="50">
+                  <input type="number" name="transforms" id="transform-x" value="${menuParameterCapture[object]?.transform?.x ? menuParameterCapture[object]?.transform?.x : "0"}" step="0.1" min="-50" max="50">
                 </div>
                 <div class="dim-input">
                   <label>Y</label>
-                  <input type="number" name="transforms" id="transform-y" value="${menuParameterCapture[object]?.transform?.y ? menuParameterCapture[object]?.transform?.y : "1"}" step="0.1" min="1" max="50">
+                  <input type="number" name="transforms" id="transform-y" value="${menuParameterCapture[object]?.transform?.y ? menuParameterCapture[object]?.transform?.y : "0"}" step="0.1" min="-50" max="50">
                 </div>
                 <div class="dim-input">
                   <label>Z</label>
-                  <input type="number" name="transforms" id="transform-z" value="${menuParameterCapture[object]?.transform?.z ? menuParameterCapture[object]?.transform?.z : "1"}" step="0.1" min="1" max="50">
+                  <input type="number" name="transforms" id="transform-z" value="${menuParameterCapture[object]?.transform?.z ? menuParameterCapture[object]?.transform?.z : "0"}" step="0.1" min="-50" max="50">
                 </div>
               </div>
               <div class="transform-btns">
@@ -106,13 +106,17 @@ export const  changeObjectMenu = (object, currentMode, menuParameterCapture) => 
             </div>
           </div>
           <div class="selected-obj" id="selected-obj">
-            <p class="selected-obj-p">Sphere</p>
+            <p class="selected-obj-p">Segments</p>
             <div class="dimensions">
-              <p>Dimensions</p>
+              <p></p>
               <div class="dimension-inputs" id="dimension-inputs">
                 <div class="dim-input">
-                  <label for="radius">Radius</label>
-                  <input type="number" name="radius" id="radius" value="0.5" step="0.5" min="0.5" max="50.5">
+                  <label for="radius">Width</label>
+                  <input type="number" name="radius" id="radius" value="1" step="1" min="1" max="50">
+                </div>
+                <div class="dim-input">
+                  <label for="radius">Height</label>
+                  <input type="number" name="radius" id="radius" value="1" step="1" min="1" max="50">
                 </div>
               </div>
             </div>
@@ -128,15 +132,15 @@ export const  changeObjectMenu = (object, currentMode, menuParameterCapture) => 
               <div class="dimension-inputs" id="dimension-inputs">
                 <div class="dim-input">
                   <label>X</label>
-                  <input type="number" name="transforms" id="transform-x" value="${menuParameterCapture[object]?.transform?.x ? menuParameterCapture[object]?.transform?.x : "1"}" step="0.1" min="1" max="50">
+                  <input type="number" name="transforms" id="transform-x" value="${menuParameterCapture[object]?.transform?.x ? menuParameterCapture[object]?.transform?.x : "0"}" step="0.1" min="-50" max="50">
                 </div>
                 <div class="dim-input">
                   <label>Y</label>
-                  <input type="number" name="transforms" id="transform-y" value="${menuParameterCapture[object]?.transform?.y ? menuParameterCapture[object]?.transform?.y : "1"}" step="0.1" min="1" max="50">
+                  <input type="number" name="transforms" id="transform-y" value="${menuParameterCapture[object]?.transform?.y ? menuParameterCapture[object]?.transform?.y : "0"}" step="0.1" min="-50" max="50">
                 </div>
                 <div class="dim-input">
                   <label>Z</label>
-                  <input type="number" name="transforms" id="transform-z" value="${menuParameterCapture[object]?.transform?.z ? menuParameterCapture[object]?.transform?.z : "1"}" step="0.1" min="1" max="50">
+                  <input type="number" name="transforms" id="transform-z" value="${menuParameterCapture[object]?.transform?.z ? menuParameterCapture[object]?.transform?.z : "0"}" step="0.1" min="-50" max="50">
                 </div>
               </div>
               <div class="transform-btns">

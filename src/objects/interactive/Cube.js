@@ -44,7 +44,7 @@ export class Cube extends Entity {
     this.material = new finalMaterial(this.materialProperties);
     this.mesh = new THREE.Mesh( this.geometry, this.material );
     this.mesh.name = name
-
+    
     if (!placeholderObj) {
       this.mesh.castShadow = true;
       this.mesh.receiveShadow = true;

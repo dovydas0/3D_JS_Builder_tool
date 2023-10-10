@@ -1,6 +1,7 @@
 import * as THREE from 'three'
 import { Cube } from './objects/interactive/Cube';
 import { Sphere } from './objects/interactive/Sphere';
+import { Cylinder } from './objects/interactive/Cylinder';
 
 export const onPointerDown = (e, pointer, raycaster, worldObject, menu) => {
   if (menu.currentMode === "editor") {
@@ -46,8 +47,9 @@ export const onPointerDown = (e, pointer, raycaster, worldObject, menu) => {
         intersectLoc.y += 0.0000001
 
         // ~~~ IMPLEMENT A CHECK FOR EXISTING BLOCKS IN THE PLACEHOLDER'S AREA
-        
-        
+        // Step 1: Iterate through every object in the world
+        // Step 2: check if object's x, y, z locations aren't within intersectLoc locations
+
         if (e.shiftKey) {
           // Removing an object
           if (intersect.object.name === 'object') {
@@ -76,12 +78,12 @@ export const onPointerDown = (e, pointer, raycaster, worldObject, menu) => {
               newObject = new Sphere("object", menu.currentObject.radius, 0x5544AA, "Lambert", false, 32, 16)
               break;
             case "CylinderGeometry":
+              // newObject = new Cylinder("object", menu.currentObject.radius, 0x5544AA, "Lambert", false, 32, 16)
               break;
           }
 
           if (newObject?.mesh) {
             const positionVector = new THREE.Vector3( Math.floor(worldObject.placeholderObject.geometry.parameters.width) / 2, Math.floor(worldObject.placeholderObject.geometry.parameters.height) / 2, Math.floor(worldObject.placeholderObject.geometry.parameters.depth) / 2)
-            
             newObject.mesh.position.copy( intersectLoc )
 
             switch (newObject.geometry.type) {
@@ -90,14 +92,23 @@ export const onPointerDown = (e, pointer, raycaster, worldObject, menu) => {
                 .add(positionVector)
                 break;
               case "SphereGeometry":
+                const size = menu.currentObject.radius
+                const hiddenNewObject = new Cube("object", size * 2, size * 2, size * 2, 0x5544AA, "Lambert")
+                const hiddenPositionVector = new THREE.Vector3( 0.5, size, 0.5)
+
+                hiddenNewObject.mesh.position.copy(intersectLoc)
+                hiddenNewObject.mesh.position.divideScalar(1).floor().add(hiddenPositionVector)
+                hiddenNewObject.mesh.visible = false
+                menu.currentWorld.addRaycastableObject(hiddenNewObject.mesh)
+
                 newObject.mesh.position.divideScalar(1).floor()
                 .add(new THREE.Vector3(0.5, worldObject.placeholderObject.radius, 0.5))
                 break;
-              case "CylinderGeometry":
-      
+              case "CylinderGeometry":                  
+                // newObject.mesh.position.divideScalar(1).floor()
+                // .add(new THREE.Vector3(0.5, worldObject.placeholderObject.radius, 0.5))
                 break;
             }
-            
             menu.currentWorld.addRaycastableObject(newObject.mesh)
           }
         }
