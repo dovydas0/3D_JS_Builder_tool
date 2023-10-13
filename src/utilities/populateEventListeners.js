@@ -1,6 +1,7 @@
 import * as THREE from 'three';
 
 export const eventListeners = (menu, canvas, worlds) => {  
+  // Covers every input in left menu UI
   document.getElementById('menu-ui').addEventListener('input', (e) => {
     // IF NOT ROBUST ENOUGH ADD AN HTML TAG CHECK BEFORE PASSING INFO
 

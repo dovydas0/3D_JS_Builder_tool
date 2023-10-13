@@ -12,14 +12,22 @@ export class Menu {
     this.currentMode = "editor";
     this.currentWorld = worldObject
     this.currentScene = worldObject.scene
-    this.currentObject = placeholderObject
     this.menuParameterCapture = {
       study: {},
       editor: {},
       play: {},
       craft: {},
     }
-  
+    
+
+    this.currentObject = placeholderObject.object
+    this.currentObjectColor = placeholderObject.color
+    // Set all menu parameters to local variables for easier object manipulation
+    // this.currentObjectForm
+    // this.currentObjectX
+    // this.currentObjectY
+    // this.currentObjectZ
+    
     // Accessing all necessary handles in the menu
     this.floorTiles = document.getElementById("floor-tile").checked
     this.axisHelper = document.getElementById("axis-helper").checked
@@ -292,6 +300,10 @@ export class Menu {
         const zEye = Number(document.getElementById("eye-z").value)
         
         this.currentWorld.camera.position.set(xEye, yEye, zEye)
+        break;
+      case "color-picker":
+        this.currentObject.material.color.set(eventData.value)
+        this.currentObjectColor = eventData.value
         break;
     }
   }

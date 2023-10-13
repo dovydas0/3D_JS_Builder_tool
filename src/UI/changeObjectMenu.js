@@ -81,7 +81,7 @@ export const changeObjectMenu = (object, currentMode, menuParameterCapture) => {
       case "sphere":
         html = `
           <div class="selected-obj" id="selected-obj">
-            <p class="selected-obj-p">Cube</p>
+            <p class="selected-obj-p">Sphere</p>
             <div class="dimensions">
               <p>Transform (object)</p>
               <div class="dimension-inputs" id="dimension-inputs">
@@ -126,7 +126,7 @@ export const changeObjectMenu = (object, currentMode, menuParameterCapture) => {
       case "cylinder":
         html = `
           <div class="selected-obj" id="selected-obj">
-            <p class="selected-obj-p">Cube</p>
+            <p class="selected-obj-p">Cylinder</p>
             <div class="dimensions">
               <p>Transform (object)</p>
               <div class="dimension-inputs" id="dimension-inputs">

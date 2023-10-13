@@ -72,10 +72,10 @@ export const onPointerDown = (e, pointer, raycaster, worldObject, menu) => {
                 height: Math.floor(menu.currentObject.geometry.parameters.height),
                 width: Math.floor(menu.currentObject.geometry.parameters.width)
               }
-              newObject = new Cube("object", currentObject.width, currentObject.depth, currentObject.height, 0x5544AA, "Lambert")
+              newObject = new Cube("object", currentObject.width, currentObject.depth, currentObject.height, menu.currentObjectColor, "Lambert")
               break;
             case "SphereGeometry":
-              newObject = new Sphere("object", menu.currentObject.radius, 0x5544AA, "Lambert", false, 32, 16)
+              newObject = new Sphere("object", menu.currentObject.radius, menu.currentObjectColor, "Lambert", false, 32, 16)
               break;
             case "CylinderGeometry":
               // newObject = new Cylinder("object", menu.currentObject.radius, 0x5544AA, "Lambert", false, 32, 16)

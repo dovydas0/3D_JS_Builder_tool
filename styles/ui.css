@@ -37,6 +37,50 @@
   border-radius: 10px;
 }
 
+.selected-obj .header {
+  display: flex;
+}
+
+.selected-obj .suggested-colors {
+  display: flex;
+  margin-top: 1rem;
+}
+
+.selected-obj .suggested-colors div {
+  margin-right: 3px;
+  border-radius: 50%;
+  width: 20px;
+  height: 20px;
+  cursor: pointer;
+}
+
+.suggested-colors .color1 {
+  background: #5544AA;
+}
+
+.suggested-colors .color2 {
+  background: #44aa4b;
+}
+
+.suggested-colors .color3 {
+  background: #aa4444;
+}
+
+.suggested-colors .color4 {
+  background: #a0aa44;
+}
+
+.suggested-colors .color5 {
+  background: #4494aa;
+}
+
+.suggested-colors .color6 {
+  background: #aa7a44;
+}
+
+.suggested-colors .color7 {
+  background: #aa44a3;
+}
 
 .helpers {
   display: flex;
@@ -72,6 +116,21 @@
   text-transform: uppercase;
   margin-top: 0.8rem;
   margin-bottom: -0.2rem;
+}
+
+.color-parameter .header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.color-parameter input {
+  padding: 0;
+  margin-top: 8px;
+  margin-bottom: -8px;
+  border: none;
+  background: none;
+  cursor: pointer;
 }
 
 .eye-dim {

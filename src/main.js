@@ -1,5 +1,5 @@
 import * as THREE from 'three'
-import { Menu } from "./UI/menu"
+import { Menu } from "./UI/Menu.js"
 import { Scene } from "./scene"
 import { World } from "./worlds/world"
 import { onPointerDown, onPointerMove, raycasterIntersections } from "./raycasting"
@@ -19,6 +19,10 @@ document.body.appendChild(stats.dom)
 const modes = { editor: "editor", study: "study", play: "play", craft: "craft"}
 
 const initplaceholderObject = new Cube("object", 1, 1, 1, 0x5544AA, "Basic", true)
+const initPlaceholderObjectArr = {
+  object: initplaceholderObject,
+  color: 0x5544AA,
+}
 const canvas = new Canvas(75, window.innerWidth / window.innerHeight, 0.1, 1000)
 
 const editorWorld = new EditorWorld(canvas, initplaceholderObject)
@@ -31,7 +35,7 @@ const worlds = {
   craft: craftWorld
 }
 
-const menu = new Menu(worlds.editor, initplaceholderObject)
+const menu = new Menu(worlds.editor, initPlaceholderObjectArr)
 const raycaster = new THREE.Raycaster();
 const pointer = new THREE.Vector2();
 
