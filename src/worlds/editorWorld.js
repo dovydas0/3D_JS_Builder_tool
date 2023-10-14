@@ -43,7 +43,7 @@ export class EditorWorld extends World {
     // }
 
     const floorObject = new Floor(200, 200)
-    const ambientLight = new THREE.AmbientLight(0xFFFFFF, 6)
+    const ambientLight = new THREE.AmbientLight(0xFFFFFF, 5)
     const dirLight = new THREE.DirectionalLight(0xFFFFFF, 3)
     // const controls = new OrbitControls(this.canvas.camera, this.canvas.renderer.domElement)
     // const lightHelper = new THREE.CameraHelper(this.dirLight.shadow.camera)

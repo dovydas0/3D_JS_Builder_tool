@@ -5,11 +5,13 @@ export const eventListeners = (menu, canvas, worlds) => {
   document.getElementById('menu-ui').addEventListener('input', (e) => {
     // IF NOT ROBUST ENOUGH ADD AN HTML TAG CHECK BEFORE PASSING INFO
 
+    console.log(e.target);
+
     menu.action({ 
       name: e.target.name, 
       checked: e.target.checked,
       value: e.target.value,
-    }, menu.currentWorld);
+    });
   })
   
   // document.getElementById('objects').addEventListener('click', (e) => {

@@ -46,7 +46,11 @@
   margin-top: 1rem;
 }
 
-.selected-obj .suggested-colors div {
+.selected-obj .suggested-colors input {
+  display: none;
+}
+
+.selected-obj .suggested-colors label {
   margin-right: 3px;
   border-radius: 50%;
   width: 20px;

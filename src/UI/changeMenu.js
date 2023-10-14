@@ -126,6 +126,37 @@ export const changeMenu = (mode, menuParameterCapture) => {
             </div>
           </div>
         </div>
+        <div class="color-picker">
+          <div class="selected-obj color-parameter">
+            <div class="header">
+              <p class="selected-obj-p">Color</p>
+              <input type="color" value="#5544AA" name="color-picker">
+            </div>
+            <div class="suggested-colors">
+              <label class="color1">
+                <input type="checkbox" name="color-picker" value="#5544AA" />
+              </label>
+              <label class="color2">
+                <input type="checkbox" name="color-picker" value="#44aa4b" />
+              </label>
+              <label class="color3">
+                <input type="checkbox" name="color-picker" value="#aa4444" />
+              </label>
+              <label class="color4">
+                <input type="checkbox" name="color-picker" value="#a0aa44" />
+              </label>
+              <label class="color5">
+                <input type="checkbox" name="color-picker" value="#4494aa" />
+              </label>
+              <label class="color6">
+                <input type="checkbox" name="color-picker" value="#aa7a44" />
+              </label>
+              <label class="color7">
+                <input type="checkbox" name="color-picker" value="#aa44a3" />
+              </label>
+            </div>
+          </div>
+        </div>
       `
       break;
     case "play":

@@ -148,9 +148,9 @@ export class Menu {
         // If new object created successfully
         if (newCubeDim?.mesh) {
           // Removing old placeholder object and adding a new one
-          this.currentWorld.scene.remove(worldObject.placeholderObject.mesh)
+          this.currentWorld.scene.remove(this.currentWorld.placeholderObject.mesh)
           
-          worldObject.updatePlaceholderObject(newCubeDim)
+          this.currentWorld.updatePlaceholderObject(newCubeDim)
           this.currentWorld.scene.add(newCubeDim.mesh)
           this.currentObject = newCubeDim
         }
@@ -165,9 +165,9 @@ export class Menu {
         // If new object created successfully
         if (newSphereRad?.mesh) {
           // Removing old placeholder object and adding a new one
-          this.currentWorld.scene.remove(worldObject.placeholderObject.mesh)
+          this.currentWorld.scene.remove(this.currentWorld.placeholderObject.mesh)
           
-          worldObject.updatePlaceholderObject(newSphereRad)
+          this.currentWorld.updatePlaceholderObject(newSphereRad)
           this.currentWorld.scene.add(newSphereRad.mesh)
           this.currentObject = newSphereRad
         }
@@ -207,9 +207,9 @@ export class Menu {
           // If new object created successfully
           if (newObject?.mesh) {
             // Removing old placeholder object and adding a new one
-            this.currentWorld.scene.remove(worldObject.placeholderObject.mesh)
+            this.currentWorld.scene.remove(this.currentWorld.placeholderObject.mesh)
             
-            worldObject.updatePlaceholderObject(newObject)
+            this.currentWorld.updatePlaceholderObject(newObject)
             this.currentWorld.scene.add(newObject.mesh)
             this.currentObject = newObject
           }
@@ -255,9 +255,9 @@ export class Menu {
           // If new object created successfully
           if (newObject?.mesh) {
             // Removing old placeholder object and adding a new one
-            this.currentWorld.removeObject(worldObject.studyObject.mesh)
+            this.currentWorld.removeObject(this.currentWorld.studyObject.mesh)
             
-            worldObject.updateStudyObject(newObject)
+            this.currentWorld.updateStudyObject(newObject)
             this.currentWorld.addObject(newObject.mesh)
           }
         }
@@ -288,9 +288,9 @@ export class Menu {
         // If new object created successfully
         if (newObjectTransform?.mesh) {
           // Removing old object and adding a new one
-          this.currentWorld.removeObject(worldObject.studyObject.mesh)
+          this.currentWorld.removeObject(this.currentWorld.studyObject.mesh)
 
-          worldObject.updateStudyObject(newObjectTransform)
+          this.currentWorld.updateStudyObject(newObjectTransform)
           this.currentWorld.addObject(newObjectTransform.mesh)
         }
         break;
