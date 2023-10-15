@@ -12,15 +12,15 @@ export const changeObjectMenu = (object, currentMode, menuParameterCapture) => {
             <div class="dimension-inputs" id="dimension-inputs">
               <div class="dim-input">
                 <label for="x-dim">X</label>
-                <input type="number" name="dimensions" id="x-dim" value="1" step="1" min="1" max="50">
+                <input type="number" name="dimensions" id="x-dim" value="${menuParameterCapture[currentMode]?.dimensions?.x ? menuParameterCapture[currentMode]?.dimensions?.x : 1}" step="1" min="1" max="50">
               </div>
               <div class="dim-input">
                 <label for="y-dim">Y</label>
-                <input type="number" name="dimensions" id="y-dim" value="1" step="1" min="1" max="50">
+                <input type="number" name="dimensions" id="y-dim" value="${menuParameterCapture[currentMode]?.dimensions?.y ? menuParameterCapture[currentMode]?.dimensions?.y : 1}" step="1" min="1" max="50">
               </div>
               <div class="dim-input">
                 <label for="z-dim">Z</label>
-                <input type="number" name="dimensions" id="z-dim" value="1" step="1" min="1" max="50">
+                <input type="number" name="dimensions" id="z-dim" value="${menuParameterCapture[currentMode]?.dimensions?.z ? menuParameterCapture[currentMode]?.dimensions?.z : 1}" step="1" min="1" max="50">
               </div>
             </div>
             

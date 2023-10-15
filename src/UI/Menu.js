@@ -70,32 +70,64 @@ export class Menu {
 
   previousModeSnapshot(prevMode) {
     switch (prevMode) {
+      case "editor":
+        const floorTilesEditor = document.getElementById("floor-tile")?.checked
+        const axisHelperEditor = document.getElementById("axis-helper")?.checked
+        const objectEditor = document.getElementById("objects")?.value
+        const colorEditor = document.getElementById("color-input")?.value
+        let dimensionsEditor = {}
+
+        switch (objectEditor) {
+          case "cube":
+            const dimXEditor = document.getElementById("x-dim")?.value
+            const dimYEditor = document.getElementById("y-dim")?.value
+            const dimZEditor = document.getElementById("z-dim")?.value
+            
+            dimensionsEditor = {x: dimXEditor, y: dimYEditor, z: dimZEditor}
+            break;
+          case "sphere":
+            const radiusEditor = Number(document.getElementById("radius")?.value)
+            
+            dimensionsEditor = { radius: radiusEditor }
+            break;
+        }
+
+        this.menuParameterCapture[prevMode] = {
+          floorTiles: floorTilesEditor,
+          axisHelper: axisHelperEditor,
+          object: objectEditor,
+          dimensions: dimensionsEditor,
+          color: colorEditor
+        }
+
+        break;
       case "study":
-        const rotation = document.getElementById("rotation")
-        const axisHelper = document.getElementById("axis-helper")
-        const object = document.getElementById("objects")?.value
-        const eyeX = Number(document.getElementById("eye-x")?.value)
-        const eyeY = Number(document.getElementById("eye-y")?.value)
-        const eyeZ = Number(document.getElementById("eye-z")?.value)
-        const transformX = Number(document.getElementById("transform-x")?.value)
-        const transformY = Number(document.getElementById("transform-y")?.value)
-        const transformZ = Number(document.getElementById("transform-z")?.value)
+        const rotationStudy = document.getElementById("rotation")
+        const axisHelperStudy = document.getElementById("axis-helper")
+        const eyeXStudy = Number(document.getElementById("eye-x")?.value)
+        const eyeYStudy = Number(document.getElementById("eye-y")?.value)
+        const eyeZStudy = Number(document.getElementById("eye-z")?.value)
+        const objectStudy = document.getElementById("objects")?.value
+        const transformXStudy = Number(document.getElementById("transform-x")?.value)
+        const transformYStudy = Number(document.getElementById("transform-y")?.value)
+        const transformZStudy = Number(document.getElementById("transform-z")?.value)
     
         this.menuParameterCapture[prevMode] = {
-          rotation: rotation.checked,
-          axisHelper: axisHelper.checked,
-          object: object,
+          rotation: rotationStudy.checked,
+          axisHelper: axisHelperStudy.checked,
+          object: objectStudy,
           eye: {
-            x: eyeX,
-            y: eyeY,
-            z: eyeZ,
+            x: eyeXStudy,
+            y: eyeYStudy,
+            z: eyeZStudy,
           },
           transform: {
-            x: transformX,
-            y: transformY,
-            z: transformZ,
+            x: transformXStudy,
+            y: transformYStudy,
+            z: transformZStudy,
           }
         }
+        
         break;
     }
   }
@@ -143,7 +175,7 @@ export class Menu {
         const zDim = Math.floor(Number(document.getElementById("z-dim").value))
 
         // Creating a new object and placing it into the grid, on the floor
-        newCubeDim = new Cube("object", xDim, yDim, zDim, 0x5544AA, "Basic", true)
+        newCubeDim = new Cube("object", xDim, yDim, zDim, this.currentObjectColor, "Basic", true)
 
         // If new object created successfully
         if (newCubeDim?.mesh) {
@@ -160,7 +192,7 @@ export class Menu {
         const sphereRad = Number(document.getElementById("radius").value)
 
         // Creating a new object and placing it into the grid, on the floor
-        newSphereRad = new Sphere("object", sphereRad, 0x5544AA, "Basic", true)
+        newSphereRad = new Sphere("object", sphereRad, this.currentObjectColor, "Basic", true)
 
         // If new object created successfully
         if (newSphereRad?.mesh) {
@@ -185,7 +217,7 @@ export class Menu {
               const z = Math.floor(Number(document.getElementById("z-dim").value))
               
               // Creating a new object and placing it into the grid, on the floor
-              newObject = new Cube("object", x, y, z, 0x5544AA, "Basic", true)
+              newObject = new Cube("object", x, y, z, this.currentObjectColor, "Basic", true)
               newObject.mesh.position.set(0.5, 0.5, 0.5)
               break;
             case "sphere":
@@ -194,7 +226,7 @@ export class Menu {
               const radius = Number(document.getElementById("radius").value)
               
               // Creating a new object and placing it into the grid, on the floor
-              newObject = new Sphere("object", radius, 0x5544AA, "Basic", true)
+              newObject = new Sphere("object", radius, this.currentObjectColor, "Basic", true)
               newObject.mesh.position.set(0.5, 0.5, 0.5)
 
               break;
@@ -230,21 +262,21 @@ export class Menu {
               
               
               // Creating a new object and placing it into the grid, on the floor
-              newObject = new Cube("object", 1, 1, 1, 0x5544AA, "Lambert")
+              newObject = new Cube("object", 1, 1, 1, this.currentObjectColor, "Lambert")
               newObject.mesh.position.set(0.5, 0.5, 0.5)
               break;
             case "sphere":
               changeObjectMenu(eventData.value, this.currentMode, this.menuParameterCapture)
               
               // Creating a new object and placing it into the grid, on the floor
-              newObject = new Sphere("object", 0.5, 0x5544AA, "Lambert")
+              newObject = new Sphere("object", 0.5, this.currentObjectColor, "Lambert")
               newObject.mesh.position.set(0.5, 0.5, 0.5)
               break;
             case "cylinder":
               changeObjectMenu(eventData.value, this.currentMode, this.menuParameterCapture)
                 
               // Creating a new object and placing it into the grid, on the floor
-              newObject = new Cylinder("object", 0.5, 0.5, 1, 0x5544AA, "Lambert")
+              newObject = new Cylinder("object", 0.5, 0.5, 1, this.currentObjectColor, "Lambert")
               newObject.mesh.position.set(0.5, 0.5, 0.5)
               break;
           }
@@ -271,11 +303,11 @@ export class Menu {
 
         switch (objectTransform) {
           case "cube":
-            newObjectTransform = new Cube("object", xTrans, yTrans, zTrans, 0x5544AA, "Lambert")
+            newObjectTransform = new Cube("object", xTrans, yTrans, zTrans, this.currentObjectColor, "Lambert")
             newObjectTransform.mesh.position.addScalar(0.5)
             break;
           case "sphere":
-            newObjectTransform = new Sphere("object", 2, 0x5544AA, "Lambert")
+            newObjectTransform = new Sphere("object", 2, this.currentObjectColor, "Lambert")
             // console.log(newObject.mesh.position.x);
             // console.log(newObject.mesh.position.y);
             // console.log(newObject.mesh.position.z);
@@ -302,8 +334,13 @@ export class Menu {
         this.currentWorld.camera.position.set(xEye, yEye, zEye)
         break;
       case "color-picker":
+        const colorInput = document.getElementById("color-input")
+
         this.currentObject.material.color.set(eventData.value)
         this.currentObjectColor = eventData.value
+        
+        colorInput.value = eventData.value
+
         break;
     }
   }

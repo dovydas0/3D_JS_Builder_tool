@@ -2,6 +2,8 @@ export const changeMenu = (mode, menuParameterCapture) => {
   let html
   const menu = document.getElementById("menu-ui")
 
+  console.log(menuParameterCapture[mode]?.dimensions?.x);
+
   switch (mode) {
     case "study":
       html = `
@@ -84,14 +86,14 @@ export const changeMenu = (mode, menuParameterCapture) => {
           <div class="checkbox">
             <p>Floor Tiles</p>
             <label class="el-switch el-switch-sm">
-              <input type="checkbox" name="floor-grid" id="floor-tile" checked>
+              <input type="checkbox" name="floor-grid" id="floor-tile" ${menuParameterCapture[mode]?.floorTiles ? "checked": ""}>
               <span class="el-switch-style"></span>
             </label>
           </div>
           <div class="checkbox">
             <p>Axis Helper</p>
             <label class="el-switch el-switch-sm">
-              <input type="checkbox" name="axis-helper" id="axis-helper">
+              <input type="checkbox" name="axis-helper" id="axis-helper" ${menuParameterCapture[mode]?.axisHelper ? "checked": ""}>
               <span class="el-switch-style"></span>
             </label>
           </div>
@@ -99,9 +101,9 @@ export const changeMenu = (mode, menuParameterCapture) => {
         <div class="objects">
           <p>Object</p>
           <select class="objects-dropdown" name="objects" id="objects">
-            <option value="cube">Cube</option>
-            <option value="sphere">Sphere</option>
-            <option value="cylinder">Cylinder</option>
+            <option ${menuParameterCapture[mode]?.object === "cube" ? "selected" : ""} value="cube">Cube</option>
+            <option ${menuParameterCapture[mode]?.object === "sphere" ? "selected" : ""} value="sphere">Sphere</option>
+            <option ${menuParameterCapture[mode]?.object === "cylinder" ? "selected" : ""} value="cylinder">Cylinder</option>
           </select>
         </div>
         <div class="selected-parameters" id="selected-parameters">
@@ -112,15 +114,15 @@ export const changeMenu = (mode, menuParameterCapture) => {
               <div class="dimension-inputs" id="dimension-inputs">
                 <div class="dim-input">
                   <label for="x-dim">X</label>
-                  <input type="number" name="dimensions" id="x-dim" value="1" step="1" min="1" max="50">
+                  <input type="number" name="dimensions" id="x-dim" value="${menuParameterCapture[mode]?.dimensions?.x ? menuParameterCapture[mode]?.dimensions?.x : 1}" step="1" min="1" max="50">
                 </div>
                 <div class="dim-input">
                   <label for="y-dim">Y</label>
-                  <input type="number" name="dimensions" id="y-dim" value="1" step="1" min="1" max="50">
+                  <input type="number" name="dimensions" id="y-dim" value="${menuParameterCapture[mode]?.dimensions?.y ? menuParameterCapture[mode]?.dimensions?.y : 1}" step="1" min="1" max="50">
                 </div>
                 <div class="dim-input">
                   <label for="z-dim">Z</label>
-                  <input type="number" name="dimensions" id="z-dim" value="1" step="1" min="1" max="50">
+                  <input type="number" name="dimensions" id="z-dim" value="${menuParameterCapture[mode]?.dimensions?.z ? menuParameterCapture[mode]?.dimensions?.z : 1}" step="1" min="1" max="50">
                 </div>
               </div>
             </div>
@@ -130,7 +132,7 @@ export const changeMenu = (mode, menuParameterCapture) => {
           <div class="selected-obj color-parameter">
             <div class="header">
               <p class="selected-obj-p">Color</p>
-              <input type="color" value="#5544AA" name="color-picker">
+              <input type="color" value="${menuParameterCapture[mode]?.color ? menuParameterCapture[mode]?.color : "#5544AA"}" name="color-picker" id="color-input">
             </div>
             <div class="suggested-colors">
               <label class="color1">
@@ -167,5 +169,6 @@ export const changeMenu = (mode, menuParameterCapture) => {
       html = ""
       break;
   }
+  // console.log(html);
   menu.innerHTML = html
 }
