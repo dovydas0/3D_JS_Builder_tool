@@ -2,7 +2,6 @@ export const changeMenu = (mode, menuParameterCapture) => {
   let html
   const menu = document.getElementById("menu-ui")
 
-
   switch (mode) {
     case "study":
       html = `
@@ -72,6 +71,37 @@ export const changeMenu = (mode, menuParameterCapture) => {
                 <button class="btn-1" id="btn-scale">Scale</button>
                 <button class="btn-1" id="btn-rotate">Rotate</button>
               </div>
+            </div>
+          </div>
+        </div>
+        <div class="color-picker">
+          <div class="selected-obj color-parameter">
+            <div class="header">
+              <p class="selected-obj-p">Color</p>
+              <input type="color" value="${menuParameterCapture[mode]?.color ? menuParameterCapture[mode]?.color : "#5544AA"}" name="color-picker-study" id="color-input">
+            </div>
+            <div class="suggested-colors">
+              <label class="color1">
+                <input type="checkbox" name="color-picker-study" value="#5544AA" />
+              </label>
+              <label class="color2">
+                <input type="checkbox" name="color-picker-study" value="#44aa4b" />
+              </label>
+              <label class="color3">
+                <input type="checkbox" name="color-picker-study" value="#aa4444" />
+              </label>
+              <label class="color4">
+                <input type="checkbox" name="color-picker-study" value="#a0aa44" />
+              </label>
+              <label class="color5">
+                <input type="checkbox" name="color-picker-study" value="#4494aa" />
+              </label>
+              <label class="color6">
+                <input type="checkbox" name="color-picker-study" value="#aa7a44" />
+              </label>
+              <label class="color7">
+                <input type="checkbox" name="color-picker-study" value="#aa44a3" />
+              </label>
             </div>
           </div>
         </div>

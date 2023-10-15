@@ -3,8 +3,6 @@ export const changeObjectMenu = (object, currentMode, menuParameterCapture) => {
     let html
     const parentDiv = document.getElementById("selected-obj")
 
-    console.log(object, currentMode, menuParameterCapture);
-
     switch(object.toLowerCase()) {
       case "cube":
         html = `

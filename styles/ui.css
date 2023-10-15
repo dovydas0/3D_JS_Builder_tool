@@ -355,7 +355,7 @@
 .transform-btns {
   display: flex;
   justify-content: center;
-  gap: 8px;
+  gap: 3px;
   margin-top: 1rem;
 }
 

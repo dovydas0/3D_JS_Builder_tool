@@ -13,6 +13,7 @@ export class StudyWorld extends World {
     this.scene.background = new THREE.Color( 0xf0f0f0 );
     this.scene.name = "study"
     this.studyObject = new Cube("object", 1, 1, 1, 0x5544AA, "Lambert")
+    this.studyObjectColor = 0x5544AA
 
     // constructing array of objects which will be scanned by raycaster
     // this.raycastableObjects.push(this.floorObject.mesh)

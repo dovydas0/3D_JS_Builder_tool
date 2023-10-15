@@ -21,7 +21,7 @@ export class Menu {
     
 
     this.currentObject = placeholderObject.object
-    this.currentObjectColor = placeholderObject.color
+    this.currentObjectColor = placeholderObject.color 
     // Set all menu parameters to local variables for easier object manipulation
     // this.currentObjectForm
     // this.currentObjectX
@@ -69,7 +69,13 @@ export class Menu {
 
     // Resetting study object
     if (mode === "study") {
-      const defaultCube = new Cube("object", 1, 1, 1, 0x5544AA, "Lambert")
+      const studyObjectColor = this.menuParameterCapture[mode].color ? 
+        this.menuParameterCapture[mode].color
+        :
+        this.currentWorld.studyObjectColor
+
+      const defaultCube = new Cube("object", 1, 1, 1, studyObjectColor, "Lambert")
+      
       if (defaultCube?.mesh) {
         defaultCube.mesh.position.set(0.5, 0.5, 0.5)
         this.currentWorld.removeObject(this.currentWorld.studyObject.mesh)
@@ -123,11 +129,14 @@ export class Menu {
         const transformXStudy = Number(document.getElementById("transform-x")?.value)
         const transformYStudy = Number(document.getElementById("transform-y")?.value)
         const transformZStudy = Number(document.getElementById("transform-z")?.value)
-    
+        const colorStudy = document.getElementById("color-input")?.value
+
+
         this.menuParameterCapture[prevMode] = {
           rotation: rotationStudy.checked,
           axisHelper: axisHelperStudy.checked,
           object: objectStudy,
+          color: colorStudy,
           eye: {
             x: eyeXStudy,
             y: eyeYStudy,
@@ -265,21 +274,21 @@ export class Menu {
               changeObjectMenu(eventData.value, this.currentMode, this.menuParameterCapture)
               
               // Creating a new object and placing it into the grid, on the floor
-              newObject = new Cube("object", 1, 1, 1, 0x5544AA, "Lambert")
+              newObject = new Cube("object", 1, 1, 1, this.currentWorld.studyObjectColor, "Lambert")
               newObject.mesh.position.set(0.5, 0.5, 0.5)
               break;
             case "sphere":
               changeObjectMenu(eventData.value, this.currentMode, this.menuParameterCapture)
               
               // Creating a new object and placing it into the grid, on the floor
-              newObject = new Sphere("object", 0.5, 0x5544AA, "Lambert")
+              newObject = new Sphere("object", 0.5, this.currentWorld.studyObjectColor, "Lambert")
               newObject.mesh.position.set(0.5, 0.5, 0.5)
               break;
             case "cylinder":
               changeObjectMenu(eventData.value, this.currentMode, this.menuParameterCapture)
                 
               // Creating a new object and placing it into the grid, on the floor
-              newObject = new Cylinder("object", 0.5, 0.5, 1, 0x5544AA, "Lambert")
+              newObject = new Cylinder("object", 0.5, 0.5, 1, this.currentWorld.studyObjectColor, "Lambert")
               newObject.mesh.position.set(0.5, 0.5, 0.5)
               break;
           }
@@ -343,6 +352,15 @@ export class Menu {
         this.currentObjectColor = eventData.value
         
         colorInput.value = eventData.value
+
+        break;
+      case "color-picker-study":
+        const colorInputStudy = document.getElementById("color-input")
+
+        this.currentWorld.studyObject.material.color.set(eventData.value)
+        this.currentWorld.studyObjectColor = eventData.value
+        
+        colorInputStudy.value = eventData.value
 
         break;
     }
