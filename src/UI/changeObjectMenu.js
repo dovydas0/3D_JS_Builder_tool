@@ -110,12 +110,12 @@ export const changeObjectMenu = (object, currentMode, menuParameterCapture) => {
               <p></p>
               <div class="dimension-inputs" id="dimension-inputs">
                 <div class="dim-input">
-                  <label for="radius">Width</label>
-                  <input type="number" name="radius" id="radius" value="1" step="1" min="1" max="50">
+                  <label>Width</label>
+                  <input type="number" name="segments" id="segments-width" value="32" step="1" min="3" max="32">
                 </div>
                 <div class="dim-input">
-                  <label for="radius">Height</label>
-                  <input type="number" name="radius" id="radius" value="1" step="1" min="1" max="50">
+                  <label>Height</label>
+                  <input type="number" name="segments" id="segments-height" value="16" step="1" min="2" max="16">
                 </div>
               </div>
             </div>

@@ -363,6 +363,24 @@ export class Menu {
         colorInputStudy.value = eventData.value
 
         break;
+
+      case "segments":
+        const segmentWidth = document.getElementById("segments-width")?.value
+        const segmentheight = document.getElementById("segments-height")?.value
+        
+        const newSphere = new Sphere("object", 0.5, this.currentWorld.studyObjectColor, "Lambert", false, segmentWidth, segmentheight)
+        newSphere.mesh.position.set(0.5, 0.5, 0.5)
+
+        // If new object created successfully
+        if (newSphere?.mesh) {
+          // Removing old placeholder object and adding a new one
+          this.currentWorld.removeObject(this.currentWorld.studyObject.mesh)
+          
+          this.currentWorld.updateStudyObject(newSphere)
+          this.currentWorld.addObject(newSphere.mesh)
+        }
+
+        break;
     }
   }
 
