@@ -73,30 +73,30 @@ export class Menu {
       case "editor":
         const floorTilesEditor = document.getElementById("floor-tile")?.checked
         const axisHelperEditor = document.getElementById("axis-helper")?.checked
-        const objectEditor = document.getElementById("objects")?.value
+        // const objectEditor = document.getElementById("objects")?.value
         const colorEditor = document.getElementById("color-input")?.value
-        let dimensionsEditor = {}
+        // let dimensionsEditor = {}
 
-        switch (objectEditor) {
-          case "cube":
-            const dimXEditor = document.getElementById("x-dim")?.value
-            const dimYEditor = document.getElementById("y-dim")?.value
-            const dimZEditor = document.getElementById("z-dim")?.value
+        // switch (objectEditor) {
+        //   case "cube":
+        //     const dimXEditor = document.getElementById("x-dim")?.value
+        //     const dimYEditor = document.getElementById("y-dim")?.value
+        //     const dimZEditor = document.getElementById("z-dim")?.value
             
-            dimensionsEditor = {x: dimXEditor, y: dimYEditor, z: dimZEditor}
-            break;
-          case "sphere":
-            const radiusEditor = Number(document.getElementById("radius")?.value)
+        //     dimensionsEditor = {x: dimXEditor, y: dimYEditor, z: dimZEditor}
+        //     break;
+        //   case "sphere":
+        //     const radiusEditor = Number(document.getElementById("radius")?.value)
             
-            dimensionsEditor = { radius: radiusEditor }
-            break;
-        }
+        //     dimensionsEditor = { radius: radiusEditor }
+        //     break;
+        // }
 
         this.menuParameterCapture[prevMode] = {
           floorTiles: floorTilesEditor,
           axisHelper: axisHelperEditor,
-          object: objectEditor,
-          dimensions: dimensionsEditor,
+          // object: objectEditor,
+          // dimensions: dimensionsEditor,
           color: colorEditor
         }
 
@@ -142,7 +142,7 @@ export class Menu {
     }
   }
 
-  action(eventData, worldObject) {
+  action(eventData) {
     switch (eventData.name) {
       case "rotation":
         eventData.checked === true ? 

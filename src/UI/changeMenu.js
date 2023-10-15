@@ -2,7 +2,6 @@ export const changeMenu = (mode, menuParameterCapture) => {
   let html
   const menu = document.getElementById("menu-ui")
 
-  console.log(menuParameterCapture[mode]?.dimensions?.x);
 
   switch (mode) {
     case "study":
@@ -44,14 +43,14 @@ export const changeMenu = (mode, menuParameterCapture) => {
         <div class="objects">
           <p>Object</p>
           <select class="objects-dropdown" name="objects" id="objects">
-            <option ${menuParameterCapture[mode].object === "cube" ? "selected" : ""} value="cube">Cube</option>
-            <option ${menuParameterCapture[mode].object === "sphere" ? "selected" : ""} value="sphere">Sphere</option>
-            <option ${menuParameterCapture[mode].object === "cylinder" ? "selected" : ""} value="cylinder">Cylinder</option>
+            <option value="cube">Cube</option>
+            <option value="sphere">Sphere</option>
+            <option value="cylinder">Cylinder</option>
           </select>
         </div>
         <div class="selected-parameters" id="selected-parameters">
           <div class="selected-obj" id="selected-obj">
-            <p class="selected-obj-p">Cube</p>
+            <p class="selected-obj-p">cube</p>
             <div class="dimensions">
               <p>Transform (object)</p>
               <div class="dimension-inputs" id="transform-inputs">
@@ -101,9 +100,9 @@ export const changeMenu = (mode, menuParameterCapture) => {
         <div class="objects">
           <p>Object</p>
           <select class="objects-dropdown" name="objects" id="objects">
-            <option ${menuParameterCapture[mode]?.object === "cube" ? "selected" : ""} value="cube">Cube</option>
-            <option ${menuParameterCapture[mode]?.object === "sphere" ? "selected" : ""} value="sphere">Sphere</option>
-            <option ${menuParameterCapture[mode]?.object === "cylinder" ? "selected" : ""} value="cylinder">Cylinder</option>
+            <option value="cube">Cube</option>
+            <option value="sphere">Sphere</option>
+            <option value="cylinder">Cylinder</option>
           </select>
         </div>
         <div class="selected-parameters" id="selected-parameters">
@@ -169,6 +168,5 @@ export const changeMenu = (mode, menuParameterCapture) => {
       html = ""
       break;
   }
-  // console.log(html);
   menu.innerHTML = html
 }

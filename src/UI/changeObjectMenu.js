@@ -3,6 +3,8 @@ export const changeObjectMenu = (object, currentMode, menuParameterCapture) => {
     let html
     const parentDiv = document.getElementById("selected-obj")
 
+    console.log(object, currentMode, menuParameterCapture);
+
     switch(object.toLowerCase()) {
       case "cube":
         html = `
@@ -23,7 +25,6 @@ export const changeObjectMenu = (object, currentMode, menuParameterCapture) => {
                 <input type="number" name="dimensions" id="z-dim" value="${menuParameterCapture[currentMode]?.dimensions?.z ? menuParameterCapture[currentMode]?.dimensions?.z : 1}" step="1" min="1" max="50">
               </div>
             </div>
-            
           </div>
         `
         break;
