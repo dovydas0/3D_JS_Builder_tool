@@ -66,6 +66,18 @@ export class Menu {
         previousWorld.removeObject(previousWorld.placeholderObject.mesh)
       }
     }
+
+    // Resetting study object
+    if (mode === "study") {
+      const defaultCube = new Cube("object", 1, 1, 1, 0x5544AA, "Lambert")
+      if (defaultCube?.mesh) {
+        defaultCube.mesh.position.set(0.5, 0.5, 0.5)
+        this.currentWorld.removeObject(this.currentWorld.studyObject.mesh)
+              
+        this.currentWorld.updateStudyObject(defaultCube)
+        this.currentWorld.addObject(defaultCube.mesh)
+      }
+    }
   }
 
   previousModeSnapshot(prevMode) {
@@ -246,37 +258,28 @@ export class Menu {
             this.currentObject = newObject
           }
         } else if (this.currentMode === "study") {
-          // Reading the inputs
-          const x = Number(document.getElementById("transform-x")?.value)
-          const y = Number(document.getElementById("transform-y")?.value)
-          const z = Number(document.getElementById("transform-z")?.value)
           let newObject
-
-          // x === 0 ? x = 1 : null
-          // y === 0 ? y = 1 : null
-          // z === 0 ? z = 1 : null
           
           switch (eventData.value) {
             case "cube":
               changeObjectMenu(eventData.value, this.currentMode, this.menuParameterCapture)
               
-              
               // Creating a new object and placing it into the grid, on the floor
-              newObject = new Cube("object", 1, 1, 1, this.currentObjectColor, "Lambert")
+              newObject = new Cube("object", 1, 1, 1, 0x5544AA, "Lambert")
               newObject.mesh.position.set(0.5, 0.5, 0.5)
               break;
             case "sphere":
               changeObjectMenu(eventData.value, this.currentMode, this.menuParameterCapture)
               
               // Creating a new object and placing it into the grid, on the floor
-              newObject = new Sphere("object", 0.5, this.currentObjectColor, "Lambert")
+              newObject = new Sphere("object", 0.5, 0x5544AA, "Lambert")
               newObject.mesh.position.set(0.5, 0.5, 0.5)
               break;
             case "cylinder":
               changeObjectMenu(eventData.value, this.currentMode, this.menuParameterCapture)
                 
               // Creating a new object and placing it into the grid, on the floor
-              newObject = new Cylinder("object", 0.5, 0.5, 1, this.currentObjectColor, "Lambert")
+              newObject = new Cylinder("object", 0.5, 0.5, 1, 0x5544AA, "Lambert")
               newObject.mesh.position.set(0.5, 0.5, 0.5)
               break;
           }
