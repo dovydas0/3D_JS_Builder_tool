@@ -6,6 +6,10 @@ import { changeMenu } from "./changeMenu"
 import { changeObjectMenu } from "./changeObjectMenu"
 import { reassigningObjectEventListeners } from "../utilities/populateEventListeners"
 
+import { EffectComposer } from "three/addons/postprocessing/EffectComposer.js";
+import { RenderPass } from "three/addons/postprocessing/RenderPass.js";
+
+
 export class Menu {
   constructor(worldObject, placeholderObject) {
     // STORE ALL BLOCKS IN AN ARRAY HERE
@@ -18,6 +22,35 @@ export class Menu {
       play: {},
       craft: {},
     }    
+
+    // SELECTING OBJECT TEST
+    // const composer = new EffectComposer(renderer);
+    // const renderPass = new RenderPass(scene, camera);
+
+    // composer.addPass(renderPass);
+
+    // const outline = new OutlinePass(new THREE.Vector2(window.innerWidth, window.innerHeight), scene, camera);
+    // outline.edgeThickness = 2.0;
+    // outline.edgeStrength = 3.0;
+    // outline.visibleEdgeColor.set(0xffffff);
+    
+    // composer.addPass(outline);
+
+    // const textureLoader = new THREE.TextureLoader();
+    // textureLoader.load("../three.js-master/examples/textures/tri_pattern.jpg", function(texture){
+    //     if (texture) {
+    //         outline.patternTexture = texture;
+    //         texture.wrapS = THREE.RepeatWrapping;
+    //         texture.wrapT = THREE.RepeatWrapping;
+
+    //     }
+        
+    // });
+
+    // const fxaaShader = new ShaderPass(FXAAShader);
+    // fxaaShader.uniforms["resolution"].value.set(1 / window.innerWidth, 1 / window.innerHeight);
+    // composer.addPass(fxaaShader);
+
 
     this.currentObject = placeholderObject.object
     this.currentObjectColor = placeholderObject.color 
@@ -200,6 +233,31 @@ export class Menu {
       if (object.id === id) {
         sceneObjects.removeChild(object)
       }
+    }
+  }
+
+  highlightObjectInMenu(id) {
+    const sceneObjects = document.getElementById('scene-objects')
+
+    for (const obj of sceneObjects.children) {
+      obj.classList.remove('selected')
+      
+      if (obj.id === id) {
+        obj.classList.add('selected')
+      }
+    }
+
+    // this.selectedObject.material.transparent = true
+    // this.selectedObject.material.opacity = 0.5
+
+    // console.log(this.selectedObject.material);
+  }
+  
+  DeselectObjectInMenu() {
+    const sceneObjects = document.getElementById('scene-objects')
+
+    for (const obj of sceneObjects.children) {
+      obj.classList.remove('selected')
     }
   }
 
@@ -421,8 +479,24 @@ export class Menu {
         }
 
         break;
-      case "scene":
-        this.selectedObject = eventData.value
+      case "scene":       
+        this.currentScene.children.forEach(object => {
+          
+          if (object.name.includes('object')) {
+            object.material.color.set(this.currentObjectColor)
+            object.material.transparent = false
+            object.material.opacity = 1
+          }
+          
+          if (object.uuid === eventData.value) {
+            object.material.color.set(0x550000)
+            object.material.transparent = true
+            object.material.opacity = 0.5
+            this.selectedObject = object
+          }
+        })
+
+        this.highlightObjectInMenu(eventData.value)
 
         break;
     }

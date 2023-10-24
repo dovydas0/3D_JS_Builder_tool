@@ -3,7 +3,9 @@ import { Cube } from './objects/interactive/Cube';
 import { Sphere } from './objects/interactive/Sphere';
 import { Cylinder } from './objects/interactive/Cylinder';
 
-export const onPointerDown = (e, pointer, raycaster, worldObject, menu) => {
+
+
+export const onPointerDown = (e, pointer, raycaster, worldObject, menu, outline, selectedObjects, addSelectedObject) => {
   if (menu.currentMode === "editor") {
     const initialPos = { x: e.clientX, y: e.clientY }
   
@@ -41,6 +43,9 @@ export const onPointerDown = (e, pointer, raycaster, worldObject, menu) => {
   
       if (intersects.length > 0) {
         const intersect = intersects[0]
+        // const selectedObject = intersects[0].object
+        // addSelectedObject( selectedObject );
+        // outline.selectedObjects = selectedObjects;
           
         let intersectLoc = intersect.point
         // Slight change in parameters to prevent visual inadequacy

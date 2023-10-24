@@ -5,6 +5,7 @@ export class Canvas {
     this.renderer = new THREE.WebGLRenderer({ antialias: true });
     
     // Renderer config
+    this.renderer.setPixelRatio(window.devicePixelRatio)
     this.renderer.shadowMap.enabled = true
     this.renderer.shadowMap.type = THREE.PCFShadowMap
     // this.renderer.shadowMap.type = THREE.BasicShadowMap

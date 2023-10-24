@@ -58,12 +58,17 @@
   margin: 0;
   padding: 0;
 }
-.scene-objects p {
+
+.scene-objects div {
   margin: 0;
   padding: 3px 4px;
 }
 
-.scene-objects > p:nth-child(odd) {
+.scene-objects div.selected {
+  background: #68c6ef91 !important;
+}
+
+.scene-objects > div:nth-child(odd) {
   background: var(--list-color);
 }
 

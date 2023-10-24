@@ -11,6 +11,12 @@ import { StudyWorld } from './worlds/studyWorld'
 import { CraftWorld } from './worlds/craftWorld'
 import { Cube } from './objects/interactive/Cube'
 
+import { EffectComposer } from "three/addons/postprocessing/EffectComposer.js";
+import { RenderPass } from "three/addons/postprocessing/RenderPass.js";
+import { OutlinePass } from 'three/addons/postprocessing/OutlinePass.js';
+import { FXAAShader } from 'three/addons/shaders/FXAAShader.js';
+import { ShaderPass } from 'three/addons/postprocessing/ShaderPass.js';
+
 // Performance monitor
 const stats = new Stats()
 document.body.appendChild(stats.dom)
@@ -43,6 +49,45 @@ worlds.editor.initWorld(worlds.editor)
 worlds.study.initWorld(worlds.study, menu, canvas)
 worlds.craft.initWorld(worlds.craft, menu, canvas)
 
+
+
+// SELECTING OBJECT TEST
+// let selectedObjects = []
+
+
+// const composer = new EffectComposer(canvas.renderer);
+
+// const renderPass = new RenderPass(menu.currentScene, menu.currentWorld.camera);
+
+// composer.addPass(renderPass);
+
+// const outline = new OutlinePass(new THREE.Vector2(window.innerWidth, window.innerHeight), menu.currentScene, menu.currentWorld.camera);
+// outline.edgeThickness = 2.0;
+// outline.edgeStrength = 3.0;
+// outline.visibleEdgeColor.set(0xff0000);
+
+// composer.addPass(outline);
+
+// const textureLoader = new THREE.TextureLoader();
+// textureLoader.load("/tri_pattern.jpg", function(texture){
+//     if (texture) {
+//         outline.patternTexture = texture;
+//         texture.wrapS = THREE.RepeatWrapping;
+//         texture.wrapT = THREE.RepeatWrapping;
+//     }
+// });
+
+// const fxaaShader = new ShaderPass(FXAAShader);
+// fxaaShader.uniforms["resolution"].value.set(1 / window.innerWidth, 1 / window.innerHeight);
+// composer.addPass(fxaaShader);
+
+
+
+
+
+
+
+
 const animate = () => {
   // Request next frame
   requestAnimationFrame(animate)
@@ -63,6 +108,7 @@ const animate = () => {
 
   // Render the scene
   canvas.renderer.render(menu.currentScene, menu.currentWorld.camera)
+  // composer.render()
 
   // Store the current time for the next frame
   previousTime = currentTime;
@@ -90,3 +136,11 @@ if (menu.currentMode === modes.editor) {
 }
 
 eventListeners(menu, canvas, worlds)
+
+
+// function addSelectedObject( object ) {
+
+//   selectedObjects = [];
+//   selectedObjects.push( object );
+
+// }
