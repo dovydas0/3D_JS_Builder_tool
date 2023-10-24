@@ -3,6 +3,7 @@
   --menu-color-2: #303030;
   --controllers-color: #4a4a4a;
   --controllers-color2: #333;
+  --list-color: #2C2C2C;
   --dimmed-text-color: #bbb;
 }
 
@@ -14,8 +15,8 @@
   opacity: 98%;
   height: 92vh;
   width: 178px;
-  margin-top: 4vh;
-  margin-left: 2vw;
+  top: 4vh;
+  left: 2vw;
   padding: 0 0.8rem;
   border-radius: 10px;
   overflow-y: auto;
@@ -25,6 +26,44 @@
 .menu > p {
   font-size: 18px;
   text-transform: uppercase;
+  font-weight: 700;
+}
+
+.scene-outline {
+  position: absolute;
+  background: var(--menu-color);
+  color: rgba(255, 255, 255, 1);
+  font-size: 12px;
+  opacity: 98%;
+  min-height: 20vh;
+  max-height: 80vh;
+  height: auto;
+  width: 178px;
+  top: 4vh;
+  right: 2vw;
+  padding: 0 0.8rem 1rem;
+  border-radius: 10px;
+  overflow-y: auto;
+  z-index: 10;
+}
+
+.scene-outline > p {
+  font-size: 18px;
+  text-transform: uppercase;
+  font-weight: 700;
+}
+
+.scene-objects {
+  margin: 0;
+  padding: 0;
+}
+.scene-objects p {
+  margin: 0;
+  padding: 3px 4px;
+}
+
+.scene-objects > p:nth-child(odd) {
+  background: var(--list-color);
 }
 
 .selected-obj {

@@ -1,7 +1,6 @@
 import * as THREE from 'three'
 import { Floor } from '../objects/non-interactive/floor'
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js'
-import { Cube } from '../objects/interactive/Cube'
 import { World } from './world'
 
 export class EditorWorld extends World {
@@ -27,27 +26,11 @@ export class EditorWorld extends World {
 
   }
 
-  initWorld(world, menu, canvas) {
-    // console.log(this.controls.enabled);
-    // switch (scene.scene.name) {
-    //   case "editor":
-    //     // this.controls.enabled = true;
-    //     break;
-
-    //   case "study":
-    //     // this.controls.enabled = false;
-    //     const cube = new Cube("object", 1, 1, 1, 0x5544AA, "Lambert")
-    //     // console.log(cube);
-    //     scene.addObject(cube.mesh)
-    //     break;
-    // }
-
+  initWorld(world) {
     const floorObject = new Floor(200, 200)
     const ambientLight = new THREE.AmbientLight(0xFFFFFF, 5)
     const dirLight = new THREE.DirectionalLight(0xFFFFFF, 3)
-    // const controls = new OrbitControls(this.canvas.camera, this.canvas.renderer.domElement)
-    // const lightHelper = new THREE.CameraHelper(this.dirLight.shadow.camera)
-  
+
     // adjusting objects
     dirLight.position.set(300, 300, 30)
     dirLight.target.position.set(0, 0, 0)

@@ -381,6 +381,10 @@ export class Menu {
         }
 
         break;
+      case "scene":
+        console.log(eventData.value);
+
+        break;
     }
   }
 

@@ -24,7 +24,7 @@ const initPlaceholderObjectArr = {
   color: 0x5544AA,
 }
 const canvas = new Canvas(75, window.innerWidth / window.innerHeight, 0.1, 1000)
-
+// initplaceholderObject.material.map = 
 const editorWorld = new EditorWorld(canvas, initplaceholderObject)
 const studyWorld = new StudyWorld(canvas)
 const craftWorld = new CraftWorld(canvas)
@@ -39,7 +39,7 @@ const menu = new Menu(worlds.editor, initPlaceholderObjectArr)
 const raycaster = new THREE.Raycaster();
 const pointer = new THREE.Vector2();
 
-editorWorld.initWorld(editorWorld, menu, canvas)
+editorWorld.initWorld(editorWorld)
 studyWorld.initWorld(studyWorld, menu, canvas)
 craftWorld.initWorld(craftWorld, menu, canvas)
 

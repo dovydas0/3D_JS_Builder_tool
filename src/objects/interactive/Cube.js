@@ -28,6 +28,14 @@ export class Cube extends Entity {
     super(width, depth, height, null, null, segmentsWidth, segmentsDepth, segmentsheight, color )
     this.materialProperties
 
+    
+    const texture = new THREE.TextureLoader().load("/texture1.jpg");
+    
+    // texture.wrapS = THREE.RepeatWrapping;
+    // texture.wrapT = THREE.RepeatWrapping;
+    // texture.repeat.set( 4, 4 );
+
+
     const threeMaterial = {
       Basic: THREE.MeshBasicMaterial,
       Phong: THREE.MeshPhongMaterial,
@@ -42,6 +50,10 @@ export class Cube extends Entity {
     
     this.geometry = new THREE.BoxGeometry( width + 0.00006, height + 0.00006, depth + 0.00006 );
     this.material = new finalMaterial(this.materialProperties);
+    
+    // this.material.map = texture
+    // console.log(this.material);
+
     this.mesh = new THREE.Mesh( this.geometry, this.material );
     this.mesh.name = name
     
