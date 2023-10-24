@@ -52,12 +52,13 @@ export const onPointerDown = (e, pointer, raycaster, worldObject, menu) => {
 
         if (e.shiftKey) {
           // Removing an object
-          if (intersect.object.name === 'object') {
+          if (intersect.object.name.includes('object')) {
             menu.currentWorld.removeObject(intersect.object)
 
             menu.currentWorld.raycastableObjects.forEach((el, index) => {
               if (el === intersect.object) {
                 menu.currentWorld.raycastableObjects.splice(index, 1)
+                menu.removeFromMenuScene(el.uuid)
               }
             })
           }
@@ -72,13 +73,13 @@ export const onPointerDown = (e, pointer, raycaster, worldObject, menu) => {
                 height: Math.floor(menu.currentObject.geometry.parameters.height),
                 width: Math.floor(menu.currentObject.geometry.parameters.width)
               }
-              newObject = new Cube("object", currentObject.width, currentObject.depth, currentObject.height, menu.currentObjectColor, "Lambert")
+              newObject = new Cube("object-Cube", currentObject.width, currentObject.depth, currentObject.height, menu.currentObjectColor, "Lambert")
               break;
             case "SphereGeometry":
-              newObject = new Sphere("object", menu.currentObject.radius, menu.currentObjectColor, "Lambert", false, 32, 16)
+              newObject = new Sphere("object-Sphere", menu.currentObject.radius, menu.currentObjectColor, "Lambert", false, 32, 16)
               break;
             case "CylinderGeometry":
-              // newObject = new Cylinder("object", menu.currentObject.radius, 0x5544AA, "Lambert", false, 32, 16)
+              // newObject = new Cylinder("object-Cylinder", menu.currentObject.radius, 0x5544AA, "Lambert", false, 32, 16)
               break;
           }
 
@@ -92,14 +93,16 @@ export const onPointerDown = (e, pointer, raycaster, worldObject, menu) => {
                 .add(positionVector)
                 break;
               case "SphereGeometry":
-                const size = menu.currentObject.radius
-                const hiddenNewObject = new Cube("object", size * 2, size * 2, size * 2, 0x5544AA, "Lambert")
-                const hiddenPositionVector = new THREE.Vector3( 0.5, size, 0.5)
+                // INVISIBLE CUBE FOR BETTER OBJECT PLACEMENT AROUND SPHERE
 
-                hiddenNewObject.mesh.position.copy(intersectLoc)
-                hiddenNewObject.mesh.position.divideScalar(1).floor().add(hiddenPositionVector)
-                hiddenNewObject.mesh.visible = false
-                menu.currentWorld.addRaycastableObject(hiddenNewObject.mesh)
+                // const size = menu.currentObject.radius
+                // const hiddenNewObject = new Cube("object", size * 2, size * 2, size * 2, 0x5544AA, "Lambert")
+                // const hiddenPositionVector = new THREE.Vector3( 0.5, size, 0.5)
+
+                // hiddenNewObject.mesh.position.copy(intersectLoc)
+                // hiddenNewObject.mesh.position.divideScalar(1).floor().add(hiddenPositionVector)
+                // hiddenNewObject.mesh.visible = false
+                // menu.currentWorld.addRaycastableObject(hiddenNewObject.mesh)
 
                 newObject.mesh.position.divideScalar(1).floor()
                 .add(new THREE.Vector3(0.5, worldObject.placeholderObject.radius, 0.5))
@@ -110,6 +113,7 @@ export const onPointerDown = (e, pointer, raycaster, worldObject, menu) => {
                 break;
             }
             menu.currentWorld.addRaycastableObject(newObject.mesh)
+            menu.addToMenuScene(newObject.mesh)
           }
         }
       }

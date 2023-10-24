@@ -13,11 +13,10 @@ export const eventListeners = (menu, canvas, worlds) => {
   })
   
   document.getElementById('scene-outline').addEventListener('click', (e) => {
-    // IF NOT ROBUST ENOUGH ADD AN HTML TAG CHECK BEFORE PASSING INFO
 
     menu.action({ 
       name: 'scene', 
-      value: e.target.dataset.obj,
+      value: e.target.id,
     });
   })
   

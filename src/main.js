@@ -39,9 +39,9 @@ const menu = new Menu(worlds.editor, initPlaceholderObjectArr)
 const raycaster = new THREE.Raycaster();
 const pointer = new THREE.Vector2();
 
-editorWorld.initWorld(editorWorld)
-studyWorld.initWorld(studyWorld, menu, canvas)
-craftWorld.initWorld(craftWorld, menu, canvas)
+worlds.editor.initWorld(worlds.editor)
+worlds.study.initWorld(worlds.study, menu, canvas)
+worlds.craft.initWorld(worlds.craft, menu, canvas)
 
 const animate = () => {
   // Request next frame
@@ -55,10 +55,11 @@ const animate = () => {
   if (menu.currentMode === modes.editor) {
     raycasterIntersections(menu.currentMode, raycaster, pointer, menu.currentWorld)
   }
-  if (studyWorld.controls.autoRotate) {
-    studyWorld.update()
+  // updating controls to allow auto rotate functionality
+  if (worlds.study.controls.autoRotate) {
+    worlds.study.update()
   }
-  editorWorld.updateControls(deltaTime)
+  worlds.editor.updateControls(deltaTime)
 
   // Render the scene
   canvas.renderer.render(menu.currentScene, menu.currentWorld.camera)

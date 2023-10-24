@@ -17,11 +17,11 @@ export class Menu {
       editor: {},
       play: {},
       craft: {},
-    }
-    
+    }    
 
     this.currentObject = placeholderObject.object
     this.currentObjectColor = placeholderObject.color 
+    this.selectedObject = null
     // Set all menu parameters to local variables for easier object manipulation
     // this.currentObjectForm
     // this.currentObjectX
@@ -163,6 +163,46 @@ export class Menu {
     }
   }
 
+  addToMenuScene(objectToAdd) {
+    const sceneObjects = document.getElementById('scene-objects')
+    let nameRepetitions = -1;
+    let objName = objectToAdd.name.split('object-')[1]
+
+    // cunstruction of non-repeating name
+    if (objectToAdd) {
+      for (const object of this.currentScene.children) {
+        if (object.name === objectToAdd.name) {
+          nameRepetitions += 1
+        }
+      }
+    }    
+    for (const obj of sceneObjects.children) {
+      if (obj.dataset.obj === objName + nameRepetitions) {
+        nameRepetitions += 1
+      }
+    }
+
+    // Assigning number next to name if identical name already exists
+    if (nameRepetitions > 0) {
+      objName += nameRepetitions
+    }
+
+
+    sceneObjects.innerHTML += `
+      <div data-obj="${objName}" id="${objectToAdd.uuid}">${objName}</div>
+    `
+  }
+
+  removeFromMenuScene(id) {
+    const sceneObjects = document.getElementById('scene-objects')
+
+    for (const object of sceneObjects.children) {
+      if (object.id === id) {
+        sceneObjects.removeChild(object)
+      }
+    }
+  }
+
   action(eventData) {
     switch (eventData.name) {
       case "rotation":
@@ -238,7 +278,7 @@ export class Menu {
               const z = Math.floor(Number(document.getElementById("z-dim").value))
               
               // Creating a new object and placing it into the grid, on the floor
-              newObject = new Cube("object", x, y, z, this.currentObjectColor, "Basic", true)
+              newObject = new Cube("void-obj-placeholder-obj", x, y, z, this.currentObjectColor, "Basic", true)
               newObject.mesh.position.set(0.5, 0.5, 0.5)
               break;
             case "sphere":
@@ -247,12 +287,12 @@ export class Menu {
               const radius = Number(document.getElementById("radius").value)
               
               // Creating a new object and placing it into the grid, on the floor
-              newObject = new Sphere("object", radius, this.currentObjectColor, "Basic", true)
+              newObject = new Sphere("void-obj-placeholder-obj", radius, this.currentObjectColor, "Basic", true)
               newObject.mesh.position.set(0.5, 0.5, 0.5)
 
               break;
             case "cylinder":
-              // newObject = new Cylinder("object", 1, 1, 1, 0x5544AA, "Basic", true)
+              // newObject = new Cylinder("void-obj-placeholder-obj", 1, 1, 1, 0x5544AA, "Basic", true)
               // changeObjectMenu(eventData.value, this.currentMode, this.menuParameterCapture)
               break;
           }
@@ -382,7 +422,7 @@ export class Menu {
 
         break;
       case "scene":
-        console.log(eventData.value);
+        this.selectedObject = eventData.value
 
         break;
     }

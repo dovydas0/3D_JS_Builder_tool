@@ -15,7 +15,7 @@ export class EditorWorld extends World {
     this.controls = new OrbitControls(this.camera, this.canvas.renderer.domElement)
     this.placeholderObject = placeholderObject
 
-    this.addObject(this.placeholderObject.mesh)
+    // this.addObject(this.placeholderObject.mesh)
     // this.placeholderObject.mesh.visible = false
     this.controls.enableDamping = true
     this.controls.dampingFactor = 0.2
@@ -30,6 +30,12 @@ export class EditorWorld extends World {
     const floorObject = new Floor(200, 200)
     const ambientLight = new THREE.AmbientLight(0xFFFFFF, 5)
     const dirLight = new THREE.DirectionalLight(0xFFFFFF, 3)
+
+    // naming default objects in the scene
+    this.placeholderObject.mesh.name = "void-obj-placeholder-obj"
+    floorObject.mesh.name = "void-obj-floor"
+    ambientLight.name = "void-obj-ambient-light"
+    dirLight.name = "void-obj-directional-light"
 
     // adjusting objects
     dirLight.position.set(300, 300, 30)
