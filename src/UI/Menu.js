@@ -514,8 +514,6 @@ export class Menu {
 
         // Highlighting selected objects in menu
         this.highlightObjectInMenu(this.selectedObjects)
-
-        break;
     }
   }
 
