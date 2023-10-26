@@ -24,7 +24,7 @@ document.body.appendChild(stats.dom)
 // MODES
 const modes = { editor: "editor", study: "study", play: "play", craft: "craft"}
 
-const initplaceholderObject = new Cube("object", 1, 1, 1, 0x5544AA, "Basic", true)
+const initplaceholderObject = new Cube("void-obj-placeholder-obj", 1, 1, 1, 0x5544AA, "Basic", true)
 const initPlaceholderObjectArr = {
   object: initplaceholderObject,
   color: 0x5544AA,
@@ -138,9 +138,9 @@ if (menu.currentMode === modes.editor) {
 eventListeners(menu, canvas, worlds)
 
 
-// function addSelectedObject( object ) {
+function addSelectedObject( object ) {
 
-//   selectedObjects = [];
-//   selectedObjects.push( object );
+  selectedObjects = [];
+  selectedObjects.push( object );
 
-// }
+}

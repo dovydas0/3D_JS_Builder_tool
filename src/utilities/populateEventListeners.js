@@ -17,6 +17,7 @@ export const eventListeners = (menu, canvas, worlds) => {
     menu.action({ 
       name: 'scene', 
       value: e.target.id,
+      ctrl: e.ctrlKey
     });
   })
   

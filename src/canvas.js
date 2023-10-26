@@ -13,6 +13,7 @@ export class Canvas {
     // this.renderer.shadowMap.type = THREE.PCFSoftShadowMap
 
     this.renderer.setSize( window.innerWidth, window.innerHeight );
+    this.renderer.outputColorSpace = THREE.SRGBColorSpace
     document.body.appendChild( this.renderer.domElement );
   }
 

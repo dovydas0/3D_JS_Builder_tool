@@ -67,7 +67,33 @@ export const onPointerDown = (e, pointer, raycaster, worldObject, menu, outline,
               }
             })
           }
+        } else if (e.ctrlKey) {
+          if (intersect.object.name.includes('object')) {
+            menu.highlightObjectInMenu(intersect.object.uuid)
+
+            menu.currentWorld.raycastableObjects.forEach(object => {
+              object.material = new THREE.MeshLambertMaterial({ color: object.material.color.getHex() })
+
+              if (object.uuid === intersect.object.uuid) {
+                // GREEN CUBE OUTLINE
+                // const cubeGeometry = new THREE.BoxGeometry( 1, 1, 1 );
+                // const outlineMaterial2 = new THREE.MeshBasicMaterial( { color: 0x41fdfe, side: THREE.BackSide } );
+                // const outlineMesh2 = new THREE.Mesh( cubeGeometry, outlineMaterial2 );
+                // outlineMesh2.position.set(object.position.x, object.position.y, object.position.z)
+                // outlineMesh2.scale.multiplyScalar(1.05);
+                // this.currentWorld.addObject( outlineMesh2 );
+    
+                object.material = new THREE.MeshBasicMaterial({ color: object.material.color.getHex(), opacity: 0.85, transparent: true })
+                menu.selectedObject = object
+              } else {
+                menu.selectedObject = null
+              }
+            })
+            console.log(intersect);
+          }
         } else {
+          // deselecting objects
+
           // Adding an object
           let newObject
 

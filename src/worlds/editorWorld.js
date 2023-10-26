@@ -32,7 +32,6 @@ export class EditorWorld extends World {
     const dirLight = new THREE.DirectionalLight(0xFFFFFF, 3)
 
     // naming default objects in the scene
-    this.placeholderObject.mesh.name = "void-obj-placeholder-obj"
     floorObject.mesh.name = "void-obj-floor"
     ambientLight.name = "void-obj-ambient-light"
     dirLight.name = "void-obj-directional-light"

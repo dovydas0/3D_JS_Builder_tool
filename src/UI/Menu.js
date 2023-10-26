@@ -1,11 +1,13 @@
+import * as THREE from 'three'
+import { CompressedArrayTexture } from 'three/src/textures/CompressedArrayTexture';
 import { Cube } from "../objects/interactive/Cube";
 import { Cylinder } from "../objects/interactive/Cylinder";
 import { Sphere } from "../objects/interactive/Sphere";
 import { changeInfo } from "./changeInfo"
 import { changeMenu } from "./changeMenu"
+import { changeSceneMenu } from "./changeSceneMenu"
 import { changeObjectMenu } from "./changeObjectMenu"
 import { reassigningObjectEventListeners } from "../utilities/populateEventListeners"
-
 import { EffectComposer } from "three/addons/postprocessing/EffectComposer.js";
 import { RenderPass } from "three/addons/postprocessing/RenderPass.js";
 
@@ -21,40 +23,12 @@ export class Menu {
       editor: {},
       play: {},
       craft: {},
-    }    
-
-    // SELECTING OBJECT TEST
-    // const composer = new EffectComposer(renderer);
-    // const renderPass = new RenderPass(scene, camera);
-
-    // composer.addPass(renderPass);
-
-    // const outline = new OutlinePass(new THREE.Vector2(window.innerWidth, window.innerHeight), scene, camera);
-    // outline.edgeThickness = 2.0;
-    // outline.edgeStrength = 3.0;
-    // outline.visibleEdgeColor.set(0xffffff);
-    
-    // composer.addPass(outline);
-
-    // const textureLoader = new THREE.TextureLoader();
-    // textureLoader.load("../three.js-master/examples/textures/tri_pattern.jpg", function(texture){
-    //     if (texture) {
-    //         outline.patternTexture = texture;
-    //         texture.wrapS = THREE.RepeatWrapping;
-    //         texture.wrapT = THREE.RepeatWrapping;
-
-    //     }
-        
-    // });
-
-    // const fxaaShader = new ShaderPass(FXAAShader);
-    // fxaaShader.uniforms["resolution"].value.set(1 / window.innerWidth, 1 / window.innerHeight);
-    // composer.addPass(fxaaShader);
+    }
 
 
     this.currentObject = placeholderObject.object
     this.currentObjectColor = placeholderObject.color 
-    this.selectedObject = null
+    this.selectedObjects = []
     // Set all menu parameters to local variables for easier object manipulation
     // this.currentObjectForm
     // this.currentObjectX
@@ -89,6 +63,7 @@ export class Menu {
     this.currentWorld = world
     this.currentScene = world.scene
     changeMenu(mode, this.menuParameterCapture)
+    changeSceneMenu(mode, this.menuParameterCapture)
     changeInfo(mode)
 
     // Adding/removing placeholder block depending on the selected mode
@@ -126,6 +101,8 @@ export class Menu {
         const axisHelperEditor = document.getElementById("axis-helper")?.checked
         // const objectEditor = document.getElementById("objects")?.value
         const colorEditor = document.getElementById("color-input")?.value
+        const objectsEditor = document.getElementById("scene-objects")
+        const sceneObjectsEditor = Array.from(objectsEditor.children)
         // let dimensionsEditor = {}
 
         // switch (objectEditor) {
@@ -148,7 +125,8 @@ export class Menu {
           axisHelper: axisHelperEditor,
           // object: objectEditor,
           // dimensions: dimensionsEditor,
-          color: colorEditor
+          color: colorEditor,
+          sceneObjects: sceneObjectsEditor
         }
 
         break;
@@ -163,7 +141,8 @@ export class Menu {
         const transformYStudy = Number(document.getElementById("transform-y")?.value)
         const transformZStudy = Number(document.getElementById("transform-z")?.value)
         const colorStudy = document.getElementById("color-input")?.value
-
+        const objectsStudy = document.getElementById("scene-objects")
+        const sceneObjectsStudy = Array.from(objectsStudy.children)
 
         this.menuParameterCapture[prevMode] = {
           rotation: rotationStudy.checked,
@@ -179,7 +158,8 @@ export class Menu {
             x: transformXStudy,
             y: transformYStudy,
             z: transformZStudy,
-          }
+          },
+          sceneObjects: sceneObjectsStudy,
         }
         
         break;
@@ -236,21 +216,20 @@ export class Menu {
     }
   }
 
-  highlightObjectInMenu(id) {
+  highlightObjectInMenu(objects) {
     const sceneObjects = document.getElementById('scene-objects')
 
     for (const obj of sceneObjects.children) {
       obj.classList.remove('selected')
       
-      if (obj.id === id) {
-        obj.classList.add('selected')
-      }
+      // selecting multiple objects
+      objects?.forEach(object => {
+        if (obj.id === object.uuid) {
+          obj.classList.add('selected')
+        }
+      })
+
     }
-
-    // this.selectedObject.material.transparent = true
-    // this.selectedObject.material.opacity = 0.5
-
-    // console.log(this.selectedObject.material);
   }
   
   DeselectObjectInMenu() {
@@ -479,29 +458,66 @@ export class Menu {
         }
 
         break;
-      case "scene":       
+      case "scene":
+        let selectedObj = null
+
+        // Grabbing selected object in the scene
         this.currentScene.children.forEach(object => {
-          
+
+          // If object is tracked in the scene restore it's material
           if (object.name.includes('object')) {
-            object.material.color.set(this.currentObjectColor)
-            object.material.transparent = false
-            object.material.opacity = 1
+            object.material = new THREE.MeshLambertMaterial({ color: object.material.color.getHex() })
           }
-          
+
+          // If it is the selected object
           if (object.uuid === eventData.value) {
-            object.material.color.set(0x550000)
-            object.material.transparent = true
-            object.material.opacity = 0.5
-            this.selectedObject = object
+            selectedObj = object
           }
         })
 
-        this.highlightObjectInMenu(eventData.value)
+        
+        // populating global selected objects array
+        if (eventData.ctrl && selectedObj !== null) {
+            let addFlag = true
+            
+            // preventing double selection
+            this.selectedObjects.forEach(selected => {
+              if (selected.uuid === selectedObj.uuid) {
+                addFlag = false
+              }
+            })
+
+            if (addFlag) {
+              this.selectedObjects.push(selectedObj)
+            }
+        } else if (selectedObj !== null) {
+          this.selectedObjects = [selectedObj]
+        } else {
+          this.selectedObjects = []
+        }
+
+
+        // Painting all selected objects
+        this.selectedObjects?.forEach( object => {
+          // GREEN CUBE OUTLINE
+          // const cubeGeometry = new THREE.BoxGeometry( 1, 1, 1 );
+          // const outlineMaterial2 = new THREE.MeshBasicMaterial( { color: 0x41fdfe, side: THREE.BackSide } );
+          // const outlineMesh2 = new THREE.Mesh( cubeGeometry, outlineMaterial2 );
+          // outlineMesh2.position.set(object.position.x, object.position.y, object.position.z)
+          // outlineMesh2.scale.multiplyScalar(1.05);
+          // this.currentWorld.addObject( outlineMesh2 );
+
+          object.material = new THREE.MeshBasicMaterial({ color: object.material.color.getHex(), opacity: 0.85, transparent: true })
+
+        })
+
+
+        // Highlighting selected objects in menu
+        this.highlightObjectInMenu(this.selectedObjects)
 
         break;
     }
   }
 
 }
-
 
