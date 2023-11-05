@@ -3,8 +3,53 @@
   --menu-color-2: #303030;
   --controllers-color: #4a4a4a;
   --controllers-color2: #333;
-  --list-color: #2C2C2C;
+  --list-color: #2c2c2c;
   --dimmed-text-color: #bbb;
+}
+
+/* scroll bars */
+
+.menu::-webkit-scrollbar {
+  width: 9px;
+  background: #ccc;
+  border-top-right-radius: 20px;
+  border-bottom-right-radius: 20px;
+}
+
+.menu::-webkit-scrollbar-thumb {
+  background: #888;
+  border-top-right-radius: 20px;
+  border-bottom-right-radius: 20px;
+}
+
+.info-window::-webkit-scrollbar {
+  width: 9px;
+  background: #ccc;
+  border-top-right-radius: 20px;
+  border-bottom-right-radius: 20px;
+}
+
+.info-window::-webkit-scrollbar-thumb {
+  background: #888;
+  border-top-right-radius: 20px;
+  border-bottom-right-radius: 20px;
+}
+
+.scene-outline::-webkit-scrollbar {
+  width: 9px;
+  background: #ccc;
+  border-top-right-radius: 20px;
+  border-bottom-right-radius: 20px;
+}
+
+.scene-outline::-webkit-scrollbar-thumb {
+  background: #888;
+  border-top-right-radius: 20px;
+  border-bottom-right-radius: 20px;
+}
+
+body {
+  overflow: hidden;
 }
 
 .menu {
@@ -105,7 +150,7 @@
 }
 
 .suggested-colors .color1 {
-  background: #5544AA;
+  background: #5544aa;
 }
 
 .suggested-colors .color2 {
@@ -255,11 +300,11 @@
 
 .selected-mode {
   background: rgba(255, 255, 255, 0.25);
-  color:#fff;
+  color: #fff;
 }
 
 .modes p:hover {
-  color:#fff;
+  color: #fff;
 }
 
 .info {
@@ -316,20 +361,14 @@
   border-radius: 10px;
   z-index: 20;
   overflow-y: auto;
-  transition: 
-    opacity 0.1s,
-    transform 0.2s,
-    visibility 0.1s;
+  transition: opacity 0.1s, transform 0.2s, visibility 0.1s;
 }
 
 .info-window.invisible {
   opacity: 0;
   transform: translate(-50%, -50%) scale(0.9);
   visibility: hidden;
-  transition: 
-    opacity 0.1s,
-    transform 0.2s,
-    visibility 0.1s;
+  transition: opacity 0.1s, transform 0.2s, visibility 0.1s;
 }
 
 .info-header {
@@ -389,6 +428,10 @@
   margin-bottom: -0.5rem;
 }
 
+.info-ans > h2 {
+  margin-left: -1rem;
+}
+
 .info-ans span {
   font-size: 13px;
   margin-bottom: 2rem;
@@ -419,9 +462,6 @@
   background: #5a5a5a;
 }
 
-
-
-
 /* Responsive design */
 @media screen and (min-width: 2000px) {
   .info-window {
@@ -432,11 +472,11 @@
   .info-title {
     font-size: 36px;
   }
-  
+
   .info-q {
     font-size: 24px;
   }
-  
+
   .info-ans {
     font-size: 16px;
     margin-bottom: 2rem;
