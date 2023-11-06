@@ -1,67 +1,86 @@
-import * as THREE from 'three'
-import { Menu } from "./UI/Menu.js"
-import { Scene } from "./scene"
-import { World } from "./worlds/world"
-import { onPointerDown, onPointerMove, raycasterIntersections } from "./raycasting"
-import { eventListeners } from './utilities/populateEventListeners'
-import Stats from 'three/examples/jsm/libs/stats.module'
-import { Canvas } from './canvas'
-import { EditorWorld } from './worlds/editorWorld'
-import { StudyWorld } from './worlds/studyWorld'
-import { CraftWorld } from './worlds/craftWorld'
-import { Cube } from './objects/interactive/Cube'
+import * as THREE from "three";
+import { Menu } from "./UI/Menu.js";
+import { Scene } from "./scene";
+import { World } from "./worlds/world";
+import {
+  onPointerDown,
+  onPointerMove,
+  raycasterIntersections,
+} from "./raycasting";
+import { eventListeners } from "./utilities/populateEventListeners";
+import Stats from "three/examples/jsm/libs/stats.module";
+import { Canvas } from "./canvas";
+import { EditorWorld } from "./worlds/editorWorld";
+import { StudyWorld } from "./worlds/studyWorld";
+import { CraftWorld } from "./worlds/craftWorld";
+import { Cube } from "./objects/interactive/Cube";
 
 import { EffectComposer } from "three/addons/postprocessing/EffectComposer.js";
 import { RenderPass } from "three/addons/postprocessing/RenderPass.js";
-import { OutlinePass } from 'three/addons/postprocessing/OutlinePass.js';
-import { FXAAShader } from 'three/addons/shaders/FXAAShader.js';
-import { ShaderPass } from 'three/addons/postprocessing/ShaderPass.js';
+import { OutlinePass } from "three/addons/postprocessing/OutlinePass.js";
+import { FXAAShader } from "three/addons/shaders/FXAAShader.js";
+import { ShaderPass } from "three/addons/postprocessing/ShaderPass.js";
 
 // Performance monitor
-const stats = new Stats()
-document.body.appendChild(stats.dom)
+const stats = new Stats();
+document.body.appendChild(stats.dom);
 
 // MODES
-const modes = { editor: "editor", study: "study", play: "play", craft: "craft"}
+const modes = {
+  editor: "editor",
+  study: "study",
+  play: "play",
+  craft: "craft",
+};
 
-const initplaceholderObject = new Cube("void-obj-placeholder-obj", 1, 1, 1, 0x5544AA, "Basic", true)
+const initplaceholderObject = new Cube(
+  "void-obj-placeholder-obj",
+  1,
+  1,
+  1,
+  0x5544aa,
+  "Basic",
+  true
+);
 const initPlaceholderObjectArr = {
   object: initplaceholderObject,
-  color: 0x5544AA,
-}
-const canvas = new Canvas(75, window.innerWidth / window.innerHeight, 0.1, 1000)
-// initplaceholderObject.material.map = 
-const editorWorld = new EditorWorld(canvas, initplaceholderObject)
-const studyWorld = new StudyWorld(canvas)
-const craftWorld = new CraftWorld(canvas)
+  color: 0x5544aa,
+};
+const canvas = new Canvas(
+  75,
+  window.innerWidth / window.innerHeight,
+  0.1,
+  1000
+);
+// initplaceholderObject.material.map =
+const editorWorld = new EditorWorld(canvas, initplaceholderObject);
+const studyWorld = new StudyWorld(canvas);
+const craftWorld = new CraftWorld(canvas);
 const worlds = {
   study: studyWorld,
   editor: editorWorld,
   play: editorWorld,
-  craft: craftWorld
-}
+  craft: craftWorld,
+};
 
-const menu = new Menu(worlds.editor, initPlaceholderObjectArr)
+const menu = new Menu(worlds.editor, initPlaceholderObjectArr);
 const raycaster = new THREE.Raycaster();
 const pointer = new THREE.Vector2();
 
-worlds.editor.initWorld(worlds.editor)
-worlds.study.initWorld(worlds.study, menu, canvas)
-worlds.craft.initWorld(worlds.craft, menu, canvas)
-
-
+worlds.editor.initWorld();
+worlds.study.initWorld(menu, canvas);
+worlds.craft.initWorld(menu, canvas);
 
 // SELECTING OBJECT TEST
 // let selectedObjects = []
 
-
 // const composer = new EffectComposer(canvas.renderer);
 
-// const renderPass = new RenderPass(menu.currentScene, menu.currentWorld.camera);
+// const renderPass = new RenderPass(menu.currentWorld.scene, menu.currentWorld.camera);
 
 // composer.addPass(renderPass);
 
-// const outline = new OutlinePass(new THREE.Vector2(window.innerWidth, window.innerHeight), menu.currentScene, menu.currentWorld.camera);
+// const outline = new OutlinePass(new THREE.Vector2(window.innerWidth, window.innerHeight), menu.currentWorld.scene, menu.currentWorld.camera);
 // outline.edgeThickness = 2.0;
 // outline.edgeStrength = 3.0;
 // outline.visibleEdgeColor.set(0xff0000);
@@ -81,66 +100,58 @@ worlds.craft.initWorld(worlds.craft, menu, canvas)
 // fxaaShader.uniforms["resolution"].value.set(1 / window.innerWidth, 1 / window.innerHeight);
 // composer.addPass(fxaaShader);
 
-
-
-
-
-
-
-
 const animate = () => {
   // Request next frame
-  requestAnimationFrame(animate)
+  requestAnimationFrame(animate);
 
   // Calculate the elapsed time since the last frame
   const currentTime = performance.now();
   const deltaTime = (currentTime - previousTime) / 1000; // Convert to seconds
 
   // Update game objects based on deltaTime
-  if (menu.currentMode === modes.editor) {
-    raycasterIntersections(menu.currentMode, raycaster, pointer, menu.currentWorld)
-  }
+  raycasterIntersections(
+    menu.currentMode,
+    raycaster,
+    pointer,
+    menu.currentWorld
+  );
+
   // updating controls to allow auto rotate functionality
   if (worlds.study.controls.autoRotate) {
-    worlds.study.update()
+    worlds.study.update();
   }
-  worlds.editor.updateControls(deltaTime)
+  worlds.editor.updateControls(deltaTime);
 
   // Render the scene
-  canvas.renderer.render(menu.currentScene, menu.currentWorld.camera)
+  canvas.renderer.render(menu.currentWorld.scene, menu.currentWorld.camera);
   // composer.render()
 
   // Store the current time for the next frame
   previousTime = currentTime;
 
-  stats.update()
-}
+  stats.update();
+};
 
 let previousTime = performance.now();
 
-animate()
-
-
+animate();
 
 // EVENT LISTENERS FOR INTERACTIONS
 
 // REMEMBER TO REMOVE EVENT LISTENERS ON DIFFERENT MODES
-if (menu.currentMode === modes.editor) {
-  canvas.renderer.domElement.addEventListener("pointermove", event => {
-    onPointerMove(event, pointer)
-  })
+if (menu.currentMode === modes.editor || menu.currentMode === modes.study) {
+  canvas.renderer.domElement.addEventListener("pointermove", (event) => {
+    onPointerMove(event, pointer);
+  });
 
-  canvas.renderer.domElement.addEventListener("pointerdown", (e) => {
-    onPointerDown(e, pointer, raycaster, menu.currentWorld, menu)
-  })
+  canvas.renderer.domElement.addEventListener("pointerdown", (event) => {
+    onPointerDown(event, pointer, raycaster, menu);
+  });
 }
 
-eventListeners(menu, canvas, worlds)
+eventListeners(menu, canvas, worlds);
 
-
-function addSelectedObject( object ) {
-
+function addSelectedObject(object) {
   selectedObjects = [];
-  selectedObjects.push( object );
-
+  selectedObjects.push(object);
 }

@@ -1,6 +1,8 @@
 export const changeSceneMenu = (mode, menuParameterCapture) => {
-  const sceneMenu = document.getElementById("scene-outline")
-  let html
+  const sceneMenu = document.getElementById("scene-outline");
+  let html;
+
+  console.log();
 
   switch (mode) {
     case "study":
@@ -8,7 +10,7 @@ export const changeSceneMenu = (mode, menuParameterCapture) => {
         <p id="scene-title">Scene</p>
         <div class="scene-objects" id="scene-objects">
         </div>
-      `
+      `;
       break;
 
     case "editor":
@@ -16,25 +18,26 @@ export const changeSceneMenu = (mode, menuParameterCapture) => {
         <p id="scene-title">Scene</p>
         <div class="scene-objects" id="scene-objects">
         </div>
-      `
+      `;
       break;
     case "play":
       break;
     case "craft":
       break;
     default:
-      html = ""
+      html = "";
       break;
   }
-  sceneMenu.innerHTML = html
+  sceneMenu.innerHTML = html;
 
-  populatingObjects(menuParameterCapture[mode].sceneObjects)
-}
+  populatingObjects(menuParameterCapture[mode].sceneObjects);
+};
 
 const populatingObjects = (savedObjects) => {
-  const sceneObjects = document.getElementById('scene-objects')
+  const sceneObjects = document.getElementById("scene-objects");
 
-  savedObjects?.forEach(object => {
-    sceneObjects.appendChild(object.cloneNode(true))
-  })
-}
+  savedObjects?.forEach((object) => {
+    object.classList = "";
+    sceneObjects.appendChild(object.cloneNode(true));
+  });
+};

@@ -1,12 +1,12 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
     <link rel="icon" type="image/svg+xml" href="/vite.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="stylesheet" href="styles/main.css">
-    <link rel="stylesheet" href="styles/ui.css">
-    <link rel="stylesheet" href="styles/checkbox.css">
+    <link rel="stylesheet" href="styles/main.css" />
+    <link rel="stylesheet" href="styles/ui.css" />
+    <link rel="stylesheet" href="styles/checkbox.css" />
     <script defer type="module" src="src/main.js"></script>
     <title>Blocks</title>
   </head>
@@ -17,14 +17,14 @@
         <div class="checkbox">
           <p>Floor Tiles</p>
           <label class="el-switch el-switch-sm">
-            <input type="checkbox" name="floor-grid" id="floor-tile" checked>
+            <input type="checkbox" name="floor-grid" id="floor-tile" checked />
             <span class="el-switch-style"></span>
           </label>
         </div>
         <div class="checkbox">
           <p>Axis Helper</p>
           <label class="el-switch el-switch-sm">
-            <input type="checkbox" name="axis-helper" id="axis-helper">
+            <input type="checkbox" name="axis-helper" id="axis-helper" />
             <span class="el-switch-style"></span>
           </label>
         </div>
@@ -38,32 +38,61 @@
         </select>
       </div>
       <div class="selected-parameters" id="selected-parameters">
-        <div class="selected-obj" id="selected-obj">
-          <p class="selected-obj-p">Cube</p>
+        <div class="container" id="selected-obj">
+          <p class="container-p">Cube</p>
           <div class="dimensions">
             <p>Dimensions</p>
             <div class="dimension-inputs" id="dimension-inputs">
               <div class="dim-input">
                 <label for="x-dim">X</label>
-                <input type="number" name="dimensions" id="x-dim" value="1" step="1" min="1" max="50">
+                <input
+                  type="number"
+                  name="dimensions"
+                  id="x-dim"
+                  value="1"
+                  step="1"
+                  min="1"
+                  max="50"
+                />
               </div>
               <div class="dim-input">
                 <label for="y-dim">Y</label>
-                <input type="number" name="dimensions" id="y-dim" value="1" step="1" min="1" max="50">
+                <input
+                  type="number"
+                  name="dimensions"
+                  id="y-dim"
+                  value="1"
+                  step="1"
+                  min="1"
+                  max="50"
+                />
               </div>
               <div class="dim-input">
                 <label for="z-dim">Z</label>
-                <input type="number" name="dimensions" id="z-dim" value="1" step="1" min="1" max="50">
+                <input
+                  type="number"
+                  name="dimensions"
+                  id="z-dim"
+                  value="1"
+                  step="1"
+                  min="1"
+                  max="50"
+                />
               </div>
             </div>
           </div>
         </div>
       </div>
       <div class="color-picker">
-        <div class="selected-obj color-parameter">
+        <div class="container color-parameter">
           <div class="header">
-            <p class="selected-obj-p">Color</p>
-            <input type="color" value="#5544AA" name="color-picker" id="color-input">
+            <p class="container-p">Color</p>
+            <input
+              type="color"
+              value="#5544AA"
+              name="color-picker"
+              id="color-input"
+            />
           </div>
           <div class="suggested-colors">
             <label class="color1">
@@ -90,11 +119,11 @@
           </div>
         </div>
       </div>
+      <div class="selected-parameters" id="selected-parameters-selected"></div>
     </div>
     <div class="scene-outline" id="scene-outline">
       <p id="scene-title">Scene</p>
-      <div class="scene-objects" id="scene-objects">
-      </div>
+      <div class="scene-objects" id="scene-objects"></div>
     </div>
     <div class="modes" id="mode-ui">
       <p id="study">STUDY</p>
@@ -117,7 +146,7 @@
       <p class="info-q">What is this mode?</p>
       <div class="info-ans">
         <p>
-          This mode allows users to interactively build structures with the 
+          This mode allows users to interactively build structures with the
           given objects and tools in the user interface present on the left
         </p>
       </div>
@@ -133,12 +162,24 @@
       <p class="info-q">UI Features:</p>
       <div class="info-ans">
         <h2><span>Mode Menu:</span></h2>
-        <p><span>Object</span> - This dropbox option enables you to switch between different objects</p>
-        <p><span>Dimensions</span> - There are 3 input fields which let you scale an object according to your needs</p>
-        <p><span>Color</span> - This property allows to change the color of the current object</p>
+        <p>
+          <span>Object</span> - This dropbox option enables you to switch
+          between different objects
+        </p>
+        <p>
+          <span>Dimensions</span> - There are 3 input fields which let you scale
+          an object according to your needs
+        </p>
+        <p>
+          <span>Color</span> - This property allows to change the color of the
+          current object
+        </p>
         <h2><span>Scene Menu:</span></h2>
         <p><span>Select Objects</span> - Left mouse click on the object name</p>
-	      <p><span>Select Multiple Objects</span> - Ctrl + left mouse click on the next object</p>
+        <p>
+          <span>Select Multiple Objects</span> - Ctrl + left mouse click on the
+          next object
+        </p>
       </div>
     </div>
   </body>
