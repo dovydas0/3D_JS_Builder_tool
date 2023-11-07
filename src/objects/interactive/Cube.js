@@ -62,8 +62,8 @@ export class Cube extends Entity {
 
     this.geometry = new THREE.BoxGeometry(
       width + 0.00006,
-      height + 0.00006,
-      depth + 0.00006
+      depth + 0.00006,
+      height + 0.00006
     );
     this.material = new finalMaterial(this.materialProperties);
     // this.material.color.get

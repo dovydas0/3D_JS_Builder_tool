@@ -2,42 +2,30 @@ import * as THREE from "three";
 import { Entity } from "../entity";
 
 /**
- * Represents a Sphere object.
+ * Represents a Capsule object.
  */
-export class Cylinder extends Entity {
+export class Capsule extends Entity {
   /**
-   * Create a Cylinder object.
-   * @param {"floor" | "object"} name - The label of the cylinder.
-   * @param {number} radius - The radius of the cylinder.
-   * @param {number} [color=0xff0000] - The color of the cylinder.
-   * @param {"Basic" | "Phong" | "Lambert"} [material="Basic"] - The material type for the cylinder.
-   * @param {number} segmentsWidth - The number of segments (cuts) throughout the width of the cylinder.
-   * @param {number} segmentsheight - The number of segments (cuts) throughout the height of the cylinder.
+   * Create a capsule object.
+   * @param {"floor" | "object"} name - The label of the capsule.
+   * @param {number} radius - The radius of the capsule.
+   * @param {number} length - The length of the capsule.
+   * @param {number} [color=0xff0000] - The color of the capsule.
+   * @param {"Basic" | "Phong" | "Lambert"} [material="Basic"] - The material type for the capsule.
+   * @param {number} capSegments - The number of segments (cuts) throughout the ends of the capsule.
+   * @param {number} radialSegments - The number of segments (cuts) throughout the height of the capsule.
    */
   constructor(
     name,
-    radiusTop = 1,
-    radiusBottom = 1,
-    height = 1,
+    radius = 1,
+    length = 2,
     color = 0xff0000,
     material = "Basic",
     placeholderObj = false,
-    radialSegments = 32,
-    heightSegments = 16
+    capSegments = 5,
+    radialSegments = 12
   ) {
-    super(
-      null,
-      null,
-      height,
-      null,
-      radiusTop,
-      radiusBottom,
-      null,
-      null,
-      null,
-      null,
-      color
-    );
+    super(null, null, null, radius, null, null, null, null, null, null, color);
     this.materialProperties;
 
     const threeMaterial = {
@@ -56,17 +44,15 @@ export class Cylinder extends Entity {
         })
       : (this.materialProperties = { color: color, side: THREE.DoubleSide });
 
-    this.geometry = new THREE.CylinderGeometry(
-      radiusTop,
-      radiusBottom,
-      height,
-      radialSegments,
-      heightSegments
+    this.geometry = new THREE.CapsuleGeometry(
+      radius,
+      length,
+      capSegments,
+      radialSegments
     );
     this.material = new finalMaterial(this.materialProperties);
     this.mesh = new THREE.Mesh(this.geometry, this.material);
     this.mesh.name = name;
-    // this.mesh.position.set(new THREE.Vector3(0, 0, 0))
 
     if (!placeholderObj) {
       this.mesh.castShadow = true;

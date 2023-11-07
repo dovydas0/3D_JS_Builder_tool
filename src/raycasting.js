@@ -5,6 +5,7 @@ import { Cylinder } from "./objects/interactive/Cylinder";
 import { changeObjectMenu } from "./UI/changeObjectMenu";
 import { reassigningObjectEventListeners } from "./utilities/populateEventListeners";
 import { nameConverter } from "./utilities/nameConverter";
+import { Capsule } from "./objects/interactive/Capsule";
 
 export const onPointerDown = (
   event,
@@ -121,8 +122,6 @@ export const onPointerDown = (
           }
           // Reassinging parameter buttons event listeners
           reassigningObjectEventListeners(menu);
-        } else {
-          selectObjects(null, menu);
         }
       } else if (menu.currentMode === "editor") {
         // deselecting objects
@@ -134,8 +133,8 @@ export const onPointerDown = (
         switch (menu.currentObject.mesh.geometry.type) {
           case "BoxGeometry":
             const currentObject = {
-              depth: Math.floor(menu.currentObject.geometry.parameters.depth),
-              height: Math.floor(menu.currentObject.geometry.parameters.height),
+              depth: Math.floor(menu.currentObject.geometry.parameters.height),
+              height: Math.floor(menu.currentObject.geometry.parameters.depth),
               width: Math.floor(menu.currentObject.geometry.parameters.width),
             };
             newObject = new Cube(
@@ -169,6 +168,18 @@ export const onPointerDown = (
               false,
               menu.currentObject.geometry.parameters.radialSegments,
               menu.currentObject.geometry.parameters.openEnded
+            );
+            break;
+          case "CapsuleGeometry":
+            newObject = new Capsule(
+              "object-Capsule",
+              menu.currentObject.geometry.parameters.radius,
+              menu.currentObject.geometry.parameters.length,
+              menu.currentObjectColor,
+              "Lambert",
+              false,
+              menu.currentObject.geometry.parameters.capSegments,
+              menu.currentObject.geometry.parameters.radialSegments
             );
             break;
         }
@@ -237,6 +248,33 @@ export const onPointerDown = (
                     0.5,
                     menu.currentWorld.placeholderObject.geometry.parameters
                       .height / 2,
+                    0.5
+                  )
+                );
+              break;
+            case "CapsuleGeometry":
+              // INVISIBLE CUBE FOR BETTER OBJECT PLACEMENT AROUND SPHERE
+
+              // const size = menu.currentObject.radius
+              // const hiddenNewObject = new Cube("object", size * 2, size * 2, size * 2, 0x5544AA, "Lambert")
+              // const hiddenPositionVector = new THREE.Vector3( 0.5, size, 0.5)
+
+              // hiddenNewObject.mesh.position.copy(intersectLoc)
+              // hiddenNewObject.mesh.position.divideScalar(1).floor().add(hiddenPositionVector)
+              // hiddenNewObject.mesh.visible = false
+              // menu.currentWorld.addRaycastableObject(hiddenNewObject.mesh)
+
+              newObject.mesh.position
+                .divideScalar(1)
+                .floor()
+                .add(
+                  new THREE.Vector3(
+                    0.5,
+                    menu.currentWorld.placeholderObject.geometry.parameters
+                      .radius +
+                      menu.currentWorld.placeholderObject.geometry.parameters
+                        .length /
+                        2,
                     0.5
                   )
                 );
@@ -333,6 +371,20 @@ export const raycasterIntersections = (
               new THREE.Vector3(
                 0.5,
                 worldObject.placeholderObject.geometry.parameters.height / 2,
+                0.5
+              )
+            );
+          break;
+        case "CapsuleGeometry":
+          // console.log(worldObject.placeholderObject.geometry.parameters);
+          worldObject.placeholderObject.mesh.position
+            .divideScalar(1)
+            .floor()
+            .add(
+              new THREE.Vector3(
+                0.5,
+                worldObject.placeholderObject.geometry.parameters.radius +
+                  worldObject.placeholderObject.geometry.parameters.length / 2,
                 0.5
               )
             );

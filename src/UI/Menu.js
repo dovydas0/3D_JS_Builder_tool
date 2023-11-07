@@ -3,6 +3,7 @@ import { CompressedArrayTexture } from "three/src/textures/CompressedArrayTextur
 import { Cube } from "../objects/interactive/Cube";
 import { Cylinder } from "../objects/interactive/Cylinder";
 import { Sphere } from "../objects/interactive/Sphere";
+import { Capsule } from "../objects/interactive/Capsule";
 import { changeInfo } from "./changeInfo";
 import { changeMenu } from "./changeMenu";
 import { changeSceneMenu } from "./changeSceneMenu";
@@ -320,23 +321,23 @@ export class Menu {
           Math.floor(this.selectedObjects[0].geometry.parameters.width) -
           xDimSel;
         const yDifference =
-          Math.floor(this.selectedObjects[0].geometry.parameters.depth) -
+          Math.floor(this.selectedObjects[0].geometry.parameters.height) -
           yDimSel;
         const zDifference =
-          Math.floor(this.selectedObjects[0].geometry.parameters.height) -
+          Math.floor(this.selectedObjects[0].geometry.parameters.depth) -
           zDimSel;
 
         const newGeometry = new THREE.BoxGeometry(
           xDimSel + 0.00006,
-          zDimSel + 0.00006,
-          yDimSel + 0.00006
+          yDimSel + 0.00006,
+          zDimSel + 0.00006
         );
 
         this.selectedObjects[0].geometry = newGeometry;
 
         this.selectedObjects[0].position.x -= xDifference / 2;
-        this.selectedObjects[0].position.z -= yDifference / 2;
-        this.selectedObjects[0].position.y -= zDifference / 2;
+        this.selectedObjects[0].position.y -= yDifference / 2;
+        this.selectedObjects[0].position.z -= zDifference / 2;
         break;
       case "radius":
         let newSphereRad;
@@ -367,9 +368,17 @@ export class Menu {
         const sphereRadius = Number(
           document.getElementById("selected-radius").value
         );
+        const sphereWidthSeg = Number(
+          document.getElementById("segments-width").value
+        );
+        const sphereHeightSeg = Number(
+          document.getElementById("segments-height").value
+        );
 
         this.selectedObjects[0].geometry = new THREE.SphereGeometry(
-          sphereRadius
+          sphereRadius,
+          sphereWidthSeg,
+          sphereHeightSeg
         );
         break;
       case "cylinder":
@@ -425,11 +434,8 @@ export class Menu {
         const openEndedSelected =
           document.getElementById("selected-openEnded").checked;
 
-        console.log(openEndedSelected);
-
         const heightDifference =
-          Math.floor(this.selectedObjects[0].geometry.parameters.height) -
-          heightSelected;
+          this.selectedObjects[0].geometry.parameters.height - heightSelected;
 
         // Creating a new object and placing it into the grid, on the floor
         this.selectedObjects[0].geometry = new THREE.CylinderGeometry(
@@ -442,21 +448,74 @@ export class Menu {
         );
 
         this.selectedObjects[0].position.y -= heightDifference / 2;
+        break;
+      case "capsule":
+        let newCapsule;
+        const radiusCap = Number(document.getElementById("radiusCap").value);
+        const lengthCap = Number(document.getElementById("lengthCap").value);
+        const segmentsCap = Math.floor(
+          Number(document.getElementById("capSegmentsCap").value)
+        );
+        const radialSegmentsCap = Math.floor(
+          Number(document.getElementById("radialSegmentsCap").value)
+        );
+
+        // Creating a new object and placing it into the grid, on the floor
+        newCapsule = new Capsule(
+          "void-obj-placeholder-obj",
+          radiusCap,
+          lengthCap,
+          this.currentObjectColor,
+          "Basic",
+          true,
+          segmentsCap,
+          radialSegmentsCap
+        );
 
         // If new object created successfully
-        // if (newCylinderGeom?.mesh) {
-        //   // Placing the new cylinder into the same position
-        //   newCylinderSelected.mesh.position.copy(
-        //     this.selectedObjects[0].position
-        //   );
+        if (newCapsule?.mesh) {
+          // Removing old placeholder object and adding a new one
+          this.currentWorld.scene.remove(
+            this.currentWorld.placeholderObject.mesh
+          );
 
-        //   // Removing old placeholder object and adding a new one
-        //   this.currentWorld.scene.remove(this.selectedObjects[0]);
+          this.currentWorld.updatePlaceholderObject(newCapsule);
+          this.currentWorld.scene.add(newCapsule.mesh);
+          this.currentObject = newCapsule;
+        }
+        break;
+      case "selected-capsule":
+        const radiusCapSelected = Number(
+          document.getElementById("selected-radiusCap").value
+        );
+        const lengthCapSelected = Number(
+          document.getElementById("selected-lengthCap").value
+        );
+        const segmentsCapSelected = Math.floor(
+          Number(document.getElementById("selected-capSegmentsCap").value)
+        );
+        const radialSegmentsCapSelected = Math.floor(
+          Number(document.getElementById("selected-radialSegmentsCap").value)
+        );
 
-        //   this.currentWorld.addRaycastableObject(newCylinderSelected.mesh);
-        //   this.addToMenuScene(newCylinderSelected);
-        //   this.currentObject = newCylinderSelected;
-        // }
+        const radiusDifference =
+          this.selectedObjects[0].geometry.parameters.radius -
+          radiusCapSelected;
+
+        const lengthDifference =
+          this.selectedObjects[0].geometry.parameters.length -
+          lengthCapSelected;
+
+        // Creating a new object and placing it into the grid, on the floor
+        this.selectedObjects[0].geometry = new THREE.CapsuleGeometry(
+          radiusCapSelected,
+          lengthCapSelected,
+          segmentsCapSelected,
+          radialSegmentsCapSelected
+        );
+
+        this.selectedObjects[0].position.y -= lengthDifference / 2;
+        this.selectedObjects[0].position.y -= radiusDifference;
         break;
       case "objects":
         if (this.currentMode === "editor") {
@@ -492,7 +551,6 @@ export class Menu {
                 "Basic",
                 true
               );
-              newObject.mesh.position.set(0.5, 0.5, 0.5);
               break;
             case "sphere":
               // Changing the menu UI and reading the inputs
@@ -513,7 +571,6 @@ export class Menu {
                 "Basic",
                 true
               );
-              newObject.mesh.position.set(0.5, 0.5, 0.5);
 
               break;
             case "cylinder":
@@ -549,9 +606,43 @@ export class Menu {
                 openEnded
               );
 
-              newObject.mesh.position.set(0.5, 0.5, 0.5);
+              break;
+            case "capsule":
+              changeObjectMenu(
+                eventData.value,
+                this.currentMode,
+                this.menuParameterCapture,
+                null,
+                "object"
+              );
+
+              const radiusCap = Number(
+                document.getElementById("radiusCap").value
+              );
+              const lengthCap = Number(
+                document.getElementById("lengthCap").value
+              );
+              const segmentsCap = Math.floor(
+                Number(document.getElementById("capSegmentsCap").value)
+              );
+              const radialSegmentsCap = Math.floor(
+                Number(document.getElementById("radialSegmentsCap").value)
+              );
+
+              newObject = new Capsule(
+                "void-obj-placeholder-obj",
+                radiusCap,
+                lengthCap,
+                this.currentObjectColor,
+                "Basic",
+                true,
+                segmentsCap,
+                radialSegmentsCap
+              );
+
               break;
           }
+          newObject.mesh.position.set(0.5, 0.5, 0.5);
 
           // If new object created successfully
           if (newObject?.mesh) {
@@ -695,6 +786,19 @@ export class Menu {
               "Lambert"
             );
             addObject.mesh.position.set(0.5, 0.5, 0.5);
+            break;
+          case "capsule":
+            addObject = new Capsule(
+              "object-Capsule",
+              0.5,
+              1,
+              selectedColor,
+              "Lambert",
+              false,
+              6,
+              12
+            );
+            addObject.mesh.position.set(0.5, 1, 0.5);
             break;
         }
 

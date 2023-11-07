@@ -63,6 +63,7 @@ export const changeMenu = (mode, menuParameterCapture) => {
               <option value="cube">Cube</option>
               <option value="sphere">Sphere</option>
               <option value="cylinder">Cylinder</option>
+              <option value="capsule">Capsule</option>
             </select>
           </div>
           <div class="add-object-study">
@@ -139,6 +140,7 @@ export const changeMenu = (mode, menuParameterCapture) => {
             <option value="cube">Cube</option>
             <option value="sphere">Sphere</option>
             <option value="cylinder">Cylinder</option>
+            <option value="capsule">Capsule</option>
           </select>
         </div>
         <div class="selected-parameters" id="selected-parameters">

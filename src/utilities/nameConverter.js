@@ -3,6 +3,7 @@ export function nameConverter(name) {
     BoxGeometry: "cube",
     SphereGeometry: "sphere",
     CylinderGeometry: "cylinder",
+    CapsuleGeometry: "capsule",
   };
   return names[name];
 }
