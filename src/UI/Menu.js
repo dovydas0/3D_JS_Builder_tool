@@ -37,6 +37,10 @@ export class Menu {
     this.floorTiles = document.getElementById("floor-tile").checked;
     this.axisHelper = document.getElementById("axis-helper").checked;
 
+    const initColor = document.getElementById("color-input");
+    this.colorBeforeSelectionEditor = initColor.value;
+    this.colorBeforeSelectionStudy = initColor.value;
+
     if (this.floorTiles) {
       this.currentWorld.addObject(this.currentWorld.gridHelper);
     }
@@ -107,6 +111,7 @@ export class Menu {
       if (object.name.includes("object")) {
         object.material = new THREE.MeshLambertMaterial({
           color: object.material.color.getHex(),
+          side: THREE.DoubleSide,
         });
       }
     });
@@ -279,7 +284,7 @@ export class Menu {
 
         // Creating a new object and placing it into the grid, on the floor
         newCubeDim = new Cube(
-          "object",
+          "void-obj-placeholder-obj",
           xDim,
           yDim,
           zDim,
@@ -300,13 +305,46 @@ export class Menu {
           this.currentObject = newCubeDim;
         }
         break;
+      case "selected-dimensions":
+        const xDimSel = Math.floor(
+          Number(document.getElementById("selected-x-dim").value)
+        );
+        const yDimSel = Math.floor(
+          Number(document.getElementById("selected-y-dim").value)
+        );
+        const zDimSel = Math.floor(
+          Number(document.getElementById("selected-z-dim").value)
+        );
+
+        const xDifference =
+          Math.floor(this.selectedObjects[0].geometry.parameters.width) -
+          xDimSel;
+        const yDifference =
+          Math.floor(this.selectedObjects[0].geometry.parameters.depth) -
+          yDimSel;
+        const zDifference =
+          Math.floor(this.selectedObjects[0].geometry.parameters.height) -
+          zDimSel;
+
+        const newGeometry = new THREE.BoxGeometry(
+          xDimSel + 0.00006,
+          zDimSel + 0.00006,
+          yDimSel + 0.00006
+        );
+
+        this.selectedObjects[0].geometry = newGeometry;
+
+        this.selectedObjects[0].position.x -= xDifference / 2;
+        this.selectedObjects[0].position.z -= yDifference / 2;
+        this.selectedObjects[0].position.y -= zDifference / 2;
+        break;
       case "radius":
         let newSphereRad;
         const sphereRad = Number(document.getElementById("radius").value);
 
         // Creating a new object and placing it into the grid, on the floor
         newSphereRad = new Sphere(
-          "object",
+          "void-obj-placeholder-obj",
           sphereRad,
           this.currentObjectColor,
           "Basic",
@@ -324,6 +362,101 @@ export class Menu {
           this.currentWorld.scene.add(newSphereRad.mesh);
           this.currentObject = newSphereRad;
         }
+        break;
+      case "selected-radius":
+        const sphereRadius = Number(
+          document.getElementById("selected-radius").value
+        );
+
+        this.selectedObjects[0].geometry = new THREE.SphereGeometry(
+          sphereRadius
+        );
+        break;
+      case "cylinder":
+        let newCylinder;
+        const radiusTop = Number(document.getElementById("radiusTop").value);
+        const radiusBottom = Number(
+          document.getElementById("radiusBottom").value
+        );
+        const height = Number(document.getElementById("height").value);
+        const radialSegments = Math.floor(
+          Number(document.getElementById("radialSegments").value)
+        );
+        const openEnded = document.getElementById("openEnded").checked;
+
+        // Creating a new object and placing it into the grid, on the floor
+        newCylinder = new Cylinder(
+          "void-obj-placeholder-obj",
+          radiusTop,
+          radiusBottom,
+          height,
+          this.currentObjectColor,
+          "Basic",
+          true,
+          radialSegments,
+          openEnded
+        );
+
+        // If new object created successfully
+        if (newCylinder?.mesh) {
+          // Removing old placeholder object and adding a new one
+          this.currentWorld.scene.remove(
+            this.currentWorld.placeholderObject.mesh
+          );
+
+          this.currentWorld.updatePlaceholderObject(newCylinder);
+          this.currentWorld.scene.add(newCylinder.mesh);
+          this.currentObject = newCylinder;
+        }
+        break;
+      case "selected-cylinder":
+        const radiusTopSelected = Number(
+          document.getElementById("selected-radiusTop").value
+        );
+        const radiusBottomSelected = Number(
+          document.getElementById("selected-radiusBottom").value
+        );
+        const heightSelected = Number(
+          document.getElementById("selected-height").value
+        );
+        const radialSegmentsSelected = Math.floor(
+          Number(document.getElementById("selected-radialSegments").value)
+        );
+        const openEndedSelected =
+          document.getElementById("selected-openEnded").checked;
+
+        console.log(openEndedSelected);
+
+        const heightDifference =
+          Math.floor(this.selectedObjects[0].geometry.parameters.height) -
+          heightSelected;
+
+        // Creating a new object and placing it into the grid, on the floor
+        this.selectedObjects[0].geometry = new THREE.CylinderGeometry(
+          radiusTopSelected,
+          radiusBottomSelected,
+          heightSelected,
+          radialSegmentsSelected,
+          1,
+          openEndedSelected
+        );
+
+        this.selectedObjects[0].position.y -= heightDifference / 2;
+
+        // If new object created successfully
+        // if (newCylinderGeom?.mesh) {
+        //   // Placing the new cylinder into the same position
+        //   newCylinderSelected.mesh.position.copy(
+        //     this.selectedObjects[0].position
+        //   );
+
+        //   // Removing old placeholder object and adding a new one
+        //   this.currentWorld.scene.remove(this.selectedObjects[0]);
+
+        //   this.currentWorld.addRaycastableObject(newCylinderSelected.mesh);
+        //   this.addToMenuScene(newCylinderSelected);
+        //   this.currentObject = newCylinderSelected;
+        // }
         break;
       case "objects":
         if (this.currentMode === "editor") {
@@ -384,8 +517,39 @@ export class Menu {
 
               break;
             case "cylinder":
-              // newObject = new Cylinder("void-obj-placeholder-obj", 1, 1, 1, 0x5544AA, "Basic", true)
-              // changeObjectMenu(eventData.value, this.currentMode, this.menuParameterCapture)
+              changeObjectMenu(
+                eventData.value,
+                this.currentMode,
+                this.menuParameterCapture,
+                null,
+                "object"
+              );
+
+              const radiusTop = Number(
+                document.getElementById("radiusTop").value
+              );
+              const radiusBottom = Number(
+                document.getElementById("radiusBottom").value
+              );
+              const height = Number(document.getElementById("height").value);
+              const radialSegments = Math.floor(
+                Number(document.getElementById("radialSegments").value)
+              );
+              const openEnded = document.getElementById("openEnded").checked;
+
+              newObject = new Cylinder(
+                "void-obj-placeholder-obj",
+                radiusTop,
+                radiusBottom,
+                height,
+                this.currentObjectColor,
+                "Basic",
+                true,
+                radialSegments,
+                openEnded
+              );
+
+              newObject.mesh.position.set(0.5, 0.5, 0.5);
               break;
           }
 
@@ -400,59 +564,51 @@ export class Menu {
             this.currentWorld.scene.add(newObject.mesh);
             this.currentObject = newObject;
           }
-        } else if (this.currentMode === "study") {
-          // changeObjectMenu(
-          //   eventData.value,
-          //   this.currentMode,
-          //   this.menuParameterCapture
-          // );
-          // // Reassinging parameter buttons event listeners
-          // reassigningObjectEventListeners(this);
         }
         break;
       case "transform":
-        let newObjectTransform;
-        const xTrans = Number(document.getElementById("transform-x").value);
-        const yTrans = Number(document.getElementById("transform-y").value);
-        const zTrans = Number(document.getElementById("transform-z").value);
-        const objectTransform = document.getElementById("objects").value;
+        // let newObjectTransform;
+        // const xTrans = Number(document.getElementById("transform-x").value);
+        // const yTrans = Number(document.getElementById("transform-y").value);
+        // const zTrans = Number(document.getElementById("transform-z").value);
+        // const objectTransform = document.getElementById("objects").value;
+        // console.log("hi");
+        // switch (objectTransform) {
+        //   case "cube":
+        //     newObjectTransform = new Cube(
+        //       "object",
+        //       xTrans,
+        //       yTrans,
+        //       zTrans,
+        //       this.currentObjectColor,
+        //       "Lambert"
+        //     );
+        //     newObjectTransform.mesh.position.addScalar(0.5);
+        //     break;
+        //   case "sphere":
+        //     newObjectTransform = new Sphere(
+        //       "object",
+        //       2,
+        //       this.currentObjectColor,
+        //       "Lambert"
+        //     );
+        //     // console.log(newObject.mesh.position.x);
+        //     // console.log(newObject.mesh.position.y);
+        //     // console.log(newObject.mesh.position.z);
+        //     break;
+        //   case "cylinder":
+        //     // newObjectTransform = new Cylinder("object", 1, 1, 1, 0x5544AA, "Basic", true)
+        //     break;
+        // }
 
-        switch (objectTransform) {
-          case "cube":
-            newObjectTransform = new Cube(
-              "object",
-              xTrans,
-              yTrans,
-              zTrans,
-              this.currentObjectColor,
-              "Lambert"
-            );
-            newObjectTransform.mesh.position.addScalar(0.5);
-            break;
-          case "sphere":
-            newObjectTransform = new Sphere(
-              "object",
-              2,
-              this.currentObjectColor,
-              "Lambert"
-            );
-            // console.log(newObject.mesh.position.x);
-            // console.log(newObject.mesh.position.y);
-            // console.log(newObject.mesh.position.z);
-            break;
-          case "cylinder":
-            // newObjectTransform = new Cylinder("object", 1, 1, 1, 0x5544AA, "Basic", true)
-            break;
-        }
+        // // If new object created successfully
+        // if (newObjectTransform?.mesh) {
+        //   // Removing old object and adding a new one
+        //   this.currentWorld.removeObject(this.currentWorld.studyObject.mesh);
 
-        // If new object created successfully
-        if (newObjectTransform?.mesh) {
-          // Removing old object and adding a new one
-          this.currentWorld.removeObject(this.currentWorld.studyObject.mesh);
-
-          this.currentWorld.updateStudyObject(newObjectTransform);
-          this.currentWorld.addObject(newObjectTransform.mesh);
-        }
+        //   this.currentWorld.updateStudyObject(newObjectTransform);
+        //   this.currentWorld.addObject(newObjectTransform.mesh);
+        // }
         break;
       case "eye":
         const xEye = Number(document.getElementById("eye-x").value);
@@ -464,11 +620,17 @@ export class Menu {
       case "color-picker":
         const colorInput = document.getElementById("color-input");
 
-        this.currentObject.material.color.set(eventData.value);
-        this.currentObjectColor = eventData.value;
+        if (this.selectedObjects.length > 0) {
+          this.selectedObjects.forEach((selected) => {
+            selected.material.color.set(eventData.value);
+          });
+        } else {
+          this.colorBeforeSelectionEditor = eventData.value;
+          this.currentObject.material.color.set(eventData.value);
+          this.currentObjectColor = eventData.value;
+        }
 
         colorInput.value = eventData.value;
-
         break;
       case "color-picker-study":
         const colorInputStudy = document.getElementById("color-input");
@@ -477,6 +639,9 @@ export class Menu {
           this.selectedObjects.forEach((object) => {
             object.material.color.set(eventData.value);
           });
+        } else {
+          this.colorBeforeSelectionStudy = eventData.value;
+          this.currentObject.material.color.set(eventData.value);
         }
 
         colorInputStudy.value = eventData.value;
@@ -541,6 +706,7 @@ export class Menu {
 
         break;
       case "scene":
+        const colorIn = document.getElementById("color-input");
         let selectedObj = null;
 
         // Grabbing selected object in the scene
@@ -549,6 +715,7 @@ export class Menu {
           if (object.name.includes("object")) {
             object.material = new THREE.MeshLambertMaterial({
               color: object.material.color.getHex(),
+              side: THREE.DoubleSide,
             });
           }
 
@@ -559,6 +726,7 @@ export class Menu {
         });
 
         // populating global selected objects array
+        // Multiple objects selection
         if (eventData.ctrl && selectedObj !== null) {
           let addFlag = true;
 
@@ -572,10 +740,43 @@ export class Menu {
           if (addFlag) {
             this.selectedObjects.push(selectedObj);
           }
-        } else if (selectedObj !== null) {
+
+          changeObjectMenu(
+            "multiple",
+            this.currentMode,
+            this.menuParameterCapture
+          );
+
+          if (this.currentMode === "editor") {
+            colorIn.value = this.colorBeforeSelectionEditor;
+          } else if (this.currentMode === "study") {
+            colorIn.value = this.colorBeforeSelectionStudy;
+          }
+        }
+        // Single object selection
+        else if (selectedObj !== null) {
           this.selectedObjects = [selectedObj];
-        } else {
+
+          changeObjectMenu(
+            nameConverter(this.selectedObjects[0].geometry.type),
+            this.currentMode,
+            this.menuParameterCapture,
+            this.selectedObjects[0]
+          );
+
+          colorIn.value = "#" + selectedObj.material.color.getHexString();
+        }
+        // Press on the scene div (not on object)
+        else {
           this.selectedObjects = [];
+
+          changeObjectMenu("", this.currentMode, this.menuParameterCapture);
+
+          if (this.currentMode === "editor") {
+            colorIn.value = this.colorBeforeSelectionEditor;
+          } else if (this.currentMode === "study") {
+            colorIn.value = this.colorBeforeSelectionStudy;
+          }
         }
 
         // Painting all selected objects
@@ -590,31 +791,12 @@ export class Menu {
 
           object.material = new THREE.MeshBasicMaterial({
             color: object.material.color.getHex(),
-            opacity: 0.85,
+            opacity: 0.6,
             transparent: true,
+            side: THREE.DoubleSide,
           });
         });
 
-        if (this.selectedObjects.length === 1) {
-          changeObjectMenu(
-            nameConverter(this.selectedObjects[0].geometry.type),
-            this.currentMode,
-            this.menuParameterCapture,
-            this.selectedObjects[0]
-          );
-        }
-
-        if (this.selectedObjects.length === 0) {
-          changeObjectMenu("", this.currentMode, this.menuParameterCapture);
-        }
-
-        if (this.selectedObjects.length > 1) {
-          changeObjectMenu(
-            "multiple",
-            this.currentMode,
-            this.menuParameterCapture
-          );
-        }
         // Reassinging parameter buttons event listeners
         reassigningObjectEventListeners(this);
 

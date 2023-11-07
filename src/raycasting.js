@@ -75,11 +75,22 @@ export const onPointerDown = (
               menu.currentWorld.raycastableObjects.splice(index, 1);
               menu.removeFromMenuScene(el.uuid);
             }
+
+            menu.selectedObjects.forEach((obj) => {
+              if (obj.uuid === intersect.object.uuid) {
+                menu.deselectObjects();
+              }
+            });
           });
         }
       } else if (event.ctrlKey) {
         if (intersect.object.name.includes("object")) {
           selectObjects(intersect.object, menu);
+
+          // Changing parameter value to selected object
+          const colorInput = document.getElementById("color-input");
+          colorInput.value =
+            "#" + intersect.object.material.color.getHexString();
 
           if (menu.selectedObjects.length === 0) {
             changeObjectMenu("", menu.currentMode, menu.menuParameterCapture);
@@ -101,9 +112,17 @@ export const onPointerDown = (
               menu.menuParameterCapture,
               menu.selectedObjects[0]
             );
+
+            if (menu.currentMode === "editor") {
+              colorInput.value = menu.colorBeforeSelectionEditor;
+            } else if (menu.currentMode === "study") {
+              colorInput.value = menu.colorBeforeSelectionStudy;
+            }
           }
           // Reassinging parameter buttons event listeners
           reassigningObjectEventListeners(menu);
+        } else {
+          selectObjects(null, menu);
         }
       } else if (menu.currentMode === "editor") {
         // deselecting objects
@@ -140,7 +159,17 @@ export const onPointerDown = (
             );
             break;
           case "CylinderGeometry":
-            // newObject = new Cylinder("object-Cylinder", menu.currentObject.radius, 0x5544AA, "Lambert", false, 32, 16)
+            newObject = new Cylinder(
+              "object-Cylinder",
+              menu.currentObject.geometry.parameters.radiusTop,
+              menu.currentObject.geometry.parameters.radiusBottom,
+              menu.currentObject.geometry.parameters.height,
+              menu.currentObjectColor,
+              "Lambert",
+              false,
+              menu.currentObject.geometry.parameters.radialSegments,
+              menu.currentObject.geometry.parameters.openEnded
+            );
             break;
         }
 
@@ -189,8 +218,28 @@ export const onPointerDown = (
                 );
               break;
             case "CylinderGeometry":
-              // newObject.mesh.position.divideScalar(1).floor()
-              // .add(new THREE.Vector3(0.5, menu.currentWorld.placeholderObject.radius, 0.5))
+              // INVISIBLE CUBE FOR BETTER OBJECT PLACEMENT AROUND SPHERE
+
+              // const size = menu.currentObject.radius
+              // const hiddenNewObject = new Cube("object", size * 2, size * 2, size * 2, 0x5544AA, "Lambert")
+              // const hiddenPositionVector = new THREE.Vector3( 0.5, size, 0.5)
+
+              // hiddenNewObject.mesh.position.copy(intersectLoc)
+              // hiddenNewObject.mesh.position.divideScalar(1).floor().add(hiddenPositionVector)
+              // hiddenNewObject.mesh.visible = false
+              // menu.currentWorld.addRaycastableObject(hiddenNewObject.mesh)
+
+              newObject.mesh.position
+                .divideScalar(1)
+                .floor()
+                .add(
+                  new THREE.Vector3(
+                    0.5,
+                    menu.currentWorld.placeholderObject.geometry.parameters
+                      .height / 2,
+                    0.5
+                  )
+                );
               break;
           }
           menu.currentWorld.addRaycastableObject(newObject.mesh);
@@ -276,6 +325,17 @@ export const raycasterIntersections = (
             );
           break;
         case "CylinderGeometry":
+          // console.log(worldObject.placeholderObject.geometry.parameters);
+          worldObject.placeholderObject.mesh.position
+            .divideScalar(1)
+            .floor()
+            .add(
+              new THREE.Vector3(
+                0.5,
+                worldObject.placeholderObject.geometry.parameters.height / 2,
+                0.5
+              )
+            );
           break;
       }
     }
@@ -288,9 +348,17 @@ const selectObjects = (selected, menu) => {
     if (object.name !== "void-obj-floor") {
       object.material = new THREE.MeshLambertMaterial({
         color: object.material.color.getHex(),
+        side: THREE.DoubleSide,
       });
     }
   });
+
+  const colorInput = document.getElementById("color-input");
+  if (menu.currentMode === "editor") {
+    colorInput.value = menu.colorBeforeSelectionEditor;
+  } else if (menu.currentMode === "study") {
+    colorInput.value = menu.colorBeforeSelectionStudy;
+  }
 
   // Removing specific object tools
   changeObjectMenu("", menu.currentMode, menu.menuParameterCapture);
@@ -325,8 +393,9 @@ const selectObjects = (selected, menu) => {
 
     object.material = new THREE.MeshBasicMaterial({
       color: object.material.color.getHex(),
-      opacity: 0.85,
+      opacity: 0.6,
       transparent: true,
+      side: THREE.DoubleSide,
     });
   });
 

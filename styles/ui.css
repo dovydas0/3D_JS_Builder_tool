@@ -26,6 +26,7 @@
 
 body {
   overflow: hidden;
+  user-select: none;
 }
 
 .menu {
@@ -497,5 +498,11 @@ body {
     font-size: 16px;
     margin-bottom: 2rem;
     font-style: italic;
+  }
+}
+
+@media screen and (max-width: 812px) {
+  .menu {
+    height: 84vh;
   }
 }

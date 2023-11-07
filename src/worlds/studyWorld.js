@@ -9,7 +9,7 @@ export class StudyWorld extends World {
     super(canvas);
     this.raycastableObjects = [];
     this.camera = new THREE.PerspectiveCamera(
-      75,
+      65,
       window.innerWidth / window.innerHeight,
       0.1,
       1000
@@ -35,6 +35,7 @@ export class StudyWorld extends World {
     dirLight.position.set(300, 300, 30);
     dirLight.target.position.set(0, 0, 0);
     dirLight.castShadow = true;
+    dirLight.shadow.bias = -0.001;
     dirLight.shadow.mapSize = new THREE.Vector2(2048, 2048);
     dirLight.shadow.camera.top = 130;
     dirLight.shadow.camera.bottom = -130;

@@ -1,5 +1,5 @@
-import * as THREE from 'three';
-import { Entity } from '../entity';
+import * as THREE from "three";
+import { Entity } from "../entity";
 
 /**
  * Represents a Sphere object.
@@ -21,28 +21,48 @@ export class Sphere extends Entity {
     material = "Basic",
     placeholderObj = false,
     segmentsWidth = 32,
-    segmentsheight = 16,
+    segmentsheight = 16
   ) {
-    super(null, null, null, radius, null, null, null, segmentsWidth, null, segmentsheight, color )
-    this.materialProperties
+    super(
+      null,
+      null,
+      null,
+      radius,
+      null,
+      null,
+      null,
+      segmentsWidth,
+      null,
+      segmentsheight,
+      color
+    );
+    this.materialProperties;
 
     const threeMaterial = {
       Basic: THREE.MeshBasicMaterial,
       Phong: THREE.MeshPhongMaterial,
-      Lambert: THREE.MeshLambertMaterial
-    }
-    const finalMaterial = threeMaterial[material]
+      Lambert: THREE.MeshLambertMaterial,
+    };
+    const finalMaterial = threeMaterial[material];
 
-    placeholderObj ? 
-      this.materialProperties = { color: color, opacity: 0.5, transparent: true }
-      : 
-      this.materialProperties = { color: color }
-    
-    this.geometry = new THREE.SphereGeometry(radius, segmentsWidth, segmentsheight);
+    placeholderObj
+      ? (this.materialProperties = {
+          color: color,
+          opacity: 0.2,
+          transparent: true,
+          side: THREE.DoubleSide,
+        })
+      : (this.materialProperties = { color: color, side: THREE.DoubleSide });
+
+    this.geometry = new THREE.SphereGeometry(
+      radius,
+      segmentsWidth,
+      segmentsheight
+    );
     this.material = new finalMaterial(this.materialProperties);
-    this.mesh = new THREE.Mesh( this.geometry, this.material ); 
-    this.mesh.name = name
-    
+    this.mesh = new THREE.Mesh(this.geometry, this.material);
+    this.mesh.name = name;
+
     if (!placeholderObj) {
       this.mesh.castShadow = true;
       this.mesh.receiveShadow = true;
@@ -50,7 +70,7 @@ export class Sphere extends Entity {
   }
 
   update(deltaTime) {
-      this.mesh.rotation.x += 0.6 * deltaTime
-      this.mesh.rotation.y += 0.6 * deltaTime
+    this.mesh.rotation.x += 0.6 * deltaTime;
+    this.mesh.rotation.y += 0.6 * deltaTime;
   }
 }

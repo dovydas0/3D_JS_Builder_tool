@@ -2,47 +2,43 @@ import * as THREE from "three";
 import { Entity } from "../entity";
 
 /**
- * Represents a Cube object.
+ * Represents a Sphere object.
  */
-export class Cube extends Entity {
+export class Cylinder extends Entity {
   /**
-   * Create a Cube object.
-   * @param {number} width - The width of the cube.
-   * @param {number} depth - The depth of the cube.
-   * @param {number} [height=1] - The height of the cube.
-   * @param {number} [color=0xff0000] - The color of the cube.
-   * @param {"Basic" | "Phong" | "Lambert"} [material="Basic"] - The material type for the cube.
+   * Create a Cylinder object.
+   * @param {"floor" | "object"} name - The label of the cylinder.
+   * @param {number} radius - The radius of the cylinder.
+   * @param {number} [color=0xff0000] - The color of the cylinder.
+   * @param {"Basic" | "Phong" | "Lambert"} [material="Basic"] - The material type for the cylinder.
+   * @param {number} segmentsWidth - The number of segments (cuts) throughout the width of the cylinder.
+   * @param {number} segmentsheight - The number of segments (cuts) throughout the height of the cylinder.
    */
   constructor(
     name,
-    width,
-    depth,
+    radiusTop = 1,
+    radiusBottom = 1,
     height = 1,
     color = 0xff0000,
     material = "Basic",
     placeholderObj = false,
-    segmentsWidth = 1,
-    segmentsDepth = 1,
-    segmentsheight = 1
+    radialSegments = 32,
+    heightSegments = 16
   ) {
     super(
-      width,
-      depth,
+      null,
+      null,
       height,
       null,
+      radiusTop,
+      radiusBottom,
       null,
-      segmentsWidth,
-      segmentsDepth,
-      segmentsheight,
+      null,
+      null,
+      null,
       color
     );
     this.materialProperties;
-
-    const texture = new THREE.TextureLoader().load("/texture1.jpg");
-
-    // texture.wrapS = THREE.RepeatWrapping;
-    // texture.wrapT = THREE.RepeatWrapping;
-    // texture.repeat.set( 4, 4 );
 
     const threeMaterial = {
       Basic: THREE.MeshBasicMaterial,
@@ -60,18 +56,17 @@ export class Cube extends Entity {
         })
       : (this.materialProperties = { color: color, side: THREE.DoubleSide });
 
-    this.geometry = new THREE.BoxGeometry(
-      width + 0.00006,
-      height + 0.00006,
-      depth + 0.00006
+    this.geometry = new THREE.CylinderGeometry(
+      radiusTop,
+      radiusBottom,
+      height,
+      radialSegments,
+      heightSegments
     );
     this.material = new finalMaterial(this.materialProperties);
-    // this.material.color.get
-    // this.material.map = texture
-    // console.log(this.material);
-
     this.mesh = new THREE.Mesh(this.geometry, this.material);
     this.mesh.name = name;
+    // this.mesh.position.set(new THREE.Vector3(0, 0, 0))
 
     if (!placeholderObj) {
       this.mesh.castShadow = true;

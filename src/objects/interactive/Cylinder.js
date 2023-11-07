@@ -1,8 +1,8 @@
-import * as THREE from 'three';
-import { Entity } from '../entity';
+import * as THREE from "three";
+import { Entity } from "../entity";
 
 /**
- * Represents a Sphere object.
+ * Represents a Cylinder object.
  */
 export class Cylinder extends Entity {
   /**
@@ -22,30 +22,52 @@ export class Cylinder extends Entity {
     color = 0xff0000,
     material = "Basic",
     placeholderObj = false,
-    radialSegments  = 32,
-    heightSegments  = 16,
+    radialSegments = 16,
+    openEnded = false
   ) {
-    super(null, null, height, null, radiusTop, radiusBottom, null, null, null, null, color )
-    this.materialProperties
+    super(
+      null,
+      null,
+      height,
+      null,
+      radiusTop,
+      radiusBottom,
+      null,
+      null,
+      null,
+      null,
+      color
+    );
+    this.materialProperties;
 
     const threeMaterial = {
       Basic: THREE.MeshBasicMaterial,
       Phong: THREE.MeshPhongMaterial,
-      Lambert: THREE.MeshLambertMaterial
-    }
-    const finalMaterial = threeMaterial[material]
+      Lambert: THREE.MeshLambertMaterial,
+    };
+    const finalMaterial = threeMaterial[material];
 
-    placeholderObj ? 
-      this.materialProperties = { color: color, opacity: 0.5, transparent: true }
-      : 
-      this.materialProperties = { color: color }
-    
-    this.geometry = new THREE.CylinderGeometry(radiusTop, radiusBottom, height, radialSegments, heightSegments);
-    this.material = new finalMaterial(this.materialProperties)
-    this.mesh = new THREE.Mesh( this.geometry, this.material );
-    this.mesh.name = name
-    // this.mesh.position.set(new THREE.Vector3(0, 0, 0))
-    
+    placeholderObj
+      ? (this.materialProperties = {
+          color: color,
+          opacity: 0.2,
+          transparent: true,
+          side: THREE.DoubleSide,
+        })
+      : (this.materialProperties = { color: color, side: THREE.DoubleSide });
+
+    this.geometry = new THREE.CylinderGeometry(
+      radiusTop,
+      radiusBottom,
+      height,
+      radialSegments,
+      1,
+      openEnded
+    );
+    this.material = new finalMaterial(this.materialProperties);
+    this.mesh = new THREE.Mesh(this.geometry, this.material);
+    this.mesh.name = name;
+
     if (!placeholderObj) {
       this.mesh.castShadow = true;
       this.mesh.receiveShadow = true;
@@ -53,7 +75,7 @@ export class Cylinder extends Entity {
   }
 
   update(deltaTime) {
-      this.mesh.rotation.x += 0.6 * deltaTime
-      this.mesh.rotation.y += 0.6 * deltaTime
+    this.mesh.rotation.x += 0.6 * deltaTime;
+    this.mesh.rotation.y += 0.6 * deltaTime;
   }
 }
