@@ -1,7 +1,5 @@
 import * as THREE from "three";
 import { Menu } from "./UI/Menu.js";
-import { Scene } from "./scene";
-import { World } from "./worlds/world";
 import {
   onPointerDown,
   onPointerMove,
@@ -20,9 +18,11 @@ import { RenderPass } from "three/addons/postprocessing/RenderPass.js";
 import { OutlinePass } from "three/addons/postprocessing/OutlinePass.js";
 import { FXAAShader } from "three/addons/shaders/FXAAShader.js";
 import { ShaderPass } from "three/addons/postprocessing/ShaderPass.js";
+import { gltfImporter } from "./importers/gltfImporter.js";
 
 // Performance monitor
 const stats = new Stats();
+stats.dom.classList.add("stats-data");
 document.body.appendChild(stats.dom);
 
 // MODES
@@ -52,7 +52,7 @@ const canvas = new Canvas(
   0.1,
   1000
 );
-// initplaceholderObject.material.map =
+
 const editorWorld = new EditorWorld(canvas, initplaceholderObject);
 const studyWorld = new StudyWorld(canvas);
 const craftWorld = new CraftWorld(canvas);
@@ -66,6 +66,9 @@ const worlds = {
 const menu = new Menu(worlds.editor, initPlaceholderObjectArr);
 const raycaster = new THREE.Raycaster();
 const pointer = new THREE.Vector2();
+
+const gltf = new gltfImporter();
+gltf.importObject("/models/random.gltf", menu);
 
 worlds.editor.initWorld();
 worlds.study.initWorld(menu, canvas);

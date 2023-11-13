@@ -13,9 +13,12 @@ export const eventListeners = (menu, canvas, worlds) => {
   });
 
   document.getElementById("scene-outline").addEventListener("click", (e) => {
+    // console.log(e.target.dataset);
     menu.action({
       name: "scene",
+      dataset: e.target.dataset,
       value: e.target.id,
+      element: e.target,
       ctrl: e.ctrlKey,
     });
   });

@@ -192,10 +192,24 @@ export class Menu {
     }
   }
 
-  addToMenuScene(objectToAdd) {
-    const sceneObjects = document.getElementById("scene-objects");
+  addToMenuScene(objectToAdd, levelDepth, hidden) {
+    let sceneObjects = document.getElementById("scene-objects");
+    let groupDiv;
+    let depth = levelDepth ? levelDepth : 0;
     let nameRepetitions = -1;
-    let objName = objectToAdd.name.split("object-")[1];
+
+    if (objectToAdd.type !== "Mesh" && depth === 0) {
+      groupDiv = document.createElement("div");
+      groupDiv.id = "group-wrapper";
+      sceneObjects.appendChild(groupDiv);
+      sceneObjects = groupDiv;
+    } else if (depth > 0) {
+      groupDiv = document.getElementById("group-wrapper");
+      sceneObjects = groupDiv;
+    }
+
+    // let objName = objectToAdd.name.split("object-")[1];
+    let objName = objectToAdd.name;
 
     // cunstruction of non-repeating name
     if (objectToAdd) {
@@ -216,9 +230,31 @@ export class Menu {
       objName += nameRepetitions;
     }
 
-    sceneObjects.innerHTML += `
-      <div data-obj="${objName}" id="${objectToAdd.uuid}">${objName}</div>
-    `;
+    if (objectToAdd.children.length > 1 || objectToAdd.type === "Group") {
+      sceneObjects.innerHTML += `
+        <div data-obj="${objName}" id="${
+        objectToAdd.uuid
+      }" class="group-depth-${depth} scene-menu-obj" ${
+        depth > 0 ? "style=display:none;" : ""
+      }><span data-name="expand-shrink" id="group-opener-${depth}">+</span> ${objName}</div>
+      `;
+    } else {
+      sceneObjects.innerHTML += `
+        <div data-obj="${objName}" class="group-depth-${depth}" id="${
+        objectToAdd.uuid
+      }" ${depth > 0 ? "style=display:none" : ""}>${objName}</div>
+      `;
+    }
+
+    if (objectToAdd.children.length > 1 || objectToAdd.type === "Group") {
+      objectToAdd.children.forEach((object) => {
+        this.addToMenuScene(object, depth + 1);
+      });
+      // console.log("more objects");
+    }
+    // sceneObjects.innerHTML += `
+    //   <div data-obj="${objName}" id="${objectToAdd.uuid}">${objName}</div>
+    // `;
   }
 
   removeFromMenuScene(id) {
@@ -810,102 +846,162 @@ export class Menu {
 
         break;
       case "scene":
-        const colorIn = document.getElementById("color-input");
-        let selectedObj = null;
+        if (eventData.dataset?.name === "expand-shrink") {
+          const depth = eventData.value.slice(-1);
+          const parentElement = document.getElementById("group-wrapper");
+          const children = document.querySelectorAll(
+            `.group-depth-${Number(depth) + 1}`
+          );
+          let childrenFlag = false;
+          let restShow;
+          let depthLevel = depth;
 
-        // Grabbing selected object in the scene
-        this.currentWorld.scene.children.forEach((object) => {
-          // If object is tracked in the scene restore it's material
-          if (object.name.includes("object")) {
-            object.material = new THREE.MeshLambertMaterial({
-              color: object.material.color.getHex(),
-              side: THREE.DoubleSide,
-            });
-          }
+          // Array.prototype.forEach.call(parentElement.children, (child) => {
+          //   if (childrenFlag) {
+          //     // console.log(child);
+          //     if (child.style.display === "block") {
+          //       console.log(child);
+          //       restShow = "none";
+          //     }
+          //     if (eventData.element.textContent === "-" && restShow) {
+          //       child.style.display = restShow;
+          //     }
+          //   }
+          //   if (eventData.element.parentElement === child) {
+          //     childrenFlag = true;
+          //   }
+          // });
+          // console.log(eventData.element.children);
 
-          // If it is the selected object
-          if (object.uuid === eventData.value) {
-            selectedObj = object;
-          }
-        });
+          eventData.element.textContent === "+"
+            ? (eventData.element.textContent = "-")
+            : (eventData.element.textContent = "+");
 
-        // populating global selected objects array
-        // Multiple objects selection
-        if (eventData.ctrl && selectedObj !== null) {
-          let addFlag = true;
+          children.forEach((child) => {
+            if (child.children.length > 0) {
+              // console.log(child.children);
+              // child.children.forEach((child) => {
+              //   if (child.style.display === "none") {
+              //     const padding = ((Number(depth) + 1) * 12).toString() + "px";
+              //     child.style.display = "block";
+              //     child.style.paddingLeft = padding;
+              //   } else {
+              //     child.style.display = "none";
+              //   }
+              // });
+            }
+            if (child.style.display === "none") {
+              const padding = ((Number(depth) + 1) * 12).toString() + "px";
 
-          // preventing double selection
-          this.selectedObjects.forEach((selected) => {
-            if (selected.uuid === selectedObj.uuid) {
-              addFlag = false;
+              child.style.display = "block";
+              child.style.paddingLeft = padding;
+            } else {
+              child.style.display = "none";
+            }
+          });
+          // while (depthLevel >= 0) {
+
+          //   console.log(depthLevel);
+          //   depthLevel--;
+          // }
+        } else {
+          const colorIn = document.getElementById("color-input");
+          let selectedObj = null;
+
+          // Grabbing selected object in the scene
+          this.currentWorld.scene.children.forEach((object) => {
+            // If object is tracked in the scene restore it's material
+            if (object.name.includes("object")) {
+              object.material = new THREE.MeshLambertMaterial({
+                color: object.material.color.getHex(),
+                side: THREE.DoubleSide,
+              });
+            }
+
+            // If it is the selected object
+            if (object.uuid === eventData.value) {
+              selectedObj = object;
             }
           });
 
-          if (addFlag) {
-            this.selectedObjects.push(selectedObj);
+          // populating global selected objects array
+          // Multiple objects selection
+          if (eventData.ctrl && selectedObj !== null) {
+            let addFlag = true;
+
+            // preventing double selection
+            this.selectedObjects.forEach((selected) => {
+              if (selected.uuid === selectedObj.uuid) {
+                addFlag = false;
+              }
+            });
+
+            if (addFlag) {
+              this.selectedObjects.push(selectedObj);
+            }
+
+            changeObjectMenu(
+              "multiple",
+              this.currentMode,
+              this.menuParameterCapture
+            );
+
+            if (this.currentMode === "editor") {
+              colorIn.value = this.colorBeforeSelectionEditor;
+            } else if (this.currentMode === "study") {
+              colorIn.value = this.colorBeforeSelectionStudy;
+            }
+          }
+          // Single object selection
+          else if (selectedObj !== null) {
+            this.selectedObjects = [selectedObj];
+
+            changeObjectMenu(
+              nameConverter(this.selectedObjects[0].geometry.type),
+              this.currentMode,
+              this.menuParameterCapture,
+              this.selectedObjects[0]
+            );
+
+            colorIn.value = "#" + selectedObj.material.color.getHexString();
+          }
+          // Press on the scene div (not on object)
+          else {
+            this.selectedObjects = [];
+
+            changeObjectMenu("", this.currentMode, this.menuParameterCapture);
+
+            if (this.currentMode === "editor") {
+              colorIn.value = this.colorBeforeSelectionEditor;
+            } else if (this.currentMode === "study") {
+              colorIn.value = this.colorBeforeSelectionStudy;
+            }
           }
 
-          changeObjectMenu(
-            "multiple",
-            this.currentMode,
-            this.menuParameterCapture
-          );
+          // Painting all selected objects
+          this.selectedObjects?.forEach((object) => {
+            // GREEN CUBE OUTLINE
+            // const cubeGeometry = new THREE.BoxGeometry( 1, 1, 1 );
+            // const outlineMaterial2 = new THREE.MeshBasicMaterial( { color: 0x41fdfe, side: THREE.BackSide } );
+            // const outlineMesh2 = new THREE.Mesh( cubeGeometry, outlineMaterial2 );
+            // outlineMesh2.position.set(object.position.x, object.position.y, object.position.z)
+            // outlineMesh2.scale.multiplyScalar(1.05);
+            // this.currentWorld.addObject( outlineMesh2 );
 
-          if (this.currentMode === "editor") {
-            colorIn.value = this.colorBeforeSelectionEditor;
-          } else if (this.currentMode === "study") {
-            colorIn.value = this.colorBeforeSelectionStudy;
-          }
-        }
-        // Single object selection
-        else if (selectedObj !== null) {
-          this.selectedObjects = [selectedObj];
-
-          changeObjectMenu(
-            nameConverter(this.selectedObjects[0].geometry.type),
-            this.currentMode,
-            this.menuParameterCapture,
-            this.selectedObjects[0]
-          );
-
-          colorIn.value = "#" + selectedObj.material.color.getHexString();
-        }
-        // Press on the scene div (not on object)
-        else {
-          this.selectedObjects = [];
-
-          changeObjectMenu("", this.currentMode, this.menuParameterCapture);
-
-          if (this.currentMode === "editor") {
-            colorIn.value = this.colorBeforeSelectionEditor;
-          } else if (this.currentMode === "study") {
-            colorIn.value = this.colorBeforeSelectionStudy;
-          }
-        }
-
-        // Painting all selected objects
-        this.selectedObjects?.forEach((object) => {
-          // GREEN CUBE OUTLINE
-          // const cubeGeometry = new THREE.BoxGeometry( 1, 1, 1 );
-          // const outlineMaterial2 = new THREE.MeshBasicMaterial( { color: 0x41fdfe, side: THREE.BackSide } );
-          // const outlineMesh2 = new THREE.Mesh( cubeGeometry, outlineMaterial2 );
-          // outlineMesh2.position.set(object.position.x, object.position.y, object.position.z)
-          // outlineMesh2.scale.multiplyScalar(1.05);
-          // this.currentWorld.addObject( outlineMesh2 );
-
-          object.material = new THREE.MeshBasicMaterial({
-            color: object.material.color.getHex(),
-            opacity: 0.6,
-            transparent: true,
-            side: THREE.DoubleSide,
+            object.material = new THREE.MeshBasicMaterial({
+              color: object.material.color.getHex(),
+              opacity: 0.6,
+              transparent: true,
+              side: THREE.DoubleSide,
+            });
           });
-        });
 
-        // Reassinging parameter buttons event listeners
-        reassigningObjectEventListeners(this);
+          // Reassinging parameter buttons event listeners
+          reassigningObjectEventListeners(this);
 
-        // Highlighting selected objects in menu
-        this.highlightObjectInMenu(this.selectedObjects);
+          // Highlighting selected objects in menu
+          this.highlightObjectInMenu(this.selectedObjects);
+        }
         break;
     }
   }
