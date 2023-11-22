@@ -18,7 +18,7 @@ import { RenderPass } from "three/addons/postprocessing/RenderPass.js";
 import { OutlinePass } from "three/addons/postprocessing/OutlinePass.js";
 import { FXAAShader } from "three/addons/shaders/FXAAShader.js";
 import { ShaderPass } from "three/addons/postprocessing/ShaderPass.js";
-import { gltf } from "./importers/gltf.js";
+import { gltfObject } from "./importers/gltfObject.js";
 
 // Performance monitor
 const stats = new Stats();
@@ -66,10 +66,6 @@ const worlds = {
 const menu = new Menu(worlds.editor, initPlaceholderObjectArr);
 const raycaster = new THREE.Raycaster();
 const pointer = new THREE.Vector2();
-
-const gltfObject = new gltf();
-// gltfObject.importObject("/models/random.gltf", menu);
-gltfObject.exportScene(menu.currentWorld.scene);
 
 worlds.editor.initWorld();
 worlds.study.initWorld(menu, canvas);

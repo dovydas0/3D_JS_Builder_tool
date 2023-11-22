@@ -12,6 +12,16 @@ export const eventListeners = (menu, canvas, worlds) => {
     });
   });
 
+  document.getElementById("menu-bar").addEventListener("click", (e) => {
+    // IF NOT ROBUST ENOUGH ADD AN HTML TAG CHECK BEFORE PASSING INFO
+
+    menu.action({
+      name: e.target.name,
+      checked: e.target.checked,
+      value: e.target.value,
+    });
+  });
+
   document.getElementById("scene-outline").addEventListener("click", (e) => {
     // console.log(e.target.dataset);
     menu.action({

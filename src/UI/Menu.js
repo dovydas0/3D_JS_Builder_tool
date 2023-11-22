@@ -12,10 +12,12 @@ import { reassigningObjectEventListeners } from "../utilities/populateEventListe
 import { EffectComposer } from "three/addons/postprocessing/EffectComposer.js";
 import { RenderPass } from "three/addons/postprocessing/RenderPass.js";
 import { nameConverter } from "../utilities/nameConverter";
+import { gltfObject } from "../importers/gltfObject";
 
 export class Menu {
   constructor(worldObject, placeholderObject) {
     // STORE ALL BLOCKS IN AN ARRAY HERE
+    this.gltfObj = new gltfObject();
     this.currentMode = "editor";
     this.currentWorld = worldObject;
     this.menuParameterCapture = {
@@ -842,6 +844,14 @@ export class Menu {
         if (addObject?.mesh) {
           this.currentWorld.addRaycastableObject(addObject.mesh);
           this.addToMenuScene(addObject.mesh);
+        }
+
+        break;
+      case "menu-bar":
+        if (eventData.value === "export") {
+          this.gltfObj.exportScene(this.currentWorld.scene);
+        } else if (eventData.value === "import") {
+          this.gltfObj.importObject("/models/scene.gltf", this);
         }
 
         break;
