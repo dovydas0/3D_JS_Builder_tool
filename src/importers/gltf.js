@@ -1,8 +1,42 @@
 import { GLTFLoader } from "three/addons/loaders/GLTFLoader.js";
+import { GLTFExporter } from "three/addons/exporters/GLTFExporter.js";
 
-export class gltfImporter {
+export class gltf {
   constructor() {
     this.loader = new GLTFLoader();
+    this.exporter = new GLTFExporter();
+  }
+
+  #save(blob, filename) {
+    link.href = URL.createObjectURL(blob);
+    link.download = filename;
+    link.click();
+
+    // URL.revokeObjectURL( url ); breaks Firefox...
+  }
+
+  #saveString(text, filename) {
+    this.#save(new Blob([text], { type: "text/plain" }), filename);
+  }
+
+  exportScene(scene) {
+    this.exporter.parse(
+      scene,
+      // called when the gltf has been generated
+      function (result) {
+        if (result instanceof ArrayBuffer) {
+          saveArrayBuffer(result, "scene.glb");
+        } else {
+          const output = JSON.stringify(result, null, 2);
+          console.log(output);
+          this.#saveString(output, "scene.gltf");
+        }
+      },
+      // called when there is an error in the generation
+      function (error) {
+        console.log("An error happened");
+      }
+    );
   }
 
   importObject(path, menu) {
