@@ -20,6 +20,14 @@ export const eventListeners = (menu, canvas, worlds) => {
       checked: e.target.checked,
       value: e.target.value,
     });
+
+    if (e.target.value === "new") {
+      menu.modeChange("editor", worlds["editor"]);
+
+      reassigningModeEventListeners(menu);
+      reassigningObjectEventListeners(menu);
+      console.log("hi");
+    }
   });
 
   document.getElementById("scene-outline").addEventListener("click", (e) => {

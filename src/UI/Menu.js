@@ -1,4 +1,5 @@
 import * as THREE from "three";
+import _ from "lodash";
 import { CompressedArrayTexture } from "three/src/textures/CompressedArrayTexture";
 import { Cube } from "../objects/interactive/Cube";
 import { Cylinder } from "../objects/interactive/Cylinder";
@@ -13,11 +14,15 @@ import { EffectComposer } from "three/addons/postprocessing/EffectComposer.js";
 import { RenderPass } from "three/addons/postprocessing/RenderPass.js";
 import { nameConverter } from "../utilities/nameConverter";
 import { gltfObject } from "../importers/gltfObject";
+import { objObject } from "../importers/objObject";
+import { EditorWorld } from "../worlds/editorWorld";
 
 export class Menu {
-  constructor(worldObject, placeholderObject) {
+  constructor(worldObject, placeholderObject, newEditor) {
     // STORE ALL BLOCKS IN AN ARRAY HERE
+    this.newEditor = newEditor;
     this.gltfObj = new gltfObject();
+    this.objObj = new objObject();
     this.currentMode = "editor";
     this.currentWorld = worldObject;
     this.menuParameterCapture = {
@@ -30,11 +35,6 @@ export class Menu {
     this.currentObject = placeholderObject.object;
     this.currentObjectColor = placeholderObject.color;
     this.selectedObjects = [];
-    // Set all menu parameters to local variables for easier object manipulation
-    // this.currentObjectForm
-    // this.currentObjectX
-    // this.currentObjectY
-    // this.currentObjectZ
 
     // Accessing all necessary handles in the menu
     this.floorTiles = document.getElementById("floor-tile").checked;
@@ -163,8 +163,8 @@ export class Menu {
         const sceneObjectsStudy = Array.from(objectsStudy.children);
 
         this.menuParameterCapture[prevMode] = {
-          rotation: rotationStudy.checked,
-          axisHelper: axisHelperStudy.checked,
+          rotation: rotationStudy?.checked,
+          axisHelper: axisHelperStudy?.checked,
           object: objectStudy,
           color: colorStudy,
           eye: {
@@ -848,10 +848,38 @@ export class Menu {
 
         break;
       case "menu-bar":
-        if (eventData.value === "export") {
-          this.gltfObj.exportScene(this.currentWorld.scene);
-        } else if (eventData.value === "import") {
-          this.gltfObj.importObject("/models/scene.gltf", this);
+        this.deselectObjects();
+        let cleanScene;
+        switch (eventData.value) {
+          case "new":
+            this.newEditor();
+
+            break;
+          case "export GLTF":
+            cleanScene = _.cloneDeep(this.currentWorld.scene);
+
+            const childrenGltf = cleanScene.children.filter(
+              (object) => !object.name.includes("void-obj")
+            );
+
+            cleanScene.children = childrenGltf;
+
+            this.gltfObj.exportScene(cleanScene);
+            break;
+          case "export OBJ":
+            cleanScene = _.cloneDeep(this.currentWorld.scene);
+
+            const childrenObj = cleanScene.children.filter(
+              (object) => !object.name.includes("void-obj")
+            );
+
+            cleanScene.children = childrenObj;
+
+            this.objObj.exportScene(cleanScene);
+            break;
+          case "import":
+            this.gltfObj.importObject("/models/scene.gltf", this);
+            break;
         }
 
         break;

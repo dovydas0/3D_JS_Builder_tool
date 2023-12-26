@@ -18,7 +18,6 @@ import { RenderPass } from "three/addons/postprocessing/RenderPass.js";
 import { OutlinePass } from "three/addons/postprocessing/OutlinePass.js";
 import { FXAAShader } from "three/addons/shaders/FXAAShader.js";
 import { ShaderPass } from "three/addons/postprocessing/ShaderPass.js";
-import { gltfObject } from "./importers/gltfObject.js";
 
 // Performance monitor
 const stats = new Stats();
@@ -56,14 +55,44 @@ const canvas = new Canvas(
 const editorWorld = new EditorWorld(canvas, initplaceholderObject);
 const studyWorld = new StudyWorld(canvas);
 const craftWorld = new CraftWorld(canvas);
-const worlds = {
+let worlds = {
   study: studyWorld,
   editor: editorWorld,
   play: editorWorld,
   craft: craftWorld,
 };
 
-const menu = new Menu(worlds.editor, initPlaceholderObjectArr);
+const newEditor = () => {
+  const sceneObjects = document.getElementById("scene-objects");
+
+  sceneObjects.innerHTML = "";
+  // sceneObjects.childNodes.forEach((node) => {
+  //   console.log(node);
+  //   // sceneObjects.removeChild(node);
+  // });
+  // console.log(sceneObjects.children);
+  // Object.keys(sceneObjects.children).forEach((value) => {
+  //   console.log(sceneObjects.children[value]);
+  // });
+
+  // console.log(sceneObjects);
+
+  // menu.removeFromMenuScene(id)
+
+  const editorWorld = new EditorWorld(canvas, initplaceholderObject);
+  worlds = {
+    study: studyWorld,
+    editor: editorWorld,
+    play: editorWorld,
+    craft: craftWorld,
+  };
+  menu = new Menu(worlds.editor, initPlaceholderObjectArr, newEditor);
+
+  editorWorld.initWorld();
+  eventListeners(menu, canvas, worlds);
+};
+
+let menu = new Menu(worlds.editor, initPlaceholderObjectArr, newEditor);
 const raycaster = new THREE.Raycaster();
 const pointer = new THREE.Vector2();
 

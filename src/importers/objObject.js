@@ -1,39 +1,15 @@
-import { GLTFLoader } from "three/addons/loaders/GLTFLoader.js";
-import { GLTFExporter } from "three/addons/exporters/GLTFExporter.js";
+import { OBJLoader } from "three/addons/loaders/OBJLoader.js";
+import { OBJExporter } from "three/addons/exporters/OBJExporter.js";
 
-export class gltfObject {
+export class objObject {
   constructor() {
-    this.loader = new GLTFLoader();
-    this.exporter = new GLTFExporter();
+    this.loader = new OBJLoader();
+    this.exporter = new OBJExporter();
   }
 
-  exportScene(scene, filename = "scene") {
-    this.exporter.parse(
-      scene,
-      // called when the gltf has been generated
-      function (result) {
-        if (result instanceof ArrayBuffer) {
-          saveArrayBuffer(result, "scene.glb");
-        } else {
-          const output = JSON.stringify(result, null, 2);
-
-          const blob = new Blob(
-            [output],
-            { type: "text/plain" },
-            `${filename}.gltf`
-          );
-
-          const link = document.createElement("a");
-          link.href = URL.createObjectURL(blob);
-          link.download = `${filename}.gltf`;
-          link.click();
-        }
-      },
-      // called when there is an error in the generation
-      function (error) {
-        console.log("An error happened");
-      }
-    );
+  exportScene(scene) {
+    const data = this.exporter.parse(scene);
+    this.#downloadFile(data);
   }
 
   importObject(path, menu) {
@@ -77,5 +53,13 @@ export class gltfObject {
         console.log(error);
       }
     );
+  }
+
+  #downloadFile(data, filename = "export.obj") {
+    const blob = new Blob([data], { type: "text/plain" });
+    const link = document.createElement("a");
+    link.href = URL.createObjectURL(blob);
+    link.download = filename;
+    link.click();
   }
 }
