@@ -11,7 +11,7 @@ export const changeMenu = (mode, menuParameterCapture) => {
             <p>Rotation</p>
             <label class="el-switch el-switch-sm">
               <input type="checkbox" name="rotation" id="rotation" ${
-                menuParameterCapture[mode].rotation ? "checked" : ""
+                menuParameterCapture[mode]?.rotation ? "checked" : ""
               }>
               <span class="el-switch-style"></span>
             </label>
@@ -20,7 +20,7 @@ export const changeMenu = (mode, menuParameterCapture) => {
             <p>Axis Helper</p>
             <label class="el-switch el-switch-sm">
               <input type="checkbox" name="axis-helper" id="axis-helper" ${
-                menuParameterCapture[mode].axisHelper ? "checked" : ""
+                menuParameterCapture[mode]?.axisHelper ? "checked" : ""
               }>
               <span class="el-switch-style"></span>
             </label>

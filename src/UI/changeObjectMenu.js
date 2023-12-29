@@ -13,7 +13,7 @@ export const changeObjectMenu = (
       switch (object.toLowerCase()) {
         case "cube":
           html = `
-            <p class="container-p">Cube</p>
+            <p class="container-p">Placeholder Cube</p>
             <div class="dimensions">
               <p>Dimensions</p>
               <div class="dimension-inputs" id="dimension-inputs">
@@ -47,7 +47,7 @@ export const changeObjectMenu = (
           break;
         case "sphere":
           html = `
-            <p class="container-p">Sphere</p>
+            <p class="container-p">Placeholder Sphere</p>
             <div class="dimensions">
               <p>Dimensions</p>
               <div class="dimension-inputs" id="dimension-inputs">
@@ -61,7 +61,7 @@ export const changeObjectMenu = (
           break;
         case "cylinder":
           html = `
-            <p class="container-p">Cylinder</p>
+            <p class="container-p">Placeholder Cylinder</p>
             <div class="dimensions">
               <p>Properties</p>
               <div class="dimension-inputs" id="dimension-inputs">
@@ -91,7 +91,7 @@ export const changeObjectMenu = (
           break;
         case "capsule":
           html = `
-            <p class="container-p">Capsule</p>
+            <p class="container-p">Placeholder Capsule</p>
             <div class="dimensions">
               <p>Properties</p>
               <div class="dimension-inputs" id="dimension-inputs">
@@ -115,35 +115,35 @@ export const changeObjectMenu = (
             </div>
           `;
           break;
-        case "multiple":
-          html = `
-            <div class="container" id="selected-obj">
-              <p class="container-p">Transform</p>
-              <div class="dimensions">
-                <p></p>
-                <div class="dimension-inputs" id="dimension-inputs">
-                  <div class="dim-input">
-                    <label>X</label>
-                    <input type="number" name="transforms" id="transform-x" value="0" step="0.1" min="-50" max="50">
-                  </div>
-                  <div class="dim-input">
-                    <label>Y</label>
-                    <input type="number" name="transforms" id="transform-y" value="0" step="0.1" min="-50" max="50">
-                  </div>
-                  <div class="dim-input">
-                    <label>Z</label>
-                    <input type="number" name="transforms" id="transform-z" value="0" step="0.1" min="-50" max="50">
-                  </div>
-                </div>
-                <div class="transform-btns">
-                  <button class="btn-1" id="btn-translate">Translate</button>
-                  <button class="btn-1" id="btn-scale">Scale</button>
-                  <button class="btn-1" id="btn-rotate">Rotate</button>
-                </div>
-              </div>
-            </div>
-          `;
-          break;
+        // case "multiple":
+        //   html = `
+        //     <div class="container" id="selected-obj">
+        //       <p class="container-p">Transform</p>
+        //       <div class="dimensions">
+        //         <p></p>
+        //         <div class="dimension-inputs" id="dimension-inputs">
+        //           <div class="dim-input">
+        //             <label>X</label>
+        //             <input type="number" name="transforms" id="transform-x" value="0" step="0.1" min="-50" max="50">
+        //           </div>
+        //           <div class="dim-input">
+        //             <label>Y</label>
+        //             <input type="number" name="transforms" id="transform-y" value="0" step="0.1" min="-50" max="50">
+        //           </div>
+        //           <div class="dim-input">
+        //             <label>Z</label>
+        //             <input type="number" name="transforms" id="transform-z" value="0" step="0.1" min="-50" max="50">
+        //           </div>
+        //         </div>
+        //         <div class="transform-btns">
+        //           <button class="btn-1" id="btn-translate">Translate</button>
+        //           <button class="btn-1" id="btn-scale">Scale</button>
+        //           <button class="btn-1" id="btn-rotate">Rotate</button>
+        //         </div>
+        //       </div>
+        //     </div>
+        //   `;
+        //   break;
         default:
           html = "";
           break;
@@ -154,7 +154,7 @@ export const changeObjectMenu = (
       let html;
       const parentDiv = document.getElementById("selected-parameters-selected");
 
-      switch (object.toLowerCase()) {
+      switch (object?.toLowerCase()) {
         case "cube":
           html = `
             <div class="container" id="selected-obj-selected">
@@ -388,6 +388,7 @@ export const changeObjectMenu = (
           `;
           break;
         case "multiple":
+        case "buffer":
           html = `
             <div class="container" id="selected-obj-selected">
               <p class="container-p">Transform</p>

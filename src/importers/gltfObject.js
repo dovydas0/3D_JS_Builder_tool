@@ -40,15 +40,30 @@ export class gltfObject {
     this.loader.load(
       path,
       // called when the resource is loaded
-      function (gltf) {
+      async function (gltf) {
+        console.log(gltf.scene);
         menu.currentWorld.scene.add(gltf.scene);
 
-        // console.log(gltf.scene.children[0].children);
-        // gltf.scene.children[0].children.forEach((element) => {
-        //   element.name = "object-" + element.name;
-        //   menu.currentWorld.addRaycastableObject(element);
-        //   menu.addToMenuScene(element);
-        // });
+        // menu.addObjectFully(gltf.scene.children[0]);
+        // menu.addObjectFully(gltf.scene.children[1]);
+        // menu.addObjectFully(gltf.scene.children[2]);
+        // console.log(gltf.scene.children[2]);
+
+        // for (const element of gltf.scene.children) {
+        //   if (element.type.toLowerCase() === "mesh") {
+        //     // if (!element.name?.toLowerCase()?.includes("object-")) {
+        //     //   element.name = "object-" + element.name;
+        //     // }
+        //     console.log("ZZZZZ", element);
+
+        //     menu.addObjectFully(element);
+        //   }
+        // }
+        gltf.scene.children.forEach((element) => {
+          if (element.type.toLowerCase() === "mesh") {
+            menu.currentWorld.raycastableObjects.push(element);
+          }
+        });
 
         if (gltf.asset.generator.toLowerCase().includes("three")) {
           // Add it to the scene

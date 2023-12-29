@@ -1,6 +1,7 @@
 :root {
   --menu-color: #202020;
   --menu-color-2: #303030;
+  --menu-color-3: #303030;
   --controllers-color: #4a4a4a;
   --button-color: #a0a0a0;
   --button-hover-color: #b0b0b0;
@@ -437,32 +438,42 @@ body {
 }
 
 .info-window {
-  display: block;
   position: absolute;
   background: var(--menu-color-2);
   opacity: 98%;
   color: #fff;
-  left: 50%;
-  top: 50%;
-  transform: translate(-50%, -50%) scale(1);
+  left: 0;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  margin: auto;
+  transform: scale(1);
   width: 30vw;
   height: 70vh;
-  padding: 5px 25px;
+  padding: 0 25px;
   border-radius: 10px;
   z-index: 20;
   overflow-y: auto;
+  overflow-x: hidden;
   transition: opacity 0.1s, transform 0.2s, visibility 0.1s;
 }
 
 .info-window.invisible {
   opacity: 0;
-  transform: translate(-50%, -50%) scale(0.9);
+  transform: scale(0.9);
   visibility: hidden;
   transition: opacity 0.1s, transform 0.2s, visibility 0.1s;
 }
 
 .info-header {
   display: flex;
+  position: sticky;
+  top: 0px;
+  border-bottom: 1px solid #505050;
+  padding: 0 0 10px 0;
+  margin-left: -10px;
+  width: calc(100% + 20px);
+  background: var(--menu-color-3);
   align-items: center;
   justify-content: space-between;
 }
@@ -501,6 +512,7 @@ body {
 }
 
 .info-q {
+  margin-right: auto;
   font-weight: 600;
   font-size: 16px;
   margin-bottom: -0.2rem;

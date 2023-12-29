@@ -1,74 +1,87 @@
 import * as THREE from "three";
 
-export const eventListeners = (menu, canvas, worlds) => {
+let inputClickEventsReference;
+let sceneUIEventsReference;
+let modeChangeEventsReference;
+let infoWindowEventsReference;
+let windowResizeEventsReference;
+
+// Removing event listeners
+export const removeEventListeners = () => {
   // Covers every input in left menu UI
-  document.getElementById("menu-ui").addEventListener("input", (e) => {
-    // IF NOT ROBUST ENOUGH ADD AN HTML TAG CHECK BEFORE PASSING INFO
+  document
+    .getElementById("menu-ui")
+    .removeEventListener("input", inputClickEventsReference);
 
-    menu.action({
-      name: e.target.name,
-      checked: e.target.checked,
-      value: e.target.value,
-    });
-  });
+  // Top menu bar click events
+  document
+    .getElementById("menu-bar")
+    .removeEventListener("click", inputClickEventsReference);
 
-  document.getElementById("menu-bar").addEventListener("click", (e) => {
-    // IF NOT ROBUST ENOUGH ADD AN HTML TAG CHECK BEFORE PASSING INFO
+  // Scene UI events
+  document
+    .getElementById("scene-outline")
+    .removeEventListener("click", sceneUIEventsReference);
 
-    menu.action({
-      name: e.target.name,
-      checked: e.target.checked,
-      value: e.target.value,
-    });
+  // Bottom mode change bar
+  document
+    .getElementById("mode-ui")
+    .removeEventListener("click", modeChangeEventsReference);
 
-    if (e.target.value === "new") {
-      menu.modeChange("editor", worlds["editor"]);
+  document
+    .getElementById("info")
+    .removeEventListener("click", infoWindowEventsReference);
 
-      reassigningModeEventListeners(menu);
-      reassigningObjectEventListeners(menu);
-      console.log("hi");
-    }
-  });
+  document
+    .getElementById("info-close")
+    .removeEventListener("click", infoWindowEventsReference);
 
-  document.getElementById("scene-outline").addEventListener("click", (e) => {
-    // console.log(e.target.dataset);
-    menu.action({
-      name: "scene",
-      dataset: e.target.dataset,
-      value: e.target.id,
-      element: e.target,
-      ctrl: e.ctrlKey,
-    });
-  });
+  window.removeEventListener("resize", windowResizeEventsReference);
+};
 
-  document.getElementById("mode-ui").addEventListener("click", (e) => {
-    const buttonId = e.target.id;
+const windowResizeEvents = (menu, canvas) => {
+  menu.currentWorld.camera.aspect = window.innerWidth / window.innerHeight;
+  menu.currentWorld.camera.updateProjectionMatrix();
+  canvas.renderer.setSize(window.innerWidth, window.innerHeight);
+};
 
-    e.target.parentNode.childNodes.forEach((element) => {
-      element.className = "";
-    });
-    e.target.className = "selected-mode";
+// Assigning event listeners
+export const eventListeners = (menu, canvas, worlds) => {
+  inputClickEventsReference = (e) => inputClickEvents(e, menu);
+  sceneUIEventsReference = (e) => sceneUIEvents(e, menu);
+  modeChangeEventsReference = (e) => modeChangeEvents(e, menu, worlds);
+  infoWindowEventsReference = () => infoWindowEvents(menu);
+  windowResizeEventsReference = () => windowResizeEvents(menu, canvas);
 
-    // Changing the mode
-    menu.modeChange(buttonId, worlds[buttonId]);
+  // Covers every input in left menu UI
+  document
+    .getElementById("menu-ui")
+    .addEventListener("input", inputClickEventsReference);
 
-    reassigningModeEventListeners(menu);
-    reassigningObjectEventListeners(menu);
-  });
+  // Top menu bar click events
+  document
+    .getElementById("menu-bar")
+    .addEventListener("click", inputClickEventsReference);
 
-  document.getElementById("info").addEventListener("click", () => {
-    menu.showInfo();
-  });
+  // Scene UI events
+  document
+    .getElementById("scene-outline")
+    .addEventListener("click", sceneUIEventsReference);
 
-  document.getElementById("info-close").addEventListener("click", () => {
-    menu.showInfo();
-  });
+  // Bottom mode change bar
+  document
+    .getElementById("mode-ui")
+    .addEventListener("click", modeChangeEventsReference);
 
-  window.addEventListener("resize", () => {
-    menu.currentWorld.camera.aspect = window.innerWidth / window.innerHeight;
-    menu.currentWorld.camera.updateProjectionMatrix();
-    canvas.renderer.setSize(window.innerWidth, window.innerHeight);
-  });
+  document
+    .getElementById("info")
+    .addEventListener("click", infoWindowEventsReference);
+
+  document
+    .getElementById("info-close")
+    .addEventListener("click", infoWindowEventsReference);
+
+  window.addEventListener("resize", windowResizeEventsReference);
 };
 
 export const reassigningModeEventListeners = (menu) => {
@@ -84,47 +97,6 @@ export const reassigningModeEventListeners = (menu) => {
       ctrl: e.ctrlKey,
     });
   });
-
-  // Readding study mode eye input change event listener
-  // document.getElementById('eye-inputs')?.addEventListener('input', e => {
-  //   e.target.value <= -50 ? e.target.value = -50 : null
-  //   e.target.value >= 50 ? e.target.value = 50 : null
-
-  //   menu.action({
-  //     name: "eye",
-  //     checked: null,
-  //     value: e.target.value,
-  //   }, menu.currentWorld);
-  // })
-
-  // Readding editor mode dimension input change event listener
-  // document.getElementById('selected-obj')?.addEventListener('input', e => {
-  //   e.target.value <= 0 ? e.target.value = 1 : null
-  //   e.target.value >= 50 ? e.target.value = 50 : null
-
-  //   console.log("selected event");
-
-  //   menu.action({
-  //     name: e.target.name,
-  //     checked: null,
-  //     dimension: e.target.id,
-  //     value: e.target.value,
-  //   }, menu.currentWorld);
-  // })
-
-  // Readding study mode transform input change event listener
-  // document.getElementById('transform-inputs')?.addEventListener('input', e => {
-  //   e.target.value <= -50 ? e.target.value = -50 : null
-  //   e.target.value >= 50 ? e.target.value = 50 : null
-
-  //   console.log("transform event");
-
-  //   menu.action({
-  //     name: "transform",
-  //     checked: null,
-  //     value: e.target.value,
-  //   }, menu.currentWorld);
-  // })
 };
 
 export const reassigningObjectEventListeners = (menu) => {
@@ -172,4 +144,42 @@ export const reassigningObjectEventListeners = (menu) => {
       });
     }
   });
+};
+
+// Event listener functions
+const inputClickEvents = (e, menu) => {
+  menu.action({
+    name: e.target.name,
+    checked: e.target.checked,
+    value: e.target.value,
+  });
+};
+
+const sceneUIEvents = (e, menu) => {
+  menu.action({
+    name: "scene",
+    dataset: e.target.dataset,
+    value: e.target.id,
+    element: e.target,
+    ctrl: e.ctrlKey,
+  });
+};
+
+const modeChangeEvents = (e, menu, worlds) => {
+  const buttonId = e.target.id;
+
+  e.target.parentNode.childNodes.forEach((element) => {
+    element.className = "";
+  });
+  e.target.className = "selected-mode";
+
+  // Changing the mode
+  menu.modeChange(buttonId, worlds[buttonId]);
+
+  reassigningModeEventListeners(menu);
+  reassigningObjectEventListeners(menu);
+};
+
+const infoWindowEvents = (menu) => {
+  menu.showInfo();
 };

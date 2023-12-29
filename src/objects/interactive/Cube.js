@@ -23,7 +23,7 @@ export class Cube extends Entity {
     placeholderObj = false,
     segmentsWidth = 1,
     segmentsDepth = 1,
-    segmentsheight = 1
+    segmentsHeight = 1
   ) {
     super(
       width,
@@ -33,7 +33,7 @@ export class Cube extends Entity {
       null,
       segmentsWidth,
       segmentsDepth,
-      segmentsheight,
+      segmentsHeight,
       color
     );
     this.materialProperties;

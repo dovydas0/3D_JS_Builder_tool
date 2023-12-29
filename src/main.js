@@ -5,7 +5,10 @@ import {
   onPointerMove,
   raycasterIntersections,
 } from "./raycasting";
-import { eventListeners } from "./utilities/populateEventListeners";
+import {
+  eventListeners,
+  removeEventListeners,
+} from "./utilities/populateEventListeners";
 import Stats from "three/examples/jsm/libs/stats.module";
 import { Canvas } from "./canvas";
 import { EditorWorld } from "./worlds/editorWorld";
@@ -41,10 +44,12 @@ const initplaceholderObject = new Cube(
   "Basic",
   true
 );
+
 const initPlaceholderObjectArr = {
   object: initplaceholderObject,
   color: 0x5544aa,
 };
+
 const canvas = new Canvas(
   75,
   window.innerWidth / window.innerHeight,
@@ -63,21 +68,10 @@ let worlds = {
 };
 
 const newEditor = () => {
+  removeEventListeners(menu, canvas, worlds);
+
   const sceneObjects = document.getElementById("scene-objects");
-
   sceneObjects.innerHTML = "";
-  // sceneObjects.childNodes.forEach((node) => {
-  //   console.log(node);
-  //   // sceneObjects.removeChild(node);
-  // });
-  // console.log(sceneObjects.children);
-  // Object.keys(sceneObjects.children).forEach((value) => {
-  //   console.log(sceneObjects.children[value]);
-  // });
-
-  // console.log(sceneObjects);
-
-  // menu.removeFromMenuScene(id)
 
   const editorWorld = new EditorWorld(canvas, initplaceholderObject);
   worlds = {
@@ -86,9 +80,12 @@ const newEditor = () => {
     play: editorWorld,
     craft: craftWorld,
   };
-  menu = new Menu(worlds.editor, initPlaceholderObjectArr, newEditor);
+
+  menu = new Menu(editorWorld, initPlaceholderObjectArr, newEditor);
 
   editorWorld.initWorld();
+
+  // Reassigning event listeners to the new world
   eventListeners(menu, canvas, worlds);
 };
 

@@ -1,6 +1,6 @@
 export const changeInfo = (mode) => {
-  let html
-  const infoWindow = document.getElementById('info-window')
+  let html;
+  const infoWindow = document.getElementById("info-window");
 
   switch (mode) {
     case "study":
@@ -11,7 +11,6 @@ export const changeInfo = (mode) => {
           </div>
           <p class="info-close" id="info-close">&Cross;</p>
         </div>
-        <hr />
         <p class="info-q">What is this mode?</p>
         <div class="info-ans">
           <p>
@@ -30,7 +29,7 @@ export const changeInfo = (mode) => {
           <p><span>Select Objects</span> - Left mouse click on the object name</p>
           <p><span>Select Multiple Objects</span> - Ctrl + left mouse click on the next object</p>
         </div>
-      `
+      `;
 
       break;
 
@@ -42,7 +41,6 @@ export const changeInfo = (mode) => {
           </div>
           <p class="info-close" id="info-close">&Cross;</p>
         </div>
-        <hr />
         <p class="info-q">What is this mode?</p>
         <div class="info-ans">
           <p>
@@ -69,18 +67,18 @@ export const changeInfo = (mode) => {
           <p><span>Select Objects</span> - Left mouse click on the object name</p>
           <p><span>Select Multiple Objects</span> - Ctrl + left mouse click on the next object</p>
         </div>
-      `
+      `;
       break;
 
     case "play":
-      html = ""
+      html = "";
       break;
 
     case "craft":
       break;
 
     default:
-      html = ""
+      html = "";
   }
-  infoWindow.innerHTML = html
-}
+  infoWindow.innerHTML = html;
+};

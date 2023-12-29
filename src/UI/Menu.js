@@ -16,10 +16,12 @@ import { nameConverter } from "../utilities/nameConverter";
 import { gltfObject } from "../importers/gltfObject";
 import { objObject } from "../importers/objObject";
 import { EditorWorld } from "../worlds/editorWorld";
+import { modelLoader } from "../utilities/modelLoader";
 
 export class Menu {
   constructor(worldObject, placeholderObject, newEditor) {
     // STORE ALL BLOCKS IN AN ARRAY HERE
+    this.savedModel = [];
     this.newEditor = newEditor;
     this.gltfObj = new gltfObject();
     this.objObj = new objObject();
@@ -57,11 +59,13 @@ export class Menu {
 
     this.previousModeSnapshot(previousWorld.scene.name);
 
-    // Enabling/disabling camera controls
+    // Enabling/disabling camera controls AND top menu-bar
     if (previousWorld.scene.name === "editor" && mode !== "editor") {
       this.currentWorld.controls.enabled = false;
+      document.getElementById("menu-bar").style.display = "none";
     } else if (mode === "editor") {
       world.controls.enabled = true;
+      document.getElementById("menu-bar").style.display = "flex";
     }
 
     this.currentMode = mode;
@@ -194,6 +198,12 @@ export class Menu {
     }
   }
 
+  addObjectFully(object) {
+    this.currentWorld.addRaycastableObject(object);
+    this.addToMenuScene(object);
+    console.log(this.currentWorld.scene);
+  }
+
   addToMenuScene(objectToAdd, levelDepth, hidden) {
     let sceneObjects = document.getElementById("scene-objects");
     let groupDiv;
@@ -232,7 +242,11 @@ export class Menu {
       objName += nameRepetitions;
     }
 
-    if (objectToAdd.children.length > 1 || objectToAdd.type === "Group") {
+    if (
+      objectToAdd.children.length > 1 ||
+      objectToAdd.type === "Group" ||
+      objectToAdd.type.toLowerCase().includes("object")
+    ) {
       sceneObjects.innerHTML += `
         <div data-obj="${objName}" id="${
         objectToAdd.uuid
@@ -248,7 +262,11 @@ export class Menu {
       `;
     }
 
-    if (objectToAdd.children.length > 1 || objectToAdd.type === "Group") {
+    if (
+      objectToAdd.children.length > 1 ||
+      objectToAdd.type === "Group" ||
+      objectToAdd.type.toLowerCase().includes("object")
+    ) {
       objectToAdd.children.forEach((object) => {
         this.addToMenuScene(object, depth + 1);
       });
@@ -695,6 +713,130 @@ export class Menu {
           }
         }
         break;
+      case "save-model":
+        if (eventData.value === "save") {
+          // SELECTED ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+          // WHOLE SCENE ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+          // Remove all static elements in the world
+          const modelAlone = this.currentWorld.scene.children.filter(
+            (object) => !object.name.includes("void-obj")
+          );
+
+          const modelArray = modelAlone.map((object) => {
+            switch (object.geometry.type) {
+              case "BoxGeometry":
+                return {
+                  uuid: object.uuid,
+                  geometry: object.geometry.type,
+                  name: object.name,
+                  width: object.geometry.parameters.width,
+                  depth: object.geometry.parameters.depth,
+                  height: object.geometry.parameters.height,
+                  color: object.material?.color?.getHex(),
+                  material: "Lambert",
+                  placeholderObj: false,
+                  segmentsWidth: object.geometry.parameters.widthSegments,
+                  segmentsDepth: object.geometry.parameters.depthSegments,
+                  segmentsHeight: object.geometry.parameters.heightSegments,
+                  position: object.position,
+                };
+              case "SphereGeometry":
+                return {
+                  uuid: object.uuid,
+                  geometry: object.geometry.type,
+                  name: object.name,
+                  radius: object.geometry.parameters.radius,
+                  color: object.material?.color?.getHex(),
+                  material: "Lambert",
+                  placeholderObj: false,
+                  segmentsWidth: object.geometry.parameters.widthSegments,
+                  segmentsheight: object.geometry.parameters.heightSegments,
+                  position: object.position,
+                };
+              case "CylinderGeometry":
+                return {
+                  uuid: object.uuid,
+                  geometry: object.geometry.type,
+                  name: object.name,
+                  radiusTop: object.geometry.parameters.radiusTop,
+                  radiusBottom: object.geometry.parameters.radiusBottom,
+                  height: object.geometry.parameters.height,
+                  color: object.material?.color?.getHex(),
+                  material: "Lambert",
+                  placeholderObj: false,
+                  radialSegments: object.geometry.parameters.radialSegments,
+                  openEnded: object.geometry.parameters.openEnded,
+                  position: object.position,
+                };
+              case "CapsuleGeometry":
+                return {
+                  uuid: object.uuid,
+                  geometry: object.geometry.type,
+                  name: object.name,
+                  radius: object.geometry.parameters.radius,
+                  length: object.geometry.parameters.length,
+                  color: object.material?.color?.getHex(),
+                  material: "Lambert",
+                  placeholderObj: false,
+                  capSegments: object.geometry.parameters.capSegments,
+                  radialSegments: object.geometry.parameters.radialSegments,
+                  position: object.position,
+                };
+            }
+          });
+
+          // SAVING IN MEMORY ~~~~~~~~~~~~~~~~~~
+          // this.savedModel = modelArray;
+
+          // SAVING TO JSON FILE ~~~~~~~~~~~~~~~
+          const output = JSON.stringify(modelArray, null, 2);
+
+          const blob = new Blob([output], { type: "application/json" });
+
+          const link = document.createElement("a");
+          link.href = URL.createObjectURL(blob);
+          link.download = "model.json";
+          link.click();
+        }
+
+        if (eventData.value === "load") {
+          let readData;
+          // FROM JSON FILE ~~~~~~~~~~~~~~~~
+          const input = document.createElement("input");
+          input.accept = ".json";
+          input.type = "file";
+          input.click();
+
+          input.onchange = (e) => {
+            const file = e.target.files[0];
+
+            if (file.type !== "application/json") {
+              return;
+            }
+
+            // setting up the reader
+            const reader = new FileReader();
+
+            if (file) {
+              reader.readAsText(file);
+            }
+
+            reader.onload = () => {
+              readData = JSON.parse(reader.result);
+
+              modelLoader(readData, this);
+            };
+          };
+
+          // FROM MEMORY ~~~~~~~~~~~~~~~~~~~
+          // readData = this.savedModel;
+
+          // // LOADING ~~~~~~~~~~~~~~~~~~~~~~~
+          // modelLoader(readData, this);
+        }
+        break;
       case "transform":
         // let newObjectTransform;
         // const xTrans = Number(document.getElementById("transform-x").value);
@@ -848,11 +990,18 @@ export class Menu {
 
         break;
       case "menu-bar":
-        this.deselectObjects();
         let cleanScene;
+        this.deselectObjects();
+
         switch (eventData.value) {
           case "new":
-            this.newEditor();
+            if (
+              window.confirm(
+                "Any unsaved data will be lost. Are you sure you want to do this?"
+              )
+            ) {
+              this.newEditor();
+            }
 
             break;
           case "export GLTF":
@@ -878,7 +1027,42 @@ export class Menu {
             this.objObj.exportScene(cleanScene);
             break;
           case "import":
-            this.gltfObj.importObject("/models/scene.gltf", this);
+            let gltf = false;
+            const input = document.createElement("input");
+            const allowedTypes = [".gltf", ".obj"];
+            input.type = "file";
+
+            input.click();
+
+            input.onchange = (e) => {
+              const file = e.target.files[0];
+
+              // if file is not of gltf/obj format
+              if (!allowedTypes.some((type) => file.name.includes(type))) {
+                return;
+              }
+
+              // if file is of gltf format
+              if (file.name.includes(".gltf")) {
+                gltf = true;
+              }
+
+              // setting up the reader
+              const reader = new FileReader();
+
+              if (file) {
+                reader.readAsDataURL(file);
+              }
+
+              reader.onload = () => {
+                if (gltf) {
+                  this.gltfObj.importObject(reader.result, this);
+                } else {
+                  this.objObj.importObject(reader.result, this);
+                }
+              };
+            };
+
             break;
         }
 
@@ -893,6 +1077,9 @@ export class Menu {
           let childrenFlag = false;
           let restShow;
           let depthLevel = depth;
+
+          console.log(parentElement);
+          console.log(children);
 
           // Array.prototype.forEach.call(parentElement.children, (child) => {
           //   if (childrenFlag) {
@@ -950,8 +1137,9 @@ export class Menu {
           this.currentWorld.scene.children.forEach((object) => {
             // If object is tracked in the scene restore it's material
             if (object.name.includes("object")) {
+              // console.log("selected color not working on imported objects");
               object.material = new THREE.MeshLambertMaterial({
-                color: object.material.color.getHex(),
+                color: object.material?.color?.getHex(),
                 side: THREE.DoubleSide,
               });
             }
@@ -990,9 +1178,12 @@ export class Menu {
               colorIn.value = this.colorBeforeSelectionStudy;
             }
           }
+
           // Single object selection
           else if (selectedObj !== null) {
             this.selectedObjects = [selectedObj];
+
+            console.log(this.selectedObjects[0].geometry.type);
 
             changeObjectMenu(
               nameConverter(this.selectedObjects[0].geometry.type),
