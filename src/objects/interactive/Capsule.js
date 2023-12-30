@@ -23,7 +23,9 @@ export class Capsule extends Entity {
     material = "Basic",
     placeholderObj = false,
     capSegments = 5,
-    radialSegments = 12
+    radialSegments = 12,
+    scale,
+    rotation
   ) {
     super(null, null, null, radius, null, null, null, null, null, null, color);
     this.materialProperties;
@@ -53,6 +55,14 @@ export class Capsule extends Entity {
     this.material = new finalMaterial(this.materialProperties);
     this.mesh = new THREE.Mesh(this.geometry, this.material);
     this.mesh.name = name;
+
+    if (scale) {
+      this.mesh.scale.set(scale.x, scale.y, scale.z);
+    }
+
+    if (rotation) {
+      this.mesh.rotation.set(rotation.x, rotation.y, rotation.z);
+    }
 
     if (!placeholderObj) {
       this.mesh.castShadow = true;

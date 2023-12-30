@@ -23,7 +23,9 @@ export class Cylinder extends Entity {
     material = "Basic",
     placeholderObj = false,
     radialSegments = 16,
-    openEnded = false
+    openEnded = false,
+    scale,
+    rotation
   ) {
     super(
       null,
@@ -67,6 +69,14 @@ export class Cylinder extends Entity {
     this.material = new finalMaterial(this.materialProperties);
     this.mesh = new THREE.Mesh(this.geometry, this.material);
     this.mesh.name = name;
+
+    if (scale) {
+      this.mesh.scale.set(scale.x, scale.y, scale.z);
+    }
+
+    if (rotation) {
+      this.mesh.rotation.set(rotation.x, rotation.y, rotation.z);
+    }
 
     if (!placeholderObj) {
       this.mesh.castShadow = true;

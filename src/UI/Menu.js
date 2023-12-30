@@ -16,7 +16,7 @@ import { nameConverter } from "../utilities/nameConverter";
 import { gltfObject } from "../importers/gltfObject";
 import { objObject } from "../importers/objObject";
 import { EditorWorld } from "../worlds/editorWorld";
-import { modelLoader } from "../utilities/modelLoader";
+import { modelLoader, modelSaver } from "../utilities/modelLoader";
 
 export class Menu {
   constructor(worldObject, placeholderObject, newEditor) {
@@ -300,6 +300,36 @@ export class Menu {
         }
       });
     }
+
+    if (
+      this.selectedObjects.length > 0 &&
+      !document.getElementById("scene-group-btn") &&
+      !document.getElementById("scene-remove-btn")
+    ) {
+      const sceneHeader = document.getElementById("scene-header");
+      const groupBtn = document.createElement("button");
+      const removeBtn = document.createElement("button");
+
+      groupBtn.id = "scene-group-btn";
+      groupBtn.name = "obj-action";
+      groupBtn.textContent = "Group";
+      groupBtn.classList.add("btn-1");
+      removeBtn.id = "scene-remove-btn";
+      removeBtn.name = "obj-action";
+      removeBtn.textContent = "Remove";
+      removeBtn.classList.add("btn-1");
+
+      sceneHeader.appendChild(removeBtn);
+      sceneHeader.appendChild(groupBtn);
+    } else if (this.selectedObjects.length === 0) {
+      const groupBtn = document.getElementById("scene-group-btn");
+      const removeBtn = document.getElementById("scene-remove-btn");
+
+      if (groupBtn && removeBtn) {
+        groupBtn.remove();
+        removeBtn.remove();
+      }
+    }
   }
 
   DeselectObjectInMenu() {
@@ -307,6 +337,15 @@ export class Menu {
 
     for (const obj of sceneObjects.children) {
       obj.classList.remove("selected");
+    }
+
+    // Removing buttons
+    const groupBtn = document.getElementById("scene-group-btn");
+    const removeBtn = document.getElementById("scene-remove-btn");
+
+    if (groupBtn && removeBtn) {
+      groupBtn.remove();
+      removeBtn.remove();
     }
   }
 
@@ -724,68 +763,8 @@ export class Menu {
             (object) => !object.name.includes("void-obj")
           );
 
-          const modelArray = modelAlone.map((object) => {
-            switch (object.geometry.type) {
-              case "BoxGeometry":
-                return {
-                  uuid: object.uuid,
-                  geometry: object.geometry.type,
-                  name: object.name,
-                  width: object.geometry.parameters.width,
-                  depth: object.geometry.parameters.depth,
-                  height: object.geometry.parameters.height,
-                  color: object.material?.color?.getHex(),
-                  material: "Lambert",
-                  placeholderObj: false,
-                  segmentsWidth: object.geometry.parameters.widthSegments,
-                  segmentsDepth: object.geometry.parameters.depthSegments,
-                  segmentsHeight: object.geometry.parameters.heightSegments,
-                  position: object.position,
-                };
-              case "SphereGeometry":
-                return {
-                  uuid: object.uuid,
-                  geometry: object.geometry.type,
-                  name: object.name,
-                  radius: object.geometry.parameters.radius,
-                  color: object.material?.color?.getHex(),
-                  material: "Lambert",
-                  placeholderObj: false,
-                  segmentsWidth: object.geometry.parameters.widthSegments,
-                  segmentsheight: object.geometry.parameters.heightSegments,
-                  position: object.position,
-                };
-              case "CylinderGeometry":
-                return {
-                  uuid: object.uuid,
-                  geometry: object.geometry.type,
-                  name: object.name,
-                  radiusTop: object.geometry.parameters.radiusTop,
-                  radiusBottom: object.geometry.parameters.radiusBottom,
-                  height: object.geometry.parameters.height,
-                  color: object.material?.color?.getHex(),
-                  material: "Lambert",
-                  placeholderObj: false,
-                  radialSegments: object.geometry.parameters.radialSegments,
-                  openEnded: object.geometry.parameters.openEnded,
-                  position: object.position,
-                };
-              case "CapsuleGeometry":
-                return {
-                  uuid: object.uuid,
-                  geometry: object.geometry.type,
-                  name: object.name,
-                  radius: object.geometry.parameters.radius,
-                  length: object.geometry.parameters.length,
-                  color: object.material?.color?.getHex(),
-                  material: "Lambert",
-                  placeholderObj: false,
-                  capSegments: object.geometry.parameters.capSegments,
-                  radialSegments: object.geometry.parameters.radialSegments,
-                  position: object.position,
-                };
-            }
-          });
+          // console.log(modelAlone);
+          const modelArray = modelSaver(modelAlone);
 
           // SAVING IN MEMORY ~~~~~~~~~~~~~~~~~~
           // this.savedModel = modelArray;
@@ -832,9 +811,6 @@ export class Menu {
 
           // FROM MEMORY ~~~~~~~~~~~~~~~~~~~
           // readData = this.savedModel;
-
-          // // LOADING ~~~~~~~~~~~~~~~~~~~~~~~
-          // modelLoader(readData, this);
         }
         break;
       case "transform":
@@ -1068,6 +1044,43 @@ export class Menu {
 
         break;
       case "scene":
+        if (eventData.type === "obj-action") {
+          if (eventData.id === "scene-remove-btn") {
+            this.selectedObjects.forEach((object) => {
+              this.currentWorld.raycastableObjects.forEach((el, index) => {
+                if (el === object) {
+                  this.currentWorld.raycastableObjects.splice(index, 1);
+                  this.removeFromMenuScene(el.uuid);
+                }
+              });
+              this.currentWorld.removeObject(object);
+            });
+            this.deselectObjects();
+          }
+
+          if (eventData.id === "scene-group-btn") {
+            const group = new THREE.Group();
+            this.selectedObjects.forEach((object) => {
+              if (object.type === "Mesh") {
+                group.add(object);
+                this.currentWorld.raycastableObjects.forEach((el, index) => {
+                  if (el === object) {
+                    this.currentWorld.raycastableObjects.splice(index, 1);
+                    this.removeFromMenuScene(el.uuid);
+                  }
+                });
+                this.currentWorld.removeObject(object);
+              }
+            });
+            this.deselectObjects();
+
+            console.log(group);
+            this.currentWorld.addObject(group);
+          }
+
+          break;
+        }
+
         if (eventData.dataset?.name === "expand-shrink") {
           const depth = eventData.value.slice(-1);
           const parentElement = document.getElementById("group-wrapper");
@@ -1182,8 +1195,6 @@ export class Menu {
           // Single object selection
           else if (selectedObj !== null) {
             this.selectedObjects = [selectedObj];
-
-            console.log(this.selectedObjects[0].geometry.type);
 
             changeObjectMenu(
               nameConverter(this.selectedObjects[0].geometry.type),

@@ -17,11 +17,15 @@
         <div class="file-dropdown">
           <input type="button" name="menu-bar" value="new" />
           <hr />
-          <input type="button" name="menu-bar" value="import" />
+          <input type="button" name="menu-bar" value="import GLTF/OBJ" />
           <hr />
           <input type="button" name="menu-bar" value="export GLTF" />
           <hr />
           <input type="button" name="menu-bar" value="export OBJ" />
+          <hr />
+          <input type="button" name="menu-bar" value="model save" />
+          <hr />
+          <input type="button" name="menu-bar" value="model load" />
         </div>
       </div>
     </div>
@@ -156,7 +160,9 @@
       <div class="selected-parameters" id="selected-parameters-selected"></div>
     </div>
     <div class="scene-outline" id="scene-outline">
-      <p id="scene-title">Scene</p>
+      <div class="scene-header" id="scene-header">
+        <p id="scene-title">Scene</p>
+      </div>
       <div class="scene-objects" id="scene-objects"></div>
     </div>
     <div class="modes" id="mode-ui">

@@ -18,7 +18,9 @@ export const modelLoader = (data, menu) => {
           object.placeholderObj,
           object.segmentsWidth,
           object.segmentsDepth,
-          object.segmentsHeight
+          object.segmentsHeight,
+          object.scale,
+          object.rotation
         );
         break;
       case "SphereGeometry":
@@ -29,7 +31,9 @@ export const modelLoader = (data, menu) => {
           object.material,
           object.placeholderObj,
           object.segmentsWidth,
-          object.segmentsHeight
+          object.segmentsHeight,
+          object.scale,
+          object.rotation
         );
         break;
       case "CylinderGeometry":
@@ -42,7 +46,9 @@ export const modelLoader = (data, menu) => {
           object.material,
           object.placeholderObj,
           object.radialSegments,
-          object.openEnded
+          object.openEnded,
+          object.scale,
+          object.rotation
         );
         break;
       case "CapsuleGeometry":
@@ -54,7 +60,9 @@ export const modelLoader = (data, menu) => {
           object.material,
           object.placeholderObj,
           object.capSegments,
-          object.radialSegments
+          object.radialSegments,
+          object.scale,
+          object.rotation
         );
         break;
     }
@@ -62,5 +70,94 @@ export const modelLoader = (data, menu) => {
 
     menu.currentWorld.addRaycastableObject(newObject.mesh);
     menu.addToMenuScene(newObject.mesh);
+  });
+};
+
+export const modelSaver = (data) => {
+  return data.map((object) => {
+    switch (object.geometry.type) {
+      case "BoxGeometry":
+        return {
+          uuid: object.uuid,
+          geometry: object.geometry.type,
+          name: object.name,
+          width: object.geometry.parameters.width,
+          depth: object.geometry.parameters.depth,
+          height: object.geometry.parameters.height,
+          color: object.material?.color?.getHex(),
+          material: "Lambert",
+          placeholderObj: false,
+          segmentsWidth: object.geometry.parameters.widthSegments,
+          segmentsDepth: object.geometry.parameters.depthSegments,
+          segmentsHeight: object.geometry.parameters.heightSegments,
+          position: object.position,
+          scale: object.scale,
+          rotation: {
+            x: object.rotation._x,
+            y: object.rotation._y,
+            z: object.rotation._z,
+          },
+        };
+      case "SphereGeometry":
+        return {
+          uuid: object.uuid,
+          geometry: object.geometry.type,
+          name: object.name,
+          radius: object.geometry.parameters.radius,
+          color: object.material?.color?.getHex(),
+          material: "Lambert",
+          placeholderObj: false,
+          segmentsWidth: object.geometry.parameters.widthSegments,
+          segmentsheight: object.geometry.parameters.heightSegments,
+          position: object.position,
+          scale: object.scale,
+          rotation: {
+            x: object.rotation._x,
+            y: object.rotation._y,
+            z: object.rotation._z,
+          },
+        };
+      case "CylinderGeometry":
+        return {
+          uuid: object.uuid,
+          geometry: object.geometry.type,
+          name: object.name,
+          radiusTop: object.geometry.parameters.radiusTop,
+          radiusBottom: object.geometry.parameters.radiusBottom,
+          height: object.geometry.parameters.height,
+          color: object.material?.color?.getHex(),
+          material: "Lambert",
+          placeholderObj: false,
+          radialSegments: object.geometry.parameters.radialSegments,
+          openEnded: object.geometry.parameters.openEnded,
+          position: object.position,
+          scale: object.scale,
+          rotation: {
+            x: object.rotation._x,
+            y: object.rotation._y,
+            z: object.rotation._z,
+          },
+        };
+      case "CapsuleGeometry":
+        return {
+          uuid: object.uuid,
+          geometry: object.geometry.type,
+          name: object.name,
+          radius: object.geometry.parameters.radius,
+          length: object.geometry.parameters.length,
+          color: object.material?.color?.getHex(),
+          material: "Lambert",
+          placeholderObj: false,
+          capSegments: object.geometry.parameters.capSegments,
+          radialSegments: object.geometry.parameters.radialSegments,
+          position: object.position,
+          scale: object.scale,
+          rotation: {
+            x: object.rotation._x,
+            y: object.rotation._y,
+            z: object.rotation._z,
+          },
+        };
+    }
   });
 };

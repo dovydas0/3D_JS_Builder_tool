@@ -1,0 +1,58 @@
+[
+  {
+    "uuid": "06cef01b-229a-449e-9b79-df289090a6fe",
+    "geometry": "CapsuleGeometry",
+    "name": "object-Capsule",
+    "radius": 0.5,
+    "length": 1,
+    "color": 5588138,
+    "material": "Lambert",
+    "placeholderObj": false,
+    "capSegments": 6,
+    "radialSegments": 12,
+    "position": {
+      "x": 0.5,
+      "y": 3,
+      "z": 1.5
+    },
+    "scale": {
+      "x": 1,
+      "y": 5,
+      "z": 1
+    },
+    "rotation": {
+      "x": -3.623233072825523e-17,
+      "y": 0.698131700797732,
+      "z": 0.6981317007977319
+    }
+  },
+  {
+    "uuid": "2e1ca76d-ca17-4eaa-b1e9-d25ee1011b04",
+    "geometry": "BoxGeometry",
+    "name": "object-Cube",
+    "width": 1.00006,
+    "depth": 1.00006,
+    "height": 1.00006,
+    "color": 5588138,
+    "material": "Lambert",
+    "placeholderObj": false,
+    "segmentsWidth": 1,
+    "segmentsDepth": 1,
+    "segmentsHeight": 1,
+    "position": {
+      "x": 7.5,
+      "y": 1.5,
+      "z": 3.5
+    },
+    "scale": {
+      "x": 9,
+      "y": 3,
+      "z": 1
+    },
+    "rotation": {
+      "x": 0.6466017109468549,
+      "y": 0.2964646073185729,
+      "z": -0.08854263903795376
+    }
+  }
+]

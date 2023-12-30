@@ -78,6 +78,10 @@ export class EditorWorld extends World {
     this.placeholderObject = object;
   }
 
+  addGroup(group) {
+    // Write algorithm for adding groups
+  }
+
   updateControls() {
     this.controls.update();
   }

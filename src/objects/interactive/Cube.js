@@ -23,7 +23,9 @@ export class Cube extends Entity {
     placeholderObj = false,
     segmentsWidth = 1,
     segmentsDepth = 1,
-    segmentsHeight = 1
+    segmentsHeight = 1,
+    scale,
+    rotation
   ) {
     super(
       width,
@@ -72,6 +74,14 @@ export class Cube extends Entity {
 
     this.mesh = new THREE.Mesh(this.geometry, this.material);
     this.mesh.name = name;
+
+    if (scale) {
+      this.mesh.scale.set(scale.x, scale.y, scale.z);
+    }
+
+    if (rotation) {
+      this.mesh.rotation.set(rotation.x, rotation.y, rotation.z);
+    }
 
     if (!placeholderObj) {
       this.mesh.castShadow = true;

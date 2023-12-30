@@ -7,17 +7,19 @@ export const changeSceneMenu = (mode, menuParameterCapture) => {
   switch (mode) {
     case "study":
       html = `
-        <p id="scene-title">Scene</p>
-        <div class="scene-objects" id="scene-objects">
+        <div class="scene-header" id="scene-header">
+          <p id="scene-title">Scene</p>
         </div>
+        <div class="scene-objects" id="scene-objects"></div>
       `;
       break;
 
     case "editor":
       html = `
-        <p id="scene-title">Scene</p>
-        <div class="scene-objects" id="scene-objects">
+        <div class="scene-header" id="scene-header">
+          <p id="scene-title">Scene</p>
         </div>
+        <div class="scene-objects" id="scene-objects"></div>
       `;
       break;
     case "play":

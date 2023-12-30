@@ -158,6 +158,8 @@ const inputClickEvents = (e, menu) => {
 const sceneUIEvents = (e, menu) => {
   menu.action({
     name: "scene",
+    type: e.target?.name,
+    id: e.target?.id,
     dataset: e.target.dataset,
     value: e.target.id,
     element: e.target,
