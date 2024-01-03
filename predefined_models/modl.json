@@ -1,11 +1,11 @@
 [
   {
-    "uuid": "00e63fc3-0b61-42df-b450-a5260c51c17f",
+    "uuid": "04815ddb-c7e0-4b5d-b04a-abbe0e3850e4",
     "geometry": "BoxGeometry",
     "name": "object-Cube",
-    "width": 1.00006,
-    "depth": 1.00006,
-    "height": 1.00006,
+    "width": 1.00012,
+    "depth": 1.00012,
+    "height": 1.00012,
     "color": 5588138,
     "material": "Lambert",
     "placeholderObj": false,
@@ -29,7 +29,7 @@
     }
   },
   {
-    "uuid": "4091eb35-63c6-4203-a6e0-3645180e154a",
+    "uuid": "6858d879-6390-4da0-b7f1-20425024a8ca",
     "geometry": "SphereGeometry",
     "name": "object-Sphere",
     "radius": 0.5,
@@ -55,7 +55,7 @@
     }
   },
   {
-    "uuid": "27ca3959-b872-46ab-a76a-3b861abe6c20",
+    "uuid": "8ebcc7fa-af59-4e5f-baa8-64f85d61d409",
     "geometry": "CylinderGeometry",
     "name": "object-Cylinder",
     "radiusTop": 0.5,
@@ -83,7 +83,7 @@
     }
   },
   {
-    "uuid": "078d2630-bb4a-49cb-91d7-a25364fc04aa",
+    "uuid": "13cc45e5-fabc-4cd0-9c08-f25beb53127d",
     "geometry": "CapsuleGeometry",
     "name": "object-Capsule",
     "radius": 0.5,
@@ -107,6 +107,35 @@
       "x": 2.0943951023931957,
       "y": 0.349065850398866,
       "z": 0.698131700797732
+    }
+  },
+  {
+    "uuid": "a5d50481-8430-4d6b-a1eb-b43a81a65e11",
+    "geometry": "BoxGeometry",
+    "name": "object-Cube",
+    "width": 1.00006,
+    "depth": 1.00006,
+    "height": 1.00006,
+    "color": 5588138,
+    "material": "Lambert",
+    "placeholderObj": false,
+    "segmentsWidth": 1,
+    "segmentsDepth": 1,
+    "segmentsHeight": 1,
+    "position": {
+      "x": 1.5,
+      "y": 0.5,
+      "z": 2.5
+    },
+    "scale": {
+      "x": 1,
+      "y": 1,
+      "z": 1
+    },
+    "rotation": {
+      "x": 0,
+      "y": 0,
+      "z": 0
     }
   }
 ]

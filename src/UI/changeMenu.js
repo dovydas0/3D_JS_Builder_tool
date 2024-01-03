@@ -120,7 +120,7 @@ export const changeMenu = (mode, menuParameterCapture) => {
             <label class="el-switch el-switch-sm">
               <input type="checkbox" name="floor-grid" id="floor-tile" ${
                 menuParameterCapture[mode]?.floorTiles ? "checked" : ""
-              }>
+              } />
               <span class="el-switch-style"></span>
             </label>
           </div>
@@ -129,7 +129,16 @@ export const changeMenu = (mode, menuParameterCapture) => {
             <label class="el-switch el-switch-sm">
               <input type="checkbox" name="axis-helper" id="axis-helper" ${
                 menuParameterCapture[mode]?.axisHelper ? "checked" : ""
-              }>
+              } />
+              <span class="el-switch-style"></span>
+            </label>
+          </div>
+          <div class="checkbox">
+            <p>Snap To Grid</p>
+            <label class="el-switch el-switch-sm">
+              <input type="checkbox" name="grid-snap" id="grid-snap" ${
+                menuParameterCapture[mode]?.gridSnap ? "checked" : ""
+              } />
               <span class="el-switch-style"></span>
             </label>
           </div>

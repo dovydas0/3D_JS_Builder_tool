@@ -23,9 +23,9 @@
           <hr />
           <input type="button" name="menu-bar" value="export OBJ" />
           <hr />
-          <input type="button" name="menu-bar" value="model save" />
+          <input type="button" name="menu-bar" value="save model" />
           <hr />
-          <input type="button" name="menu-bar" value="model load" />
+          <input type="button" name="menu-bar" value="load model" />
         </div>
       </div>
     </div>
@@ -43,6 +43,13 @@
           <p>Axis Helper</p>
           <label class="el-switch el-switch-sm">
             <input type="checkbox" name="axis-helper" id="axis-helper" />
+            <span class="el-switch-style"></span>
+          </label>
+        </div>
+        <div class="checkbox">
+          <p>Snap To Grid</p>
+          <label class="el-switch el-switch-sm">
+            <input type="checkbox" name="grid-snap" id="grid-snap" checked />
             <span class="el-switch-style"></span>
           </label>
         </div>
@@ -140,21 +147,8 @@
       </div>
       <div class="selected-parameters" id="selected-parameters">
         <div class="container" id="selected-obj">
-          <p class="container-p">Save model</p>
-          save
-          <input
-            type="checkbox"
-            id="save-model"
-            name="save-model"
-            value="save"
-          />
-          load
-          <input
-            type="checkbox"
-            id="save-model"
-            name="save-model"
-            value="load"
-          />
+          <p class="container-p">Predefined models</p>
+          <div id="predefined-models"></div>
         </div>
       </div>
       <div class="selected-parameters" id="selected-parameters-selected"></div>

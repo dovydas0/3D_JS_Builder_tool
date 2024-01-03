@@ -21,11 +21,14 @@ import { RenderPass } from "three/addons/postprocessing/RenderPass.js";
 import { OutlinePass } from "three/addons/postprocessing/OutlinePass.js";
 import { FXAAShader } from "three/addons/shaders/FXAAShader.js";
 import { ShaderPass } from "three/addons/postprocessing/ShaderPass.js";
+import { populatePredefinedModels } from "./utilities/populatePredefinedModels.js";
 
 // Performance monitor
 const stats = new Stats();
 stats.dom.classList.add("stats-data");
 document.body.appendChild(stats.dom);
+
+populatePredefinedModels();
 
 // MODES
 const modes = {
@@ -148,9 +151,7 @@ const animate = () => {
   }
   worlds.editor.updateControls(deltaTime);
 
-  // Render the scene
-  canvas.renderer.render(menu.currentWorld.scene, menu.currentWorld.camera);
-  // composer.render()
+  render();
 
   // Store the current time for the next frame
   previousTime = currentTime;
@@ -158,11 +159,24 @@ const animate = () => {
   stats.update();
 };
 
+const render = () => {
+  // Render the scene
+  canvas.renderer.render(menu.currentWorld.scene, menu.currentWorld.camera);
+};
+
 let previousTime = performance.now();
 
 animate();
 
 // EVENT LISTENERS FOR INTERACTIONS
+menu.currentWorld.transformControls.addEventListener("change", render);
+
+menu.currentWorld.transformControls.addEventListener(
+  "dragging-changed",
+  function (event) {
+    menu.currentWorld.controls.enabled = !event.value;
+  }
+);
 
 // REMEMBER TO REMOVE EVENT LISTENERS ON DIFFERENT MODES
 if (menu.currentMode === modes.editor || menu.currentMode === modes.study) {

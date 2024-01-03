@@ -1,6 +1,7 @@
 import * as THREE from "three";
 import { Floor } from "../objects/non-interactive/floor";
 import { OrbitControls } from "three/addons/controls/OrbitControls.js";
+import { TransformControls } from "three/addons/controls/TransformControls.js";
 import { World } from "./world";
 
 export class EditorWorld extends World {
@@ -16,6 +17,12 @@ export class EditorWorld extends World {
     this.scene = new THREE.Scene();
     this.scene.background = new THREE.Color(0xf0f0f0);
     this.scene.name = "editor";
+
+    this.transformControls = new TransformControls(
+      this.camera,
+      canvas.renderer.domElement
+    );
+    this.transformControls.translationSnap = 0.5;
 
     this.controls = new OrbitControls(
       this.camera,

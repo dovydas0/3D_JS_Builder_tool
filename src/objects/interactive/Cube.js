@@ -75,6 +75,8 @@ export class Cube extends Entity {
     this.mesh = new THREE.Mesh(this.geometry, this.material);
     this.mesh.name = name;
 
+    // this.controls = new TransformControls();
+
     if (scale) {
       this.mesh.scale.set(scale.x, scale.y, scale.z);
     }

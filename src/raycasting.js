@@ -28,12 +28,28 @@ export const onPointerDown = (
     // If the mouse has moved more than a certain threshold, set the flag
     if ((deltaX > 1.5 || deltaY > 1.5) && menu.currentMode === "editor") {
       document.getElementsByTagName("body")[0].style.cursor = "crosshair";
+
+      // Making placeholder invisible
+      menu.currentWorld.scene.children.forEach((object) => {
+        if (object.name === "void-obj-placeholder-obj") {
+          object.visible = false;
+        }
+      });
+
       movedDuringClick = true;
     }
   };
 
   const upListener = () => {
     document.getElementsByTagName("body")[0].style.cursor = "default";
+
+    // Making placeholder object visible again
+    menu.currentWorld.scene.children.forEach((object) => {
+      if (object.name === "void-obj-placeholder-obj") {
+        object.visible = true;
+      }
+    });
+
     // Remove the move and up listeners
     window.removeEventListener("pointermove", moveListener);
     window.removeEventListener("pointerup", upListener);
@@ -80,6 +96,11 @@ export const onPointerDown = (
             menu.selectedObjects.forEach((obj) => {
               if (obj.uuid === intersect.object.uuid) {
                 menu.deselectObjects();
+
+                menu.currentWorld.removeObject(
+                  menu.currentWorld.transformControls
+                );
+                menu.currentWorld.transformControls.enabled = false;
               }
             });
           });
@@ -104,6 +125,13 @@ export const onPointerDown = (
               menu.menuParameterCapture,
               menu.selectedObjects[0]
             );
+
+            menu.currentWorld.transformControls.attach(intersect.object);
+            menu.currentWorld.transformControls.name =
+              "void-obj-transform-controls";
+
+            menu.currentWorld.addObject(menu.currentWorld.transformControls);
+            menu.currentWorld.transformControls.enabled = true;
           }
 
           if (menu.selectedObjects.length > 1) {
@@ -116,6 +144,11 @@ export const onPointerDown = (
 
             if (menu.currentMode === "editor") {
               colorInput.value = menu.colorBeforeSelectionEditor;
+
+              menu.currentWorld.removeObject(
+                menu.currentWorld.transformControls
+              );
+              menu.currentWorld.transformControls.enabled = false;
             } else if (menu.currentMode === "study") {
               colorInput.value = menu.colorBeforeSelectionStudy;
             }
@@ -126,6 +159,9 @@ export const onPointerDown = (
       } else if (menu.currentMode === "editor") {
         // deselecting objects
         selectObjects(null, menu);
+
+        menu.currentWorld.removeObject(menu.currentWorld.transformControls);
+        menu.currentWorld.transformControls.enabled = false;
 
         // Adding an object
         let newObject;
