@@ -18,9 +18,10 @@ import { objObject } from "../importers/objObject";
 import { EditorWorld } from "../worlds/editorWorld";
 import { modelLoader, modelSaver } from "../utilities/modelLoader";
 import { nonRepeatingName } from "../utilities/nonRepeatingName";
+import { BoxHelper } from "../helpers/boxHelper";
 
 export class Menu {
-  constructor(worldObject, placeholderObject, newEditor) {
+  constructor(worldObject, placeholderObject, newEditor, boxHelper) {
     // STORE ALL BLOCKS IN AN ARRAY HERE
     this.savedModel = [];
     this.newEditor = newEditor;
@@ -35,6 +36,7 @@ export class Menu {
       craft: {},
     };
 
+    this.boxHelper = boxHelper;
     this.currentObject = placeholderObject.object;
     this.currentObjectColor = placeholderObject.color;
     this.selectedObjects = [];
@@ -117,18 +119,46 @@ export class Menu {
     }
   }
 
-  deselectObjects() {
+  deselectObjects(objects) {
     this.selectedObjects = [];
 
-    // If object is tracked in the scene restore it's material
-    this.currentWorld.scene.children.forEach((object) => {
-      if (object.name.includes("object")) {
-        object.material = new THREE.MeshLambertMaterial({
-          color: object.material.color.getHex(),
-          side: THREE.DoubleSide,
-        });
-      }
-    });
+    if (objects) {
+      // If object is a group
+      objects.children.forEach((object) => {
+        if (object.type !== "Mesh" && object.isGroup) {
+          this.deselectObjects(object);
+        }
+
+        // If object is tracked in the scene restore it's material
+        if (object.name.includes("object")) {
+          object.material = new THREE.MeshLambertMaterial({
+            color: object.material.color.getHex(),
+            side: THREE.DoubleSide,
+          });
+        }
+
+        // removing yellow bounding box around selected objects
+        this.boxHelper.removeHelper(this);
+      });
+    } else {
+      // if object is a mesh
+      // If object is tracked in the scene restore it's material
+      this.currentWorld.scene.children.forEach((object) => {
+        if (object.type !== "Mesh" && object.isGroup) {
+          this.deselectObjects(object);
+        }
+
+        if (object.name.includes("object")) {
+          object.material = new THREE.MeshLambertMaterial({
+            color: object.material.color.getHex(),
+            side: THREE.DoubleSide,
+          });
+        }
+
+        // removing yellow bounding box around selected objects
+        this.boxHelper.removeHelper(this);
+      });
+    }
 
     changeObjectMenu("", this.currentMode, this.menuParameterCapture);
     this.DeselectObjectInMenu();
@@ -207,19 +237,25 @@ export class Menu {
     }
   }
 
-  addObjectFully(objectToAdd, levelDepth, hidden) {
+  addObjectFully(objectToAdd, levelDepth, prevId) {
     let sceneObjects = document.getElementById("scene-objects");
     let groupDiv;
     let depth = levelDepth ? levelDepth : 0;
+
+    console.log(objectToAdd);
 
     // accessing the correct div depending on the level
     if (objectToAdd.type !== "Mesh" && depth === 0) {
       groupDiv = document.createElement("div");
       groupDiv.id = "group-wrapper";
+      groupDiv.style.padding = 0;
+      groupDiv.dataset.objectId = objectToAdd.uuid;
       sceneObjects.appendChild(groupDiv);
       sceneObjects = groupDiv;
     } else if (depth > 0) {
-      groupDiv = document.getElementById("group-wrapper");
+      console.log(sceneObjects);
+      groupDiv = document.querySelector(`[data-object-id="${prevId}"]`);
+      console.log(groupDiv);
       sceneObjects = groupDiv;
     }
 
@@ -238,7 +274,7 @@ export class Menu {
         objectToAdd.uuid
       }" class="group-depth-${depth} scene-menu-obj" ${
         depth > 0 ? "style=display:none;" : ""
-      }><span data-name="expand-shrink" id="group-opener-${depth}">+</span> ${objName}</div>
+      }><span data-name="expand-shrink" id="group-opener-${depth}" class="expand-shrink">+</span> ${objName}</div>
       `;
     } else {
       sceneObjects.innerHTML += `
@@ -255,7 +291,7 @@ export class Menu {
       objectToAdd.type.toLowerCase().includes("object")
     ) {
       objectToAdd.children.forEach((object) => {
-        this.addObjectFully(object, depth + 1);
+        this.addObjectFully(object, depth + 1, objectToAdd.uuid);
       });
       // console.log("more objects");
     } else {
@@ -324,10 +360,28 @@ export class Menu {
     // `;
   }
 
+  #removeObjectInGroup(object, id) {
+    for (const child of object.children) {
+      if (child.id === "group-wrapper") {
+        this.#removeObjectInGroup(object, id);
+      }
+      if (child.id === id) {
+        if (child.dataset.obj.includes("group")) {
+          object.remove();
+        } else {
+          object.removeChild(child);
+        }
+      }
+    }
+  }
+
   removeFromMenuScene(id) {
     const sceneObjects = document.getElementById("scene-objects");
 
     for (const object of sceneObjects.children) {
+      if (object.id === "group-wrapper") {
+        this.#removeObjectInGroup(object, id);
+      }
       if (object.id === id) {
         sceneObjects.removeChild(object);
       }
@@ -336,7 +390,12 @@ export class Menu {
 
   #highlightObjectInGroup(objects, group) {
     for (const child of group.children) {
-      if (child.dataset.obj?.includes("object")) {
+      child.classList.remove("selected");
+
+      if (
+        child.dataset.obj?.includes("object") ||
+        child.dataset.obj?.includes("group")
+      ) {
         // selecting multiple objects
         objects?.forEach((object) => {
           if (child.id === object.uuid) {
@@ -369,11 +428,8 @@ export class Menu {
       parent = document.getElementById("scene-objects");
     }
 
-    // console.log(objects);
-
     for (const obj of parent.children) {
       obj.classList.remove("selected");
-      // console.log(obj);
 
       if (obj.id === "group-wrapper") {
         this.#highlightObjectInGroup(objects, obj);
@@ -383,98 +439,20 @@ export class Menu {
     }
 
     // Adding remove/group buttons on selection
-    if (
-      this.selectedObjects.length > 0 &&
-      !document.getElementById("scene-group-btn") &&
-      !document.getElementById("scene-remove-btn")
-    ) {
-      const sceneHeader = document.getElementById("scene-header");
-      const groupBtn = document.createElement("button");
-      const removeBtn = document.createElement("button");
-
-      groupBtn.id = "scene-group-btn";
-      groupBtn.name = "obj-action";
-      groupBtn.textContent = "Group";
-      groupBtn.classList.add("btn-1");
-      removeBtn.id = "scene-remove-btn";
-      removeBtn.name = "obj-action";
-      removeBtn.textContent = "Remove";
-      removeBtn.classList.add("btn-1");
-
-      sceneHeader.appendChild(removeBtn);
-      sceneHeader.appendChild(groupBtn);
-    } else if (this.selectedObjects.length === 0) {
+    if (this.selectedObjects.length > 0) {
       const groupBtn = document.getElementById("scene-group-btn");
       const removeBtn = document.getElementById("scene-remove-btn");
 
-      if (groupBtn && removeBtn) {
-        groupBtn.remove();
-        removeBtn.remove();
+      groupBtn.textContent = "Group";
+
+      if (this.selectedObjects[0].isGroup) {
+        groupBtn.textContent = "Ungroup";
       }
+
+      groupBtn.hidden = false;
+      removeBtn.hidden = false;
     }
   }
-
-  // highlightObjectInMenu(objects) {
-  //   const sceneObjects = document.getElementById("scene-objects");
-
-  //   for (const obj of sceneObjects.children) {
-  //     obj.classList.remove("selected");
-
-  //     if (obj.id === "group-wrapper") {
-  //       Object.keys(obj.children).forEach((value) => {
-  //         if (obj.children[value].dataset.obj.includes("object")) {
-  //           // selecting multiple objects
-  //           objects?.forEach((object) => {
-  //             if (obj.children[value].id === object.uuid) {
-  //               obj.children[value].classList.add("selected");
-  //             }
-  //           });
-  //         }
-  //       });
-  //       // obj.children.forEach((element) => {
-  //       //   console.log(element.dataset);
-  //       // });
-  //     } else {
-  //       // selecting multiple objects
-  //       objects?.forEach((object) => {
-  //         if (obj.id === object.uuid) {
-  //           obj.classList.add("selected");
-  //         }
-  //       });
-  //     }
-  //   }
-
-  //   // Adding remove/group buttons on selection
-  //   if (
-  //     this.selectedObjects.length > 0 &&
-  //     !document.getElementById("scene-group-btn") &&
-  //     !document.getElementById("scene-remove-btn")
-  //   ) {
-  //     const sceneHeader = document.getElementById("scene-header");
-  //     const groupBtn = document.createElement("button");
-  //     const removeBtn = document.createElement("button");
-
-  //     groupBtn.id = "scene-group-btn";
-  //     groupBtn.name = "obj-action";
-  //     groupBtn.textContent = "Group";
-  //     groupBtn.classList.add("btn-1");
-  //     removeBtn.id = "scene-remove-btn";
-  //     removeBtn.name = "obj-action";
-  //     removeBtn.textContent = "Remove";
-  //     removeBtn.classList.add("btn-1");
-
-  //     sceneHeader.appendChild(removeBtn);
-  //     sceneHeader.appendChild(groupBtn);
-  //   } else if (this.selectedObjects.length === 0) {
-  //     const groupBtn = document.getElementById("scene-group-btn");
-  //     const removeBtn = document.getElementById("scene-remove-btn");
-
-  //     if (groupBtn && removeBtn) {
-  //       groupBtn.remove();
-  //       removeBtn.remove();
-  //     }
-  //   }
-  // }
 
   #deselectObjectInGroup(group) {
     for (const child of group.children) {
@@ -490,14 +468,8 @@ export class Menu {
     }
   }
 
-  // #deselectSingleObject(obj) {
-  //   obj.classList.remove("selected");
-  // }
-
   DeselectObjectInMenu() {
     const sceneObjects = document.getElementById("scene-objects");
-
-    console.log("deselecting objects in menu");
 
     for (const obj of sceneObjects.children) {
       obj.classList.remove("selected");
@@ -507,13 +479,13 @@ export class Menu {
       }
     }
 
-    // Removing buttons
+    // Hiding buttons
     const groupBtn = document.getElementById("scene-group-btn");
     const removeBtn = document.getElementById("scene-remove-btn");
 
     if (groupBtn && removeBtn) {
-      groupBtn.remove();
-      removeBtn.remove();
+      groupBtn.hidden = true;
+      removeBtn.hidden = true;
     }
   }
 
@@ -981,7 +953,11 @@ export class Menu {
 
         if (this.selectedObjects.length > 0) {
           this.selectedObjects.forEach((selected) => {
-            selected.material.color.set(eventData.value);
+            if (selected.isGroup) {
+              this.#recursiveObjectColoring(selected, eventData.value);
+            } else {
+              selected.material.color.set(eventData.value);
+            }
           });
         } else {
           this.colorBeforeSelectionEditor = eventData.value;
@@ -1079,7 +1055,6 @@ export class Menu {
         break;
       case "menu-bar":
         let cleanScene;
-        this.deselectObjects();
 
         switch (eventData.value) {
           case "new":
@@ -1088,6 +1063,7 @@ export class Menu {
                 "Any unsaved data will be lost. Are you sure you want to do this?"
               )
             ) {
+              this.deselectObjects();
               this.newEditor();
             }
 
@@ -1154,27 +1130,49 @@ export class Menu {
             break;
 
           case "save model":
-            // SELECTED ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+            console.log("hiii");
+            let modelAlone;
+
+            // SELECTED GROUP ~~~~~~~~~~~~~~~~~~~~~~~~
+            if (
+              this.selectedObjects.length === 1 &&
+              this.selectedObjects[0].isGroup
+            ) {
+              console.log("hi");
+              // Remove all static elements in the world
+              modelAlone = this.selectedObjects[0].children.filter(
+                (object) => !object.name.includes("void-obj")
+              );
+            }
 
             // WHOLE SCENE ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+            else if (this.selectedObjects.length === 0) {
+              console.log("hi2");
 
-            // Remove all static elements in the world
-            const modelAlone = this.currentWorld.scene.children.filter(
-              (object) => !object.name.includes("void-obj")
-            );
+              // Remove all static elements in the world
+              modelAlone = this.currentWorld.scene.children.filter(
+                (object) => !object.name.includes("void-obj")
+              );
+            } else {
+              alert(
+                "Please select a group of the model you wish to save,\nor deselect everything to save the whole scene."
+              );
+            }
 
-            // console.log(modelAlone);
-            const modelArray = modelSaver(modelAlone);
+            if (modelAlone) {
+              console.log("works");
+              const modelArray = modelSaver(modelAlone);
 
-            // SAVING TO JSON FILE ~~~~~~~~~~~~~~~
-            const output = JSON.stringify(modelArray, null, 2);
+              // SAVING TO JSON FILE ~~~~~~~~~~~~~~~
+              const output = JSON.stringify(modelArray, null, 2);
 
-            const blob = new Blob([output], { type: "application/json" });
+              const blob = new Blob([output], { type: "application/json" });
 
-            const link = document.createElement("a");
-            link.href = URL.createObjectURL(blob);
-            link.download = "model.json";
-            link.click();
+              const link = document.createElement("a");
+              link.href = URL.createObjectURL(blob);
+              link.download = "model.json";
+              link.click();
+            }
             break;
 
           case "load model":
@@ -1210,44 +1208,79 @@ export class Menu {
         break;
       case "scene":
         if (eventData.type === "obj-action") {
-          this.currentWorld.removeObject(this.currentWorld.transformControls);
-          this.currentWorld.transformControls.enabled = false;
+          const groupBtn = document.getElementById("scene-group-btn");
 
+          if (this.currentMode === "editor") {
+            this.currentWorld.removeObject(this.currentWorld.transformControls);
+            this.currentWorld.transformControls.enabled = false;
+          }
+
+          //  If remove button clicked - removes selected elements
           if (eventData.id === "scene-remove-btn") {
+            // removing yellow bounding box around selected objects
             this.selectedObjects.forEach((object) => {
-              this.currentWorld.raycastableObjects.forEach((el, index) => {
-                if (el === object) {
-                  this.currentWorld.raycastableObjects.splice(index, 1);
-                  this.removeFromMenuScene(el.uuid);
-                }
-              });
+              if (object.isGroup) {
+                this.#recursiveObjectDeletion(object);
+              } else {
+                this.currentWorld.raycastableObjects.forEach((el, index) => {
+                  if (el === object) {
+                    this.currentWorld.raycastableObjects.splice(index, 1);
+                    this.removeFromMenuScene(object.uuid);
+                  }
+                });
+
+                // removing yellow bounding box around selected objects
+                this.boxHelper.removeHelper(this);
+              }
+
               this.currentWorld.removeObject(object);
             });
             this.deselectObjects();
           }
 
           if (eventData.id === "scene-group-btn") {
-            const group = new THREE.Group();
-            this.selectedObjects.forEach((object) => {
-              if (object.type === "Mesh") {
-                const obj = object.clone();
-                group.add(obj);
+            // if group button clicked - groups selected elements
+            if (groupBtn.textContent.toLowerCase() === "group") {
+              const group = new THREE.Group();
+              this.selectedObjects.forEach((object) => {
+                if (object.type === "Mesh") {
+                  const obj = object.clone();
+                  group.add(obj);
 
-                this.currentWorld.raycastableObjects.forEach((el, index) => {
-                  if (el === object) {
-                    this.currentWorld.raycastableObjects.splice(index, 1);
-                    this.currentWorld.removeObject(object);
-                    this.removeFromMenuScene(el.uuid);
-                  }
-                });
-              }
-            });
-            this.deselectObjects();
+                  this.currentWorld.raycastableObjects.forEach((el, index) => {
+                    if (el === object) {
+                      this.currentWorld.raycastableObjects.splice(index, 1);
+                      this.currentWorld.removeObject(object);
+                      this.removeFromMenuScene(el.uuid);
+                    }
+                  });
 
-            group.name = "group";
-            this.currentWorld.addObject(group);
-            this.addObjectFully(group);
-            this.deselectObjects();
+                  // removing yellow bounding box around selected objects
+                  this.boxHelper.removeHelper(this);
+                }
+              });
+
+              group.name = "group";
+              this.currentWorld.addObject(group);
+              this.addObjectFully(group);
+
+              this.deselectObjects();
+            }
+
+            // if ungroup button clicked - ungroups selected group
+            if (groupBtn.textContent.toLowerCase() === "ungroup") {
+              this.selectedObjects.forEach((object) => {
+                this.#recursiveObjectUngroup(object);
+
+                // Removing the whole group object
+                this.currentWorld.removeObject(object);
+                this.removeFromMenuScene(object.uuid);
+              });
+              // removing yellow bounding box around selected objects
+              this.boxHelper.removeHelper(this);
+
+              this.deselectObjects();
+            }
           }
 
           break;
@@ -1255,10 +1288,25 @@ export class Menu {
 
         if (eventData.dataset?.name === "expand-shrink") {
           const depth = eventData.value.slice(-1);
-          const parentElement = document.getElementById("group-wrapper");
-          const children = document.querySelectorAll(
-            `.group-depth-${Number(depth) + 1}`
-          );
+          const parentElement = eventData.element.parentElement.parentElement;
+          // const children = document.querySelectorAll(
+          //   `.group-depth-${Number(depth) + 1}`
+          // );
+          const children = [];
+
+          console.log(parentElement);
+
+          parentElement.childNodes.forEach((child) => {
+            if (
+              child.id === eventData.element.parentElement.id ||
+              child.tagName !== "DIV"
+            ) {
+              return;
+            }
+
+            children.push(child);
+          });
+
           let childrenFlag = false;
           let restShow;
           let depthLevel = depth;
@@ -1301,7 +1349,7 @@ export class Menu {
               // });
             }
             if (child.style.display === "none") {
-              const padding = ((Number(depth) + 1) * 12).toString() + "px";
+              const padding = ((Number(depth) + 1) * 16).toString() + "px";
 
               child.style.display = "block";
               child.style.paddingLeft = padding;
@@ -1309,14 +1357,17 @@ export class Menu {
               child.style.display = "none";
             }
           });
-          // while (depthLevel >= 0) {
-
-          //   console.log(depthLevel);
-          //   depthLevel--;
-          // }
         } else {
           const colorIn = document.getElementById("color-input");
           let selectedObj = null;
+
+          // console.log(this.currentWorld.transformControls);
+          // console.log(this.currentWorld.scene.children);
+          // this.currentWorld.scene.children.forEach((child) => {
+          //   if (child.isGroup) {
+          //     child.position.x = 5;
+          //   }
+          // });
 
           // Grabbing selected object in the scene
           this.currentWorld.scene.children.forEach((object) => {
@@ -1325,7 +1376,8 @@ export class Menu {
               object.children.length > 0 &&
               !object.name.includes("void-obj")
             ) {
-              this.traverseScene(object);
+              const obj = this.#traverseScene(object, eventData.value);
+              obj ? (object = obj) : null;
             }
 
             // If object is tracked in the scene restore it's material
@@ -1337,47 +1389,63 @@ export class Menu {
               });
             }
 
+            // removing yellow bounding box around selected objects
+            this.boxHelper.removeHelper(this);
+
             // If it is the selected object
             if (object.uuid === eventData.value) {
               selectedObj = object;
             }
           });
 
-          console.log(selectedObj);
-          // console.log(eventData.value);
-          // console.log(this.currentWorld.scene.children);
-
           // populating global selected objects array
           // Multiple objects selection
           if (eventData.ctrl && selectedObj !== null) {
             let addFlag = true;
 
-            // preventing double selection
+            // preventing double/group <-> object selection
             this.selectedObjects.forEach((selected) => {
               if (selected.uuid === selectedObj.uuid) {
+                addFlag = false;
+              }
+              if (selected.isMesh === selectedObj.isGroup) {
+                addFlag = false;
+              }
+              if (selected.isGroup) {
                 addFlag = false;
               }
             });
 
             if (addFlag) {
               this.selectedObjects.push(selectedObj);
-            }
 
-            changeObjectMenu(
-              "multiple",
-              this.currentMode,
-              this.menuParameterCapture
-            );
-
-            if (this.currentMode === "editor") {
-              colorIn.value = this.colorBeforeSelectionEditor;
-
-              this.currentWorld.removeObject(
-                this.currentWorld.transformControls
+              changeObjectMenu(
+                "multiple",
+                this.currentMode,
+                this.menuParameterCapture
               );
-              this.currentWorld.transformControls.enabled = false;
-            } else if (this.currentMode === "study") {
-              colorIn.value = this.colorBeforeSelectionStudy;
+
+              if (this.currentMode === "editor") {
+                colorIn.value = this.colorBeforeSelectionEditor;
+
+                if (this.selectedObjects.length === 1) {
+                  this.currentWorld.transformControls.attach(selectedObj);
+                  this.currentWorld.transformControls.name =
+                    "void-obj-transform-controls";
+
+                  this.currentWorld.addObject(
+                    this.currentWorld.transformControls
+                  );
+                  this.currentWorld.transformControls.enabled = true;
+                } else {
+                  this.currentWorld.removeObject(
+                    this.currentWorld.transformControls
+                  );
+                  this.currentWorld.transformControls.enabled = false;
+                }
+              } else if (this.currentMode === "study") {
+                colorIn.value = this.colorBeforeSelectionStudy;
+              }
             }
           }
 
@@ -1413,6 +1481,7 @@ export class Menu {
               this.currentWorld.transformControls.enabled = true;
             }
           }
+
           // Press on the scene div (not on object)
           else {
             this.selectedObjects = [];
@@ -1434,17 +1503,10 @@ export class Menu {
 
           // Painting all selected objects
           this.selectedObjects?.forEach((object) => {
-            // GREEN CUBE OUTLINE
-            // const cubeGeometry = new THREE.BoxGeometry( 1, 1, 1 );
-            // const outlineMaterial2 = new THREE.MeshBasicMaterial( { color: 0x41fdfe, side: THREE.BackSide } );
-            // const outlineMesh2 = new THREE.Mesh( cubeGeometry, outlineMaterial2 );
-            // outlineMesh2.position.set(object.position.x, object.position.y, object.position.z)
-            // outlineMesh2.scale.multiplyScalar(1.05);
-            // this.currentWorld.addObject( outlineMesh2 );
-
             if (object.isGroup) {
-              console.log("is group");
               this.recursiveObjectPaint(object);
+              this.boxHelper.setObject(object);
+              this.currentWorld.addObject(this.boxHelper.bbox);
             } else {
               object.material = new THREE.MeshBasicMaterial({
                 color: object.material.color.getHex(),
@@ -1452,8 +1514,13 @@ export class Menu {
                 transparent: true,
                 side: THREE.DoubleSide,
               });
+
+              this.boxHelper.setObject(object);
+              this.currentWorld.addObject(this.boxHelper.bbox);
             }
           });
+
+          console.log(this.currentWorld.scene.children);
 
           // Reassinging parameter buttons event listeners
           reassigningObjectEventListeners(this);
@@ -1463,6 +1530,75 @@ export class Menu {
         }
         break;
     }
+  }
+
+  #recursiveObjectColoring(object, color) {
+    object.children.forEach((el) => {
+      if (el.isGroup) {
+        this.#recursiveObjectColoring(el, color);
+      } else {
+        el.material.color.set(color);
+      }
+    });
+  }
+
+  #recursiveObjectUngroup(object) {
+    object.children.forEach((element) => {
+      if (element.isGroup) {
+        this.#recursiveObjectUngroup(element);
+      } else {
+        const newObj = element.clone();
+
+        // adding group position to the object positions
+        newObj.position.add(object.position);
+        newObj.rotation.x += object.rotation.x;
+        newObj.rotation.y += object.rotation.y;
+        newObj.rotation.z += object.rotation.z;
+
+        // console.log(object);
+
+        // Removing object from raycastable array
+        this.currentWorld.raycastableObjects.forEach((el, index) => {
+          if (el === element) {
+            this.currentWorld.raycastableObjects.splice(index, 1);
+          }
+        });
+
+        // Adding the single objects
+        this.currentWorld.addObject(newObj);
+        this.addObjectFully(newObj);
+      }
+    });
+  }
+
+  #recursiveObjectDeletion(object) {
+    object.children.forEach((element) => {
+      if (element.isGroup) {
+        this.#recursiveObjectDeletion(element);
+      } else {
+        this.currentWorld.raycastableObjects.forEach((el, index) => {
+          if (el === element) {
+            this.currentWorld.raycastableObjects.splice(index, 1);
+          }
+        });
+      }
+    });
+    this.removeFromMenuScene(object.uuid);
+  }
+
+  #checkSelectedInGroup(selected, selectedObj) {
+    let addFlag = true;
+    selected.children.forEach((object) => {
+      if (object.isGroup) {
+        const selected = this.#checkSelectedInGroup(object);
+        addFlag = selected;
+      }
+
+      if (object.uuid === selectedObj.uuid) {
+        addFlag = false;
+      }
+    });
+    return addFlag;
   }
 
   recursiveObjectPaint(object) {
@@ -1480,26 +1616,31 @@ export class Menu {
     });
   }
 
-  traverseScene(children) {
-    console.log(children);
-    // children.forEach((object) => {
-    //   // If object is tracked in the scene restore it's material
-    //   if (object.name.includes("object")) {
-    //     // console.log("selected color not working on imported objects");
-    //     object.material = new THREE.MeshLambertMaterial({
-    //       color: object.material?.color?.getHex(),
-    //       side: THREE.DoubleSide,
-    //     });
-    //   }
+  #traverseScene(objects, elemId) {
+    let returnVal = null;
 
-    //   if (object.type !== "Mesh") {
-    //     traverseScene();
-    //   }
+    objects.children.forEach((object) => {
+      console.log(object.uuid);
+      console.log(elemId);
+      if (object.type !== "Mesh") {
+        this.#traverseScene(object, elemId);
+      }
 
-    //   // If it is the selected object
-    //   if (object.uuid === eventData.value) {
-    //     selectedObj = object;
-    //   }
-    // });
+      // If object is tracked in the scene restore it's material
+      if (object.name.includes("object")) {
+        // console.log("selected color not working on imported objects");
+        object.material = new THREE.MeshLambertMaterial({
+          color: object.material?.color?.getHex(),
+          side: THREE.DoubleSide,
+        });
+      }
+
+      // If it is the selected object
+      if (object.uuid === elemId) {
+        returnVal = object;
+      }
+    });
+
+    return returnVal;
   }
 }

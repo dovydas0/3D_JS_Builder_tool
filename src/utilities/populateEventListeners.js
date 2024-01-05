@@ -5,9 +5,16 @@ let sceneUIEventsReference;
 let modeChangeEventsReference;
 let infoWindowEventsReference;
 let windowResizeEventsReference;
+let transformControlEventsReference;
 
 // Removing event listeners
-export const removeEventListeners = () => {
+export const removeEventListeners = (menu) => {
+  // Listens to transform control mouse events on objects
+  menu.currentWorld.transformControls.removeEventListener(
+    "dragging-changed",
+    transformControlEventsReference
+  );
+
   // Covers every input in left menu UI
   document
     .getElementById("menu-ui")
@@ -52,6 +59,13 @@ export const eventListeners = (menu, canvas, worlds) => {
   modeChangeEventsReference = (e) => modeChangeEvents(e, menu, worlds);
   infoWindowEventsReference = () => infoWindowEvents(menu);
   windowResizeEventsReference = () => windowResizeEvents(menu, canvas);
+  transformControlEventsReference = (e) => transformControlEvents(e, menu);
+
+  // Listens to transform control mouse events on objects
+  menu.currentWorld.transformControls.addEventListener(
+    "dragging-changed",
+    transformControlEventsReference
+  );
 
   // Covers every input in left menu UI
   document
@@ -147,6 +161,10 @@ export const reassigningObjectEventListeners = (menu) => {
 };
 
 // Event listener functions
+const transformControlEvents = (e, menu) => {
+  menu.currentWorld.controls.enabled = !e.value;
+};
+
 const inputClickEvents = (e, menu) => {
   menu.action({
     name: e.target.name,

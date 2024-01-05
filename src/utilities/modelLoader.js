@@ -1,9 +1,13 @@
+import * as THREE from "three";
 import { Capsule } from "../objects/interactive/Capsule";
 import { Cube } from "../objects/interactive/Cube";
 import { Cylinder } from "../objects/interactive/Cylinder";
 import { Sphere } from "../objects/interactive/Sphere";
 
 export const modelLoader = (data, menu) => {
+  const group = new THREE.Group();
+  group.name = "group";
+
   data.forEach((object) => {
     let newObject;
     switch (object.geometry) {
@@ -66,11 +70,13 @@ export const modelLoader = (data, menu) => {
         );
         break;
     }
-    newObject.mesh.position.copy(object.position);
 
-    menu.currentWorld.addRaycastableObject(newObject.mesh);
-    menu.addToMenuScene(newObject.mesh);
+    newObject.mesh.position.copy(object.position);
+    group.add(newObject.mesh);
   });
+
+  menu.currentWorld.addObject(group);
+  menu.addObjectFully(group);
 };
 
 export const modelSaver = (data) => {

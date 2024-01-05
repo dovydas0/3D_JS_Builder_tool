@@ -9,6 +9,12 @@ export const changeSceneMenu = (mode, menuParameterCapture) => {
       html = `
         <div class="scene-header" id="scene-header">
           <p id="scene-title">Scene</p>
+          <button id="scene-remove-btn" name="obj-action" class="btn-1" hidden>
+            Remove
+          </button>
+          <button id="scene-group-btn" name="obj-action" class="btn-1" hidden>
+            Group
+          </button>
         </div>
         <div class="scene-objects" id="scene-objects"></div>
       `;
@@ -18,6 +24,12 @@ export const changeSceneMenu = (mode, menuParameterCapture) => {
       html = `
         <div class="scene-header" id="scene-header">
           <p id="scene-title">Scene</p>
+          <button id="scene-remove-btn" name="obj-action" class="btn-1" hidden>
+            Remove
+          </button>
+          <button id="scene-group-btn" name="obj-action" class="btn-1" hidden>
+            Group
+          </button>
         </div>
         <div class="scene-objects" id="scene-objects"></div>
       `;

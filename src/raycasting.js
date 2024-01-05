@@ -97,9 +97,12 @@ export const onPointerDown = (
               if (obj.uuid === intersect.object.uuid) {
                 menu.deselectObjects();
 
+                // removing transform controls from the world
                 menu.currentWorld.removeObject(
                   menu.currentWorld.transformControls
                 );
+
+                // Disabling transform controls
                 menu.currentWorld.transformControls.enabled = false;
               }
             });
@@ -118,7 +121,10 @@ export const onPointerDown = (
             changeObjectMenu("", menu.currentMode, menu.menuParameterCapture);
           }
 
-          if (menu.selectedObjects.length === 1) {
+          if (
+            menu.selectedObjects.length === 1 &&
+            !menu.selectedObjects[0].isGroup
+          ) {
             changeObjectMenu(
               nameConverter(menu.selectedObjects[0].geometry.type),
               menu.currentMode,
@@ -126,12 +132,14 @@ export const onPointerDown = (
               menu.selectedObjects[0]
             );
 
-            menu.currentWorld.transformControls.attach(intersect.object);
-            menu.currentWorld.transformControls.name =
-              "void-obj-transform-controls";
+            if (menu.currentMode === "editor") {
+              menu.currentWorld.transformControls.attach(intersect.object);
+              menu.currentWorld.transformControls.name =
+                "void-obj-transform-controls";
 
-            menu.currentWorld.addObject(menu.currentWorld.transformControls);
-            menu.currentWorld.transformControls.enabled = true;
+              menu.currentWorld.addObject(menu.currentWorld.transformControls);
+              menu.currentWorld.transformControls.enabled = true;
+            }
           }
 
           if (menu.selectedObjects.length > 1) {
@@ -158,7 +166,7 @@ export const onPointerDown = (
         }
       } else if (menu.currentMode === "editor") {
         // deselecting objects
-        selectObjects(null, menu);
+        menu.deselectObjects();
 
         menu.currentWorld.removeObject(menu.currentWorld.transformControls);
         menu.currentWorld.transformControls.enabled = false;
@@ -431,7 +439,7 @@ export const raycasterIntersections = (
 };
 
 const selectObjects = (selected, menu) => {
-  // Grabbing selected object in the scene
+  // Restoring all scene objects' color
   menu.currentWorld.raycastableObjects.forEach((object) => {
     if (object.name !== "void-obj-floor") {
       object.material = new THREE.MeshLambertMaterial({
@@ -460,6 +468,12 @@ const selectObjects = (selected, menu) => {
       if (selectedObj.uuid === selected.uuid) {
         addFlag = false;
       }
+      if (selectedObj.isMesh === selected.isGroup) {
+        addFlag = false;
+      }
+      if (selectedObj.isGroup) {
+        addFlag = false;
+      }
     });
 
     if (addFlag) {
@@ -471,20 +485,21 @@ const selectObjects = (selected, menu) => {
 
   // Painting all selected objects
   menu.selectedObjects?.forEach((object) => {
-    // GREEN CUBE OUTLINE
-    // const cubeGeometry = new THREE.BoxGeometry( 1, 1, 1 );
-    // const outlineMaterial2 = new THREE.MeshBasicMaterial( { color: 0x41fdfe, side: THREE.BackSide } );
-    // const outlineMesh2 = new THREE.Mesh( cubeGeometry, outlineMaterial2 );
-    // outlineMesh2.position.set(object.position.x, object.position.y, object.position.z)
-    // outlineMesh2.scale.multiplyScalar(1.05);
-    // this.currentWorld.addObject( outlineMesh2 );
+    if (object.isGroup) {
+      menu.recursiveObjectPaint(object);
+      menu.boxHelper.setObject(object);
+      menu.currentWorld.addObject(menu.boxHelper.bbox);
+    } else {
+      object.material = new THREE.MeshBasicMaterial({
+        color: object.material.color.getHex(),
+        opacity: 0.6,
+        transparent: true,
+        side: THREE.DoubleSide,
+      });
 
-    object.material = new THREE.MeshBasicMaterial({
-      color: object.material.color.getHex(),
-      opacity: 0.6,
-      transparent: true,
-      side: THREE.DoubleSide,
-    });
+      menu.boxHelper.setObject(object);
+      menu.currentWorld.addObject(menu.boxHelper.bbox);
+    }
   });
 
   // Highlighting selected objects in menu

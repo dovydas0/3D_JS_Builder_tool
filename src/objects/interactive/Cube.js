@@ -75,8 +75,6 @@ export class Cube extends Entity {
     this.mesh = new THREE.Mesh(this.geometry, this.material);
     this.mesh.name = name;
 
-    // this.controls = new TransformControls();
-
     if (scale) {
       this.mesh.scale.set(scale.x, scale.y, scale.z);
     }
@@ -92,7 +90,7 @@ export class Cube extends Entity {
   }
 
   update(deltaTime) {
-    this.mesh.rotation.x += 0.6 * deltaTime;
-    this.mesh.rotation.y += 0.6 * deltaTime;
+    // this.mesh.rotation.x += 0.6 * deltaTime;
+    // this.mesh.rotation.y += 0.6 * deltaTime;
   }
 }

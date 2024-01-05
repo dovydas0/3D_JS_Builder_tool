@@ -15,13 +15,8 @@ import { EditorWorld } from "./worlds/editorWorld";
 import { StudyWorld } from "./worlds/studyWorld";
 import { CraftWorld } from "./worlds/craftWorld";
 import { Cube } from "./objects/interactive/Cube";
-
-import { EffectComposer } from "three/addons/postprocessing/EffectComposer.js";
-import { RenderPass } from "three/addons/postprocessing/RenderPass.js";
-import { OutlinePass } from "three/addons/postprocessing/OutlinePass.js";
-import { FXAAShader } from "three/addons/shaders/FXAAShader.js";
-import { ShaderPass } from "three/addons/postprocessing/ShaderPass.js";
 import { populatePredefinedModels } from "./utilities/populatePredefinedModels.js";
+import { BoxHelper } from "./helpers/boxHelper.js";
 
 // Performance monitor
 const stats = new Stats();
@@ -59,6 +54,7 @@ const canvas = new Canvas(
   0.1,
   1000
 );
+const boxHelper = new BoxHelper();
 
 const editorWorld = new EditorWorld(canvas, initplaceholderObject);
 const studyWorld = new StudyWorld(canvas);
@@ -70,8 +66,9 @@ let worlds = {
   craft: craftWorld,
 };
 
+// Reinitializing editor world and menu on "new" click in the top menu-bar
 const newEditor = () => {
-  removeEventListeners(menu, canvas, worlds);
+  removeEventListeners(menu);
 
   const sceneObjects = document.getElementById("scene-objects");
   sceneObjects.innerHTML = "";
@@ -84,7 +81,7 @@ const newEditor = () => {
     craft: craftWorld,
   };
 
-  menu = new Menu(editorWorld, initPlaceholderObjectArr, newEditor);
+  menu = new Menu(editorWorld, initPlaceholderObjectArr, newEditor, boxHelper);
 
   editorWorld.initWorld();
 
@@ -92,42 +89,18 @@ const newEditor = () => {
   eventListeners(menu, canvas, worlds);
 };
 
-let menu = new Menu(worlds.editor, initPlaceholderObjectArr, newEditor);
+let menu = new Menu(
+  worlds.editor,
+  initPlaceholderObjectArr,
+  newEditor,
+  boxHelper
+);
 const raycaster = new THREE.Raycaster();
 const pointer = new THREE.Vector2();
 
 worlds.editor.initWorld();
 worlds.study.initWorld(menu, canvas);
 worlds.craft.initWorld(menu, canvas);
-
-// SELECTING OBJECT TEST
-// let selectedObjects = []
-
-// const composer = new EffectComposer(canvas.renderer);
-
-// const renderPass = new RenderPass(menu.currentWorld.scene, menu.currentWorld.camera);
-
-// composer.addPass(renderPass);
-
-// const outline = new OutlinePass(new THREE.Vector2(window.innerWidth, window.innerHeight), menu.currentWorld.scene, menu.currentWorld.camera);
-// outline.edgeThickness = 2.0;
-// outline.edgeStrength = 3.0;
-// outline.visibleEdgeColor.set(0xff0000);
-
-// composer.addPass(outline);
-
-// const textureLoader = new THREE.TextureLoader();
-// textureLoader.load("/tri_pattern.jpg", function(texture){
-//     if (texture) {
-//         outline.patternTexture = texture;
-//         texture.wrapS = THREE.RepeatWrapping;
-//         texture.wrapT = THREE.RepeatWrapping;
-//     }
-// });
-
-// const fxaaShader = new ShaderPass(FXAAShader);
-// fxaaShader.uniforms["resolution"].value.set(1 / window.innerWidth, 1 / window.innerHeight);
-// composer.addPass(fxaaShader);
 
 const animate = () => {
   // Request next frame
@@ -149,6 +122,7 @@ const animate = () => {
   if (worlds.study.controls.autoRotate) {
     worlds.study.update();
   }
+  boxHelper.update(menu);
   worlds.editor.updateControls(deltaTime);
 
   render();
@@ -171,13 +145,6 @@ animate();
 // EVENT LISTENERS FOR INTERACTIONS
 menu.currentWorld.transformControls.addEventListener("change", render);
 
-menu.currentWorld.transformControls.addEventListener(
-  "dragging-changed",
-  function (event) {
-    menu.currentWorld.controls.enabled = !event.value;
-  }
-);
-
 // REMEMBER TO REMOVE EVENT LISTENERS ON DIFFERENT MODES
 if (menu.currentMode === modes.editor || menu.currentMode === modes.study) {
   canvas.renderer.domElement.addEventListener("pointermove", (event) => {
@@ -190,8 +157,3 @@ if (menu.currentMode === modes.editor || menu.currentMode === modes.study) {
 }
 
 eventListeners(menu, canvas, worlds);
-
-function addSelectedObject(object) {
-  selectedObjects = [];
-  selectedObjects.push(object);
-}

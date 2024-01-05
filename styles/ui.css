@@ -203,7 +203,7 @@ body {
 
 .scene-menu-obj {
   display: flex;
-  gap: 4px;
+  gap: 2px;
   padding-left: 6px;
 }
 
@@ -560,8 +560,15 @@ body {
   margin-top: 1rem;
 }
 
+.expand-shrink {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 10px;
+}
+
 .btn-1 {
-  font-size: 13px;
+  font-size: 12px;
   background: var(--controllers-color);
   border: none;
   color: #fff;
