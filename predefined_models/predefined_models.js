@@ -1,6 +1,6 @@
 export const models = [
   {
-    name: "robot",
+    name: "Android Robot",
     image: "robot.img",
     data: [
       {

@@ -1547,15 +1547,18 @@ export class Menu {
       if (element.isGroup) {
         this.#recursiveObjectUngroup(element);
       } else {
+        // getting position/rotation/scale from the object
+        const posV = new THREE.Vector3();
+        const quatV = new THREE.Quaternion();
+        const scaleV = new THREE.Vector3();
+        element.matrixWorld.decompose(posV, quatV, scaleV);
+
         const newObj = element.clone();
 
-        // adding group position to the object positions
-        newObj.position.add(object.position);
-        newObj.rotation.x += object.rotation.x;
-        newObj.rotation.y += object.rotation.y;
-        newObj.rotation.z += object.rotation.z;
-
-        // console.log(object);
+        // Setting position/rotation/scale together with parent object parameter changes
+        newObj.position.set(...posV);
+        newObj.setRotationFromQuaternion(quatV);
+        newObj.scale.set(...scaleV);
 
         // Removing object from raycastable array
         this.currentWorld.raycastableObjects.forEach((el, index) => {
@@ -1567,6 +1570,7 @@ export class Menu {
         // Adding the single objects
         this.currentWorld.addObject(newObj);
         this.addObjectFully(newObj);
+        // newObj.matrixAutoUpdate = true;
       }
     });
   }
