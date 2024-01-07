@@ -44,6 +44,8 @@ export class gltfObject {
         console.log(gltf.scene);
         menu.currentWorld.scene.add(gltf.scene);
 
+        // USE scene.traverse TO ADD EVERY MESH INTO THE SCENE
+
         // menu.addObjectFully(gltf.scene.children[0]);
         // menu.addObjectFully(gltf.scene.children[1]);
         // menu.addObjectFully(gltf.scene.children[2]);

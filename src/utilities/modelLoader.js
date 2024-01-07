@@ -36,6 +36,7 @@ export const modelLoader = (data, menu) => {
           object.placeholderObj,
           object.segmentsWidth,
           object.segmentsHeight,
+          object.thetaLength,
           object.scale,
           object.rotation
         );
@@ -115,6 +116,7 @@ export const modelSaver = (data) => {
           placeholderObj: false,
           segmentsWidth: object.geometry.parameters.widthSegments,
           segmentsheight: object.geometry.parameters.heightSegments,
+          thetaLength: object.geometry.parameters.thetaLength,
           position: object.position,
           scale: object.scale,
           rotation: {

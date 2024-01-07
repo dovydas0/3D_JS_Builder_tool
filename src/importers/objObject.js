@@ -19,6 +19,8 @@ export class objObject {
       function (gltf) {
         menu.currentWorld.scene.add(gltf.scene);
 
+        // USE scene.traverse TO ADD EVERY MESH INTO THE SCENE
+
         // console.log(gltf.scene.children[0].children);
         // gltf.scene.children[0].children.forEach((element) => {
         //   element.name = "object-" + element.name;

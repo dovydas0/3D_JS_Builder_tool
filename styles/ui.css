@@ -94,6 +94,35 @@ body {
   display: block;
 }
 
+.predefined-models {
+  display: flex;
+  gap: 5px;
+  margin-top: 15px;
+}
+
+.predefined-container {
+  display: grid;
+  align-content: space-between;
+  background: var(--menu-color);
+  border-radius: 10px;
+  padding: 10px;
+  width: 56px;
+  height: 94px;
+  cursor: pointer;
+}
+
+.predefined-container > img {
+  border-radius: 1000px;
+  margin-bottom: 8px;
+  width: 56px;
+}
+
+.predefined-container > p {
+  text-align: center;
+  padding: 0;
+  margin: 0;
+}
+
 .menu {
   position: absolute;
   background: var(--menu-color);
@@ -224,6 +253,7 @@ body {
   padding-bottom: 1rem;
   padding-top: 1px;
   margin-top: 0.5rem;
+  margin-bottom: 0.5rem;
   background: var(--controllers-color2);
   border-radius: 10px;
 }

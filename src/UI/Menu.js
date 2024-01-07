@@ -582,6 +582,13 @@ export class Menu {
       case "radius":
         let newSphereRad;
         const sphereRad = Number(document.getElementById("radius").value);
+        const segmentsW = Number(
+          document.getElementById("segments-width")?.value
+        );
+        const segmentsH = Number(
+          document.getElementById("segments-height")?.value
+        );
+        const thetaL = Number(document.getElementById("theta-length")?.value);
 
         // Creating a new object and placing it into the grid, on the floor
         newSphereRad = new Sphere(
@@ -589,7 +596,10 @@ export class Menu {
           sphereRad,
           this.currentObjectColor,
           "Basic",
-          true
+          true,
+          segmentsW,
+          segmentsH,
+          thetaL
         );
 
         // If new object created successfully
@@ -609,16 +619,23 @@ export class Menu {
           document.getElementById("selected-radius").value
         );
         const sphereWidthSeg = Number(
-          document.getElementById("segments-width").value
+          document.getElementById("selected-segments-width")?.value
         );
         const sphereHeightSeg = Number(
-          document.getElementById("segments-height").value
+          document.getElementById("selected-segments-height")?.value
+        );
+        const thetaLen = Number(
+          document.getElementById("selected-theta-length").value
         );
 
         this.selectedObjects[0].geometry = new THREE.SphereGeometry(
           sphereRadius,
           sphereWidthSeg,
-          sphereHeightSeg
+          sphereHeightSeg,
+          undefined,
+          undefined,
+          undefined,
+          thetaLen
         );
         break;
       case "cylinder":
@@ -982,17 +999,28 @@ export class Menu {
         colorInputStudy.value = eventData.value;
         break;
 
-      case "segments":
-        const segmentWidth = document.getElementById("segments-width")?.value;
-        const segmentheight = document.getElementById("segments-height")?.value;
+      // case "segments":
+      //   const segmentWidth = document.getElementById(
+      //     "selected-segments-width"
+      //   )?.value;
+      //   const segmentHeight = document.getElementById(
+      //     "selected-segments-height"
+      //   )?.value;
+      //   const thetaLength = document.getElementById(
+      //     "selected-theta-length"
+      //   )?.value;
 
-        this.selectedObjects[0].geometry = new THREE.SphereGeometry(
-          this.selectedObjects[0].geometry.parameters.radius,
-          segmentWidth,
-          segmentheight
-        );
+      //   this.selectedObjects[0].geometry = new THREE.SphereGeometry(
+      //     this.selectedObjects[0].geometry.parameters.radius,
+      //     segmentWidth,
+      //     segmentHeight,
+      //     undefined,
+      //     undefined,
+      //     undefined,
+      //     thetaLength
+      //   );
 
-        break;
+      //   break;
       case "add-object":
         const objectToAdd = document.getElementById("objects").value;
         const selectedColor = document.getElementById("color-input").value;

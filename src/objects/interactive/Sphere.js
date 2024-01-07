@@ -22,6 +22,7 @@ export class Sphere extends Entity {
     placeholderObj = false,
     segmentsWidth = 32,
     segmentsheight = 16,
+    thetaLength = 3.142,
     scale,
     rotation
   ) {
@@ -59,7 +60,11 @@ export class Sphere extends Entity {
     this.geometry = new THREE.SphereGeometry(
       radius,
       segmentsWidth,
-      segmentsheight
+      segmentsheight,
+      undefined,
+      undefined,
+      undefined,
+      thetaLength
     );
     this.material = new finalMaterial(this.materialProperties);
     this.mesh = new THREE.Mesh(this.geometry, this.material);

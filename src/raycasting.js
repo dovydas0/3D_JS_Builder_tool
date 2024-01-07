@@ -174,6 +174,8 @@ export const onPointerDown = (
         // Adding an object
         let newObject;
 
+        console.log(menu.currentObject);
+
         switch (menu.currentObject.mesh.geometry.type) {
           case "BoxGeometry":
             const currentObject = {
@@ -197,8 +199,9 @@ export const onPointerDown = (
               menu.currentObjectColor,
               "Lambert",
               false,
-              32,
-              16
+              menu.currentObject.geometry.parameters.widthSegments,
+              menu.currentObject.geometry.parameters.heightSegments,
+              menu.currentObject.geometry.parameters.thetaLength
             );
             break;
           case "CylinderGeometry":
