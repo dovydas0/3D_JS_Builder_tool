@@ -19,10 +19,12 @@ import { EditorWorld } from "../worlds/editorWorld";
 import { modelLoader, modelSaver } from "../utilities/modelLoader";
 import { nonRepeatingName } from "../utilities/nonRepeatingName";
 import { BoxHelper } from "../helpers/boxHelper";
+import { grabPredefinedData } from "../utilities/populatePredefinedModels";
 
 export class Menu {
-  constructor(worldObject, placeholderObject, newEditor, boxHelper) {
+  constructor(worldObject, placeholderObject, newEditor, boxHelper, modelData) {
     // STORE ALL BLOCKS IN AN ARRAY HERE
+    this.modelData = modelData;
     this.savedModel = [];
     this.newEditor = newEditor;
     this.gltfObj = new gltfObject();
@@ -491,6 +493,14 @@ export class Menu {
 
   action(eventData) {
     switch (eventData.name) {
+      case "predefined-model":
+        const modelData = grabPredefinedData(eventData.value);
+
+        if (modelData) {
+          modelLoader(modelData[0].data, this);
+        }
+
+        break;
       case "rotation":
         eventData.checked === true
           ? (this.currentWorld.controls.autoRotate = true)

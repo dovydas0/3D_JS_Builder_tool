@@ -1,4 +1,5 @@
 import * as THREE from "three";
+import { grabPredefinedData } from "./populatePredefinedModels";
 
 let inputClickEventsReference;
 let sceneUIEventsReference;
@@ -96,6 +97,17 @@ export const eventListeners = (menu, canvas, worlds) => {
     .addEventListener("click", infoWindowEventsReference);
 
   window.addEventListener("resize", windowResizeEventsReference);
+
+  const models = document.getElementById("predefined-models").childNodes;
+
+  models.forEach((child) => {
+    child.addEventListener("click", (e) => {
+      menu.action({
+        name: "predefined-model",
+        value: e.currentTarget.id,
+      });
+    });
+  });
 };
 
 export const reassigningModeEventListeners = (menu) => {
@@ -158,6 +170,15 @@ export const reassigningObjectEventListeners = (menu) => {
       });
     }
   });
+
+  document
+    .getElementById("predefined-models")
+    .addEventListener("click", (e) => {
+      console.log(e.target);
+      // menu.action({
+      //   id: e.target.id
+      // })
+    });
 };
 
 // Event listener functions

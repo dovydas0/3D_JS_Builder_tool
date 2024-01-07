@@ -23,7 +23,7 @@ const stats = new Stats();
 stats.dom.classList.add("stats-data");
 document.body.appendChild(stats.dom);
 
-populatePredefinedModels();
+const modelData = populatePredefinedModels();
 
 // MODES
 const modes = {
@@ -93,7 +93,8 @@ let menu = new Menu(
   worlds.editor,
   initPlaceholderObjectArr,
   newEditor,
-  boxHelper
+  boxHelper,
+  modelData
 );
 const raycaster = new THREE.Raycaster();
 const pointer = new THREE.Vector2();
@@ -156,4 +157,4 @@ if (menu.currentMode === modes.editor || menu.currentMode === modes.study) {
   });
 }
 
-eventListeners(menu, canvas, worlds);
+eventListeners(menu, canvas, worlds, modelData);
