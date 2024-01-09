@@ -62,7 +62,7 @@ export class Cylinder extends Entity {
       radiusTop,
       radiusBottom,
       height,
-      radialSegments,
+      radialSegments < 3 ? 3 : radialSegments,
       1,
       openEnded
     );

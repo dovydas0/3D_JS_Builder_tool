@@ -134,7 +134,7 @@ export const changeMenu = (mode, menuParameterCapture) => {
             </label>
           </div>
           <div class="checkbox">
-            <p>Snap To Grid</p>
+            <p>Snap To Tiles</p>
             <label class="el-switch el-switch-sm">
               <input type="checkbox" name="grid-snap" id="grid-snap" ${
                 menuParameterCapture[mode]?.gridSnap ? "checked" : ""
@@ -221,7 +221,12 @@ export const changeMenu = (mode, menuParameterCapture) => {
             </div>
           </div>
         </div>
-        <div class="selected-parameters" id="selected-parameters-selected">
+        <div class="selected-parameters" id="selected-parameters-selected"></div>
+        <div class="selected-parameters" id="selected-parameters">
+          <div class="container" id="selected-obj">
+            <p class="container-p">Predefined models</p>
+            <div class="predefined-models" id="predefined-models"></div>
+          </div>
         </div>
       `;
       break;

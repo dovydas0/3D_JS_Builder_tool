@@ -49,7 +49,7 @@ export const changeObjectMenu = (
           html = `
             <p class="container-p">Placeholder Sphere</p>
             <div class="dimensions">
-              <p>Dimensions</p>
+              <p>Properties</p>
               <div class="dimension-inputs" id="dimension-inputs">
                 <div class="dim-input">
                   <label for="radius">Radius</label>
@@ -198,7 +198,7 @@ export const changeObjectMenu = (
             <div class="container" id="selected-obj-selected">
               <p class="container-p">Sphere</p>
               <div class="dimensions">
-                <p>Dimensions</p>
+                <p>Properties</p>
                 <div class="dimension-inputs" id="dimension-inputs">
                   <div class="dim-input">
                     <label for="radius">Radius</label>
@@ -468,27 +468,23 @@ export const changeObjectMenu = (
           <div class="container" id="selected-obj-selected">
             <p class="container-p">Sphere</p>
             <div class="dimensions">
-              <p>Dimensions</p>
+              <p>Properties</p>
               <div class="dimension-inputs" id="dimension-inputs">
                 <div class="dim-input">
                   <label for="radius">Radius</label>
                   <input type="number" name="selected-radius" id="selected-radius" value="${selectedObj.geometry.parameters.radius}" step="0.5" min="0.5" max="50.5">
                 </div>
-              </div>
-            </div>
-          </div>
-          <div class="container" id="selected-obj">
-            <p class="container-p">Segments</p>
-            <div class="dimensions">
-              <p></p>
-              <div class="dimension-inputs" id="dimension-inputs">
                 <div class="dim-input">
-                  <label>Width</label>
-                  <input type="number" name="segments" id="segments-width" value="${selectedObj.geometry.parameters.widthSegments}" step="1" min="3" max="32">
+                  <label for="thetaLength">ThetaLength</label>
+                  <input type="number" name="selected-radius" id="selected-theta-length" value="${selectedObj.geometry.parameters.thetaLength}" step="0.001" min="0" max="3.142">
                 </div>
                 <div class="dim-input">
-                  <label>Height</label>
-                  <input type="number" name="segments" id="segments-height" value="${selectedObj.geometry.parameters.heightSegments}" step="1" min="2" max="16">
+                  <label>WidthSegments</label>
+                  <input type="number" name="selected-radius" id="selected-segments-width" value="${selectedObj.geometry.parameters.widthSegments}" step="1" min="3" max="32">
+                </div>
+                <div class="dim-input">
+                  <label>HeightSegments</label>
+                  <input type="number" name="selected-radius" id="selected-segments-height" value="${selectedObj.geometry.parameters.heightSegments}" step="1" min="2" max="16">
                 </div>
               </div>
             </div>

@@ -1,5 +1,4 @@
 import * as THREE from "three";
-import { grabPredefinedData } from "./populatePredefinedModels";
 
 let inputClickEventsReference;
 let sceneUIEventsReference;
@@ -7,9 +6,12 @@ let modeChangeEventsReference;
 let infoWindowEventsReference;
 let windowResizeEventsReference;
 let transformControlEventsReference;
+let predefinedModelsEventsReference;
 
 // Removing event listeners
 export const removeEventListeners = (menu) => {
+  const models = document.getElementById("predefined-models").childNodes;
+
   // Listens to transform control mouse events on objects
   menu.currentWorld.transformControls.removeEventListener(
     "dragging-changed",
@@ -36,15 +38,23 @@ export const removeEventListeners = (menu) => {
     .getElementById("mode-ui")
     .removeEventListener("click", modeChangeEventsReference);
 
+  // Info button on the bottom event
   document
     .getElementById("info")
     .removeEventListener("click", infoWindowEventsReference);
 
+  // info component "X" button
   document
     .getElementById("info-close")
     .removeEventListener("click", infoWindowEventsReference);
 
+  // Window resizing event
   window.removeEventListener("resize", windowResizeEventsReference);
+
+  // predefined model section event
+  models.forEach((child) => {
+    child.removeEventListener("click", predefinedModelsEventsReference);
+  });
 };
 
 const windowResizeEvents = (menu, canvas) => {
@@ -55,12 +65,16 @@ const windowResizeEvents = (menu, canvas) => {
 
 // Assigning event listeners
 export const eventListeners = (menu, canvas, worlds) => {
+  const models = document.getElementById("predefined-models").childNodes;
+
+  // function references
   inputClickEventsReference = (e) => inputClickEvents(e, menu);
   sceneUIEventsReference = (e) => sceneUIEvents(e, menu);
   modeChangeEventsReference = (e) => modeChangeEvents(e, menu, worlds);
   infoWindowEventsReference = () => infoWindowEvents(menu);
   windowResizeEventsReference = () => windowResizeEvents(menu, canvas);
   transformControlEventsReference = (e) => transformControlEvents(e, menu);
+  predefinedModelsEventsReference = (e) => predefinedModelsEvents(e, menu);
 
   // Listens to transform control mouse events on objects
   menu.currentWorld.transformControls.addEventListener(
@@ -88,29 +102,35 @@ export const eventListeners = (menu, canvas, worlds) => {
     .getElementById("mode-ui")
     .addEventListener("click", modeChangeEventsReference);
 
+  // info button on the bottom
   document
     .getElementById("info")
     .addEventListener("click", infoWindowEventsReference);
 
+  // info component "X" button
   document
     .getElementById("info-close")
     .addEventListener("click", infoWindowEventsReference);
 
+  // window resizing event
   window.addEventListener("resize", windowResizeEventsReference);
 
-  const models = document.getElementById("predefined-models").childNodes;
-
+  // predefined model section event
   models.forEach((child) => {
-    child.addEventListener("click", (e) => {
-      menu.action({
-        name: "predefined-model",
-        value: e.currentTarget.id,
-      });
-    });
+    child.addEventListener("click", predefinedModelsEventsReference);
   });
 };
 
 export const reassigningModeEventListeners = (menu) => {
+  if (menu.currentMode === "editor") {
+    const models = document.getElementById("predefined-models").childNodes;
+
+    // readding predefined model section event
+    models.forEach((child) => {
+      child.addEventListener("click", predefinedModelsEventsReference);
+    });
+  }
+
   // Readding info window close event listener
   document.getElementById("info-close")?.addEventListener("click", (e) => {
     menu.showInfo();
@@ -170,18 +190,16 @@ export const reassigningObjectEventListeners = (menu) => {
       });
     }
   });
-
-  document
-    .getElementById("predefined-models")
-    .addEventListener("click", (e) => {
-      console.log(e.target);
-      // menu.action({
-      //   id: e.target.id
-      // })
-    });
 };
 
 // Event listener functions
+const predefinedModelsEvents = (e, menu) => {
+  menu.action({
+    name: "predefined-model",
+    value: e.currentTarget.id,
+  });
+};
+
 const transformControlEvents = (e, menu) => {
   menu.currentWorld.controls.enabled = !e.value;
 };

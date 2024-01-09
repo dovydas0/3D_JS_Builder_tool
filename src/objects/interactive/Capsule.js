@@ -49,8 +49,8 @@ export class Capsule extends Entity {
     this.geometry = new THREE.CapsuleGeometry(
       radius,
       length,
-      capSegments,
-      radialSegments
+      capSegments < 1 ? 1 : capSegments,
+      radialSegments < 3 ? 3 : radialSegments
     );
     this.material = new finalMaterial(this.materialProperties);
     this.mesh = new THREE.Mesh(this.geometry, this.material);

@@ -174,8 +174,6 @@ export const onPointerDown = (
         // Adding an object
         let newObject;
 
-        console.log(menu.currentObject);
-
         switch (menu.currentObject.mesh.geometry.type) {
           case "BoxGeometry":
             const currentObject = {

@@ -19,7 +19,10 @@ import { EditorWorld } from "../worlds/editorWorld";
 import { modelLoader, modelSaver } from "../utilities/modelLoader";
 import { nonRepeatingName } from "../utilities/nonRepeatingName";
 import { BoxHelper } from "../helpers/boxHelper";
-import { grabPredefinedData } from "../utilities/populatePredefinedModels";
+import {
+  grabPredefinedData,
+  populatePredefinedModels,
+} from "../utilities/populatePredefinedModels";
 
 export class Menu {
   constructor(worldObject, placeholderObject, newEditor, boxHelper, modelData) {
@@ -86,9 +89,12 @@ export class Menu {
       this.currentWorld.removeObject(this.currentWorld.transformControls);
     }
 
-    // Adding/removing placeholder block depending on the selected mode
     if (mode === "editor") {
+      // Adding/removing placeholder block depending on the selected mode
       this.action({ name: "objects", value: "cube" }, world);
+
+      // populating predefined models section
+      this.modelData = populatePredefinedModels();
     } else {
       if (previousWorld?.placeholderObject?.mesh) {
         previousWorld.removeObject(previousWorld.placeholderObject.mesh);
@@ -101,23 +107,6 @@ export class Menu {
       if (this.menuParameterCapture[mode].sceneObjects === undefined) {
         this.addToMenuScene(world.studyObject.mesh);
       }
-      //   const studyObjectColor = this.menuParameterCapture[mode].color
-      //     ? this.menuParameterCapture[mode].color
-      //     : this.currentWorld.studyObjectColor;
-      //   const defaultCube = new Cube(
-      //     "object",
-      //     1,
-      //     1,
-      //     1,
-      //     studyObjectColor,
-      //     "Lambert"
-      //   );
-      //   if (defaultCube?.mesh) {
-      //     defaultCube.mesh.position.set(0.5, 0.5, 0.5);
-      //     this.currentWorld.removeObject(this.currentWorld.studyObject.mesh);
-      //     this.currentWorld.updateStudyObject(defaultCube);
-      //     this.currentWorld.addObject(defaultCube.mesh);
-      //   }
     }
   }
 
@@ -244,8 +233,6 @@ export class Menu {
     let groupDiv;
     let depth = levelDepth ? levelDepth : 0;
 
-    console.log(objectToAdd);
-
     // accessing the correct div depending on the level
     if (objectToAdd.type !== "Mesh" && depth === 0) {
       groupDiv = document.createElement("div");
@@ -255,9 +242,7 @@ export class Menu {
       sceneObjects.appendChild(groupDiv);
       sceneObjects = groupDiv;
     } else if (depth > 0) {
-      console.log(sceneObjects);
       groupDiv = document.querySelector(`[data-object-id="${prevId}"]`);
-      console.log(groupDiv);
       sceneObjects = groupDiv;
     }
 
@@ -295,15 +280,9 @@ export class Menu {
       objectToAdd.children.forEach((object) => {
         this.addObjectFully(object, depth + 1, objectToAdd.uuid);
       });
-      // console.log("more objects");
     } else {
-      // console.log(objectToAdd);
       this.currentWorld.raycastableObjects.push(objectToAdd);
-      // this.currentWorld.addRaycastableObject(objectToAdd);
     }
-    // sceneObjects.innerHTML += `
-    //   <div data-obj="${objName}" id="${objectToAdd.uuid}">${objName}</div>
-    // `;
   }
 
   addToMenuScene(objectToAdd, levelDepth, hidden) {
@@ -322,7 +301,6 @@ export class Menu {
       sceneObjects = groupDiv;
     }
 
-    // let objName = objectToAdd.name.split("object-")[1];
     let objName = objectToAdd.name;
 
     objName = nonRepeatingName(objName, this, sceneObjects);
@@ -355,11 +333,7 @@ export class Menu {
       objectToAdd.children.forEach((object) => {
         this.addToMenuScene(object, depth + 1);
       });
-      // console.log("more objects");
     }
-    // sceneObjects.innerHTML += `
-    //   <div data-obj="${objName}" id="${objectToAdd.uuid}">${objName}</div>
-    // `;
   }
 
   #removeObjectInGroup(object, id) {
@@ -709,7 +683,7 @@ export class Menu {
           radiusTopSelected,
           radiusBottomSelected,
           heightSelected,
-          radialSegmentsSelected,
+          radialSegmentsSelected < 3 ? 3 : radialSegmentsSelected,
           1,
           openEndedSelected
         );
@@ -777,8 +751,8 @@ export class Menu {
         this.selectedObjects[0].geometry = new THREE.CapsuleGeometry(
           radiusCapSelected,
           lengthCapSelected,
-          segmentsCapSelected,
-          radialSegmentsCapSelected
+          segmentsCapSelected < 1 ? 1 : segmentsCapSelected,
+          radialSegmentsCapSelected < 3 ? 3 : radialSegmentsCapSelected
         );
 
         this.selectedObjects[0].position.y -= lengthDifference / 2;
@@ -923,50 +897,6 @@ export class Menu {
             this.currentObject = newObject;
           }
         }
-        break;
-      case "transform":
-        // let newObjectTransform;
-        // const xTrans = Number(document.getElementById("transform-x").value);
-        // const yTrans = Number(document.getElementById("transform-y").value);
-        // const zTrans = Number(document.getElementById("transform-z").value);
-        // const objectTransform = document.getElementById("objects").value;
-        // console.log("hi");
-        // switch (objectTransform) {
-        //   case "cube":
-        //     newObjectTransform = new Cube(
-        //       "object",
-        //       xTrans,
-        //       yTrans,
-        //       zTrans,
-        //       this.currentObjectColor,
-        //       "Lambert"
-        //     );
-        //     newObjectTransform.mesh.position.addScalar(0.5);
-        //     break;
-        //   case "sphere":
-        //     newObjectTransform = new Sphere(
-        //       "object",
-        //       2,
-        //       this.currentObjectColor,
-        //       "Lambert"
-        //     );
-        //     // console.log(newObject.mesh.position.x);
-        //     // console.log(newObject.mesh.position.y);
-        //     // console.log(newObject.mesh.position.z);
-        //     break;
-        //   case "cylinder":
-        //     // newObjectTransform = new Cylinder("object", 1, 1, 1, 0x5544AA, "Basic", true)
-        //     break;
-        // }
-
-        // // If new object created successfully
-        // if (newObjectTransform?.mesh) {
-        //   // Removing old object and adding a new one
-        //   this.currentWorld.removeObject(this.currentWorld.studyObject.mesh);
-
-        //   this.currentWorld.updateStudyObject(newObjectTransform);
-        //   this.currentWorld.addObject(newObjectTransform.mesh);
-        // }
         break;
       case "eye":
         const xEye = Number(document.getElementById("eye-x").value);
@@ -1168,7 +1098,6 @@ export class Menu {
             break;
 
           case "save model":
-            console.log("hiii");
             let modelAlone;
 
             // SELECTED GROUP ~~~~~~~~~~~~~~~~~~~~~~~~
@@ -1176,21 +1105,29 @@ export class Menu {
               this.selectedObjects.length === 1 &&
               this.selectedObjects[0].isGroup
             ) {
-              console.log("hi");
               // Remove all static elements in the world
               modelAlone = this.selectedObjects[0].children.filter(
                 (object) => !object.name.includes("void-obj")
               );
             }
 
-            // WHOLE SCENE ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+            // WHOLE SCENE (no selections) ~~~~~~~~~~~
             else if (this.selectedObjects.length === 0) {
-              console.log("hi2");
-
-              // Remove all static elements in the world
-              modelAlone = this.currentWorld.scene.children.filter(
-                (object) => !object.name.includes("void-obj")
-              );
+              // If there's any groups in the scene The saving is not executed
+              if (
+                this.currentWorld.scene.children.some(
+                  (object) => object.isGroup
+                )
+              ) {
+                alert(
+                  "Please select a group of the model you wish to save, or ungroup all objects from the scene."
+                );
+              } else {
+                // Remove all static elements in the world
+                modelAlone = this.currentWorld.scene.children.filter(
+                  (object) => !object.name.includes("void-obj")
+                );
+              }
             } else {
               alert(
                 "Please select a group of the model you wish to save,\nor deselect everything to save the whole scene."
@@ -1198,7 +1135,6 @@ export class Menu {
             }
 
             if (modelAlone) {
-              console.log("works");
               const modelArray = modelSaver(modelAlone);
 
               // SAVING TO JSON FILE ~~~~~~~~~~~~~~~
@@ -1558,8 +1494,6 @@ export class Menu {
             }
           });
 
-          console.log(this.currentWorld.scene.children);
-
           // Reassinging parameter buttons event listeners
           reassigningObjectEventListeners(this);
 
@@ -1662,8 +1596,6 @@ export class Menu {
     let returnVal = null;
 
     objects.children.forEach((object) => {
-      console.log(object.uuid);
-      console.log(elemId);
       if (object.type !== "Mesh") {
         this.#traverseScene(object, elemId);
       }
