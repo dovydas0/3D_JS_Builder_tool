@@ -1,0 +1,1101 @@
+[
+  {
+    "uuid": "f3d59315-db70-4d0e-8feb-91b333ad6224",
+    "geometry": "BoxGeometry",
+    "name": "object-Cube",
+    "width": 39.000119999999995,
+    "depth": 1.00012,
+    "height": 1.00012,
+    "color": 2697513,
+    "material": "Lambert",
+    "placeholderObj": false,
+    "segmentsWidth": 1,
+    "segmentsDepth": 1,
+    "segmentsHeight": 1,
+    "position": {
+      "x": 0,
+      "y": 0.5,
+      "z": -10.5
+    },
+    "scale": {
+      "x": 1,
+      "y": 1,
+      "z": 1
+    },
+    "rotation": {
+      "x": 0,
+      "y": 0,
+      "z": 0
+    }
+  },
+  {
+    "uuid": "7a411159-a56e-4779-bd59-49ff2d506f91",
+    "geometry": "BoxGeometry",
+    "name": "object-Cube",
+    "width": 39.000119999999995,
+    "depth": 1.00012,
+    "height": 1.00012,
+    "color": 2697513,
+    "material": "Lambert",
+    "placeholderObj": false,
+    "segmentsWidth": 1,
+    "segmentsDepth": 1,
+    "segmentsHeight": 1,
+    "position": {
+      "x": 0,
+      "y": 0.5,
+      "z": 10.5
+    },
+    "scale": {
+      "x": 1,
+      "y": 1,
+      "z": 1
+    },
+    "rotation": {
+      "x": 0,
+      "y": 0,
+      "z": 0
+    }
+  },
+  {
+    "uuid": "5b145026-c271-4f9d-ad82-e6eccd448c17",
+    "geometry": "BoxGeometry",
+    "name": "object-Cube",
+    "width": 20.000120000000003,
+    "depth": 1.00012,
+    "height": 1.00012,
+    "color": 2697513,
+    "material": "Lambert",
+    "placeholderObj": false,
+    "segmentsWidth": 1,
+    "segmentsDepth": 1,
+    "segmentsHeight": 1,
+    "position": {
+      "x": 19,
+      "y": 0.5,
+      "z": 0
+    },
+    "scale": {
+      "x": 1,
+      "y": 1,
+      "z": 1
+    },
+    "rotation": {
+      "x": 0,
+      "y": 1.5707963267948966,
+      "z": 0
+    }
+  },
+  {
+    "uuid": "9642f2b6-f573-4db8-9203-40e77b388162",
+    "geometry": "BoxGeometry",
+    "name": "object-Cube",
+    "width": 20.000120000000003,
+    "depth": 1.00012,
+    "height": 1.00012,
+    "color": 2697513,
+    "material": "Lambert",
+    "placeholderObj": false,
+    "segmentsWidth": 1,
+    "segmentsDepth": 1,
+    "segmentsHeight": 1,
+    "position": {
+      "x": -19,
+      "y": 0.5,
+      "z": 0
+    },
+    "scale": {
+      "x": 1,
+      "y": 1,
+      "z": 1
+    },
+    "rotation": {
+      "x": 0,
+      "y": 1.5707963267948966,
+      "z": 0
+    }
+  },
+  {
+    "uuid": "b9e0d801-f3e0-4e39-ba43-63e52585854e",
+    "geometry": "BoxGeometry",
+    "name": "object-Cube",
+    "width": 17.000120000000003,
+    "depth": 1.00012,
+    "height": 1.00012,
+    "color": 13551281,
+    "material": "Lambert",
+    "placeholderObj": false,
+    "segmentsWidth": 1,
+    "segmentsDepth": 1,
+    "segmentsHeight": 1,
+    "position": {
+      "x": -10.5,
+      "y": 1.5,
+      "z": 10
+    },
+    "scale": {
+      "x": 1,
+      "y": 1,
+      "z": 1
+    },
+    "rotation": {
+      "x": 0,
+      "y": 0,
+      "z": 0
+    }
+  },
+  {
+    "uuid": "411c276e-3737-4099-a4b3-e765219c5ced",
+    "geometry": "BoxGeometry",
+    "name": "object-Cube",
+    "width": 17.000120000000003,
+    "depth": 1.00012,
+    "height": 1.00012,
+    "color": 13551281,
+    "material": "Lambert",
+    "placeholderObj": false,
+    "segmentsWidth": 1,
+    "segmentsDepth": 1,
+    "segmentsHeight": 1,
+    "position": {
+      "x": 10.5,
+      "y": 1.5,
+      "z": 10
+    },
+    "scale": {
+      "x": 1,
+      "y": 1,
+      "z": 1
+    },
+    "rotation": {
+      "x": 0,
+      "y": 0,
+      "z": 0
+    }
+  },
+  {
+    "uuid": "7dea495a-aa6f-49e1-b8fa-4f87aa664d33",
+    "geometry": "BoxGeometry",
+    "name": "object-Cube",
+    "width": 38.000119999999995,
+    "depth": 1.00012,
+    "height": 10.000119999999999,
+    "color": 13551281,
+    "material": "Lambert",
+    "placeholderObj": false,
+    "segmentsWidth": 1,
+    "segmentsDepth": 1,
+    "segmentsHeight": 1,
+    "position": {
+      "x": 0,
+      "y": 6,
+      "z": -10
+    },
+    "scale": {
+      "x": 1,
+      "y": 1,
+      "z": 1
+    },
+    "rotation": {
+      "x": 0,
+      "y": 0,
+      "z": 0
+    }
+  },
+  {
+    "uuid": "b0f572c3-1675-4299-9ca4-ca346d2cd29b",
+    "geometry": "BoxGeometry",
+    "name": "object-Cube",
+    "width": 1.00012,
+    "depth": 19.000120000000003,
+    "height": 10.000119999999999,
+    "color": 13551281,
+    "material": "Lambert",
+    "placeholderObj": false,
+    "segmentsWidth": 1,
+    "segmentsDepth": 1,
+    "segmentsHeight": 1,
+    "position": {
+      "x": -18.5,
+      "y": 6,
+      "z": 0
+    },
+    "scale": {
+      "x": 1,
+      "y": 1,
+      "z": 1
+    },
+    "rotation": {
+      "x": 0,
+      "y": 0,
+      "z": 0
+    }
+  },
+  {
+    "uuid": "4e6364a8-4ef1-4f0a-8140-a9a3fa11d454",
+    "geometry": "BoxGeometry",
+    "name": "object-Cube",
+    "width": 1.00012,
+    "depth": 19.000120000000003,
+    "height": 10.000119999999999,
+    "color": 13551281,
+    "material": "Lambert",
+    "placeholderObj": false,
+    "segmentsWidth": 1,
+    "segmentsDepth": 1,
+    "segmentsHeight": 1,
+    "position": {
+      "x": 18.5,
+      "y": 6,
+      "z": 0
+    },
+    "scale": {
+      "x": 1,
+      "y": 1,
+      "z": 1
+    },
+    "rotation": {
+      "x": 0,
+      "y": 0,
+      "z": 0
+    }
+  },
+  {
+    "uuid": "347cc1c2-8d7a-4891-a059-6ea31c8f88bc",
+    "geometry": "CylinderGeometry",
+    "name": "object-Cylinder",
+    "radiusTop": 3,
+    "radiusBottom": 3,
+    "height": 0.5,
+    "color": 10066329,
+    "material": "Lambert",
+    "placeholderObj": false,
+    "radialSegments": 17,
+    "openEnded": false,
+    "position": {
+      "x": 0,
+      "y": 0.25,
+      "z": 10.5
+    },
+    "scale": {
+      "x": 1,
+      "y": 1,
+      "z": 1
+    },
+    "rotation": {
+      "x": 0,
+      "y": 0,
+      "z": 0
+    }
+  },
+  {
+    "uuid": "3f278313-551b-4903-9a46-e71d82312fdf",
+    "geometry": "CylinderGeometry",
+    "name": "object-Cylinder",
+    "radiusTop": 2,
+    "radiusBottom": 2,
+    "height": 1.005,
+    "color": 10066329,
+    "material": "Lambert",
+    "placeholderObj": false,
+    "radialSegments": 17,
+    "openEnded": false,
+    "position": {
+      "x": 0,
+      "y": 0.5025,
+      "z": 10.5
+    },
+    "scale": {
+      "x": 1,
+      "y": 1,
+      "z": 1
+    },
+    "rotation": {
+      "x": 0,
+      "y": 0,
+      "z": 0
+    }
+  },
+  {
+    "uuid": "f5bce091-d1bf-4827-9d52-a79828ab652b",
+    "geometry": "BoxGeometry",
+    "name": "object-Cube",
+    "width": 38.000119999999995,
+    "depth": 1.00012,
+    "height": 4.000120000000001,
+    "color": 13551281,
+    "material": "Lambert",
+    "placeholderObj": false,
+    "segmentsWidth": 1,
+    "segmentsDepth": 1,
+    "segmentsHeight": 1,
+    "position": {
+      "x": 0,
+      "y": 9,
+      "z": 10
+    },
+    "scale": {
+      "x": 1,
+      "y": 1,
+      "z": 1
+    },
+    "rotation": {
+      "x": 0,
+      "y": 0,
+      "z": 0
+    }
+  },
+  {
+    "uuid": "b6089959-17c1-4248-b8a5-ffcd74f33d3f",
+    "geometry": "BoxGeometry",
+    "name": "object-Cube",
+    "width": 1.00012,
+    "depth": 2.00012,
+    "height": 6.000120000000001,
+    "color": 14079702,
+    "material": "Lambert",
+    "placeholderObj": false,
+    "segmentsWidth": 1,
+    "segmentsDepth": 1,
+    "segmentsHeight": 1,
+    "position": {
+      "x": -2,
+      "y": 4,
+      "z": 10
+    },
+    "scale": {
+      "x": 0.8,
+      "y": 1,
+      "z": 0.7
+    },
+    "rotation": {
+      "x": 0,
+      "y": 0,
+      "z": 0
+    }
+  },
+  {
+    "uuid": "836b9d53-eb5e-4229-8497-76d84f433e59",
+    "geometry": "BoxGeometry",
+    "name": "object-Cube",
+    "width": 1.00012,
+    "depth": 2.00012,
+    "height": 6.000120000000001,
+    "color": 14079702,
+    "material": "Lambert",
+    "placeholderObj": false,
+    "segmentsWidth": 1,
+    "segmentsDepth": 1,
+    "segmentsHeight": 1,
+    "position": {
+      "x": 2,
+      "y": 4,
+      "z": 10
+    },
+    "scale": {
+      "x": 0.8,
+      "y": 1,
+      "z": 0.7
+    },
+    "rotation": {
+      "x": 0,
+      "y": 0,
+      "z": 0
+    }
+  },
+  {
+    "uuid": "f7615d09-b684-47bb-9d06-e2dde3e76e94",
+    "geometry": "BoxGeometry",
+    "name": "object-Cube",
+    "width": 5.000120000000001,
+    "depth": 1.00012,
+    "height": 1.00012,
+    "color": 14079702,
+    "material": "Lambert",
+    "placeholderObj": false,
+    "segmentsWidth": 1,
+    "segmentsDepth": 1,
+    "segmentsHeight": 1,
+    "position": {
+      "x": 0,
+      "y": 7.4,
+      "z": 10
+    },
+    "scale": {
+      "x": 0.9550000000000001,
+      "y": 0.8,
+      "z": 1.3
+    },
+    "rotation": {
+      "x": 0,
+      "y": 0,
+      "z": 0
+    }
+  },
+  {
+    "uuid": "ded86121-e56f-414b-8f89-b8e2f0df3251",
+    "geometry": "BoxGeometry",
+    "name": "object-Cube",
+    "width": 37.000119999999995,
+    "depth": 20.000120000000003,
+    "height": 1.00012,
+    "color": 5854022,
+    "material": "Lambert",
+    "placeholderObj": false,
+    "segmentsWidth": 1,
+    "segmentsDepth": 1,
+    "segmentsHeight": 1,
+    "position": {
+      "x": 0,
+      "y": 0.5,
+      "z": 0
+    },
+    "scale": {
+      "x": 1,
+      "y": 1,
+      "z": 1
+    },
+    "rotation": {
+      "x": 0,
+      "y": 0,
+      "z": 0
+    }
+  },
+  {
+    "uuid": "1131be14-581f-4fee-9849-60565d30cb96",
+    "geometry": "BoxGeometry",
+    "name": "object-Cube",
+    "width": 1.00012,
+    "depth": 3.00012,
+    "height": 6.000120000000001,
+    "color": 9194545,
+    "material": "Lambert",
+    "placeholderObj": false,
+    "segmentsWidth": 1,
+    "segmentsDepth": 1,
+    "segmentsHeight": 1,
+    "position": {
+      "x": -1.5,
+      "y": 4,
+      "z": 8
+    },
+    "scale": {
+      "x": 0.5,
+      "y": 1,
+      "z": 1
+    },
+    "rotation": {
+      "x": 0,
+      "y": 0,
+      "z": 0
+    }
+  },
+  {
+    "uuid": "9a6dbd85-6bb9-48c3-9bc0-e34be89ee7fc",
+    "geometry": "BoxGeometry",
+    "name": "object-Cube",
+    "width": 4.000120000000001,
+    "depth": 1.00012,
+    "height": 6.000120000000001,
+    "color": 13551281,
+    "material": "Lambert",
+    "placeholderObj": false,
+    "segmentsWidth": 1,
+    "segmentsDepth": 1,
+    "segmentsHeight": 1,
+    "position": {
+      "x": 14,
+      "y": 21.5,
+      "z": 1.5
+    },
+    "scale": {
+      "x": 0.9999999999999999,
+      "y": 0.9999999999999999,
+      "z": 0.9999999999999999
+    },
+    "rotation": {
+      "x": 0,
+      "y": 0,
+      "z": 0
+    }
+  },
+  {
+    "uuid": "0e247192-5051-4160-8e51-a355857905f6",
+    "geometry": "BoxGeometry",
+    "name": "object-Cube",
+    "width": 1.00012,
+    "depth": 4.000120000000001,
+    "height": 6.000120000000001,
+    "color": 13551281,
+    "material": "Lambert",
+    "placeholderObj": false,
+    "segmentsWidth": 1,
+    "segmentsDepth": 1,
+    "segmentsHeight": 1,
+    "position": {
+      "x": 16.5,
+      "y": 21.5,
+      "z": 0
+    },
+    "scale": {
+      "x": 0.9999999999999999,
+      "y": 0.9999999999999999,
+      "z": 0.9999999999999999
+    },
+    "rotation": {
+      "x": 0,
+      "y": 0,
+      "z": 0
+    }
+  },
+  {
+    "uuid": "30cf65a7-2009-470d-9b99-fe67cfcf5d8d",
+    "geometry": "BoxGeometry",
+    "name": "object-Cube",
+    "width": 4.000120000000001,
+    "depth": 1.00012,
+    "height": 6.000120000000001,
+    "color": 13551281,
+    "material": "Lambert",
+    "placeholderObj": false,
+    "segmentsWidth": 1,
+    "segmentsDepth": 1,
+    "segmentsHeight": 1,
+    "position": {
+      "x": 15,
+      "y": 21.5,
+      "z": -2.5
+    },
+    "scale": {
+      "x": 0.9999999999999999,
+      "y": 0.9999999999999999,
+      "z": 0.9999999999999999
+    },
+    "rotation": {
+      "x": 0,
+      "y": 0,
+      "z": 0
+    }
+  },
+  {
+    "uuid": "a1764f34-6edb-46b1-9aab-e048e3a2118b",
+    "geometry": "BoxGeometry",
+    "name": "object-Cube",
+    "width": 1.00012,
+    "depth": 4.000120000000001,
+    "height": 6.000120000000001,
+    "color": 13551281,
+    "material": "Lambert",
+    "placeholderObj": false,
+    "segmentsWidth": 1,
+    "segmentsDepth": 1,
+    "segmentsHeight": 1,
+    "position": {
+      "x": 12.5,
+      "y": 21.5,
+      "z": -0.9999999999999999
+    },
+    "scale": {
+      "x": 0.9999999999999999,
+      "y": 0.9999999999999999,
+      "z": 0.9999999999999999
+    },
+    "rotation": {
+      "x": 0,
+      "y": 0,
+      "z": 0
+    }
+  },
+  {
+    "uuid": "44d58971-110c-4347-ad53-6fe182772d67",
+    "geometry": "CylinderGeometry",
+    "name": "object-Cylinder",
+    "radiusTop": 12.15,
+    "radiusBottom": 12.15,
+    "height": 38,
+    "color": 13551281,
+    "material": "Lambert",
+    "placeholderObj": false,
+    "radialSegments": 3,
+    "openEnded": false,
+    "position": {
+      "x": 0,
+      "y": 14,
+      "z": 0
+    },
+    "scale": {
+      "x": 1,
+      "y": 1,
+      "z": 0.5
+    },
+    "rotation": {
+      "x": -1.5707963267948963,
+      "y": 2.220446049250313e-16,
+      "z": 1.5707963267948966
+    }
+  },
+  {
+    "uuid": "b175f6d4-d5ec-4f45-a5e4-6dc31d09fa08",
+    "geometry": "BoxGeometry",
+    "name": "object-Cube",
+    "width": 40.000119999999995,
+    "depth": 1.00012,
+    "height": 16.000120000000003,
+    "color": 11158596,
+    "material": "Lambert",
+    "placeholderObj": false,
+    "segmentsWidth": 1,
+    "segmentsDepth": 1,
+    "segmentsHeight": 1,
+    "position": {
+      "x": 0,
+      "y": 15,
+      "z": -5.7
+    },
+    "scale": {
+      "x": 1,
+      "y": 1,
+      "z": 1
+    },
+    "rotation": {
+      "x": 0.8552113334772216,
+      "y": 0,
+      "z": 0
+    }
+  },
+  {
+    "uuid": "d96805cc-66c4-48a5-b7c6-0e12e92211c3",
+    "geometry": "BoxGeometry",
+    "name": "object-Cube",
+    "width": 40.000119999999995,
+    "depth": 1.00012,
+    "height": 16.000120000000003,
+    "color": 11158596,
+    "material": "Lambert",
+    "placeholderObj": false,
+    "segmentsWidth": 1,
+    "segmentsDepth": 1,
+    "segmentsHeight": 1,
+    "position": {
+      "x": 0,
+      "y": 15,
+      "z": 5.7
+    },
+    "scale": {
+      "x": 1,
+      "y": 1,
+      "z": 1
+    },
+    "rotation": {
+      "x": -0.8552113334772216,
+      "y": 0,
+      "z": 0
+    }
+  },
+  {
+    "uuid": "8eeaee1f-05cd-4ac2-8f60-81959e229a18",
+    "geometry": "BoxGeometry",
+    "name": "object-Cube",
+    "width": 5.000120000000001,
+    "depth": 1.00012,
+    "height": 3.00012,
+    "color": 4494506,
+    "material": "Lambert",
+    "placeholderObj": false,
+    "segmentsWidth": 1,
+    "segmentsDepth": 1,
+    "segmentsHeight": 1,
+    "position": {
+      "x": -10.5,
+      "y": 4.5,
+      "z": 10
+    },
+    "scale": {
+      "x": 1,
+      "y": 1,
+      "z": 0.10000000000000003
+    },
+    "rotation": {
+      "x": 0,
+      "y": 0,
+      "z": 0
+    }
+  },
+  {
+    "uuid": "3093224a-7cbc-4b07-b339-92d42e464fc4",
+    "geometry": "BoxGeometry",
+    "name": "object-Cube",
+    "width": 5.000120000000001,
+    "depth": 1.00012,
+    "height": 5.000120000000001,
+    "color": 13551281,
+    "material": "Lambert",
+    "placeholderObj": false,
+    "segmentsWidth": 1,
+    "segmentsDepth": 1,
+    "segmentsHeight": 1,
+    "position": {
+      "x": -4.5,
+      "y": 4.5,
+      "z": 10
+    },
+    "scale": {
+      "x": 1,
+      "y": 1,
+      "z": 1
+    },
+    "rotation": {
+      "x": 0,
+      "y": 0,
+      "z": 0
+    }
+  },
+  {
+    "uuid": "c0d9b16d-da63-4d8c-9c0b-b70f518ed3aa",
+    "geometry": "BoxGeometry",
+    "name": "object-Cube",
+    "width": 5.000120000000001,
+    "depth": 1.00012,
+    "height": 5.000120000000001,
+    "color": 13551281,
+    "material": "Lambert",
+    "placeholderObj": false,
+    "segmentsWidth": 1,
+    "segmentsDepth": 1,
+    "segmentsHeight": 1,
+    "position": {
+      "x": -16.5,
+      "y": 4.5,
+      "z": 10
+    },
+    "scale": {
+      "x": 1,
+      "y": 1,
+      "z": 1
+    },
+    "rotation": {
+      "x": 0,
+      "y": 0,
+      "z": 0
+    }
+  },
+  {
+    "uuid": "2adecf00-a356-4dba-b58d-6b40406caeda",
+    "geometry": "BoxGeometry",
+    "name": "object-Cube",
+    "width": 5.000120000000001,
+    "depth": 1.00012,
+    "height": 5.000120000000001,
+    "color": 13551281,
+    "material": "Lambert",
+    "placeholderObj": false,
+    "segmentsWidth": 1,
+    "segmentsDepth": 1,
+    "segmentsHeight": 1,
+    "position": {
+      "x": 4.5,
+      "y": 4.5,
+      "z": 10
+    },
+    "scale": {
+      "x": 1,
+      "y": 1,
+      "z": 1
+    },
+    "rotation": {
+      "x": 0,
+      "y": 0,
+      "z": 0
+    }
+  },
+  {
+    "uuid": "d524b281-5f96-4b4c-ba90-4eb04bf0fdda",
+    "geometry": "BoxGeometry",
+    "name": "object-Cube",
+    "width": 5.000120000000001,
+    "depth": 1.00012,
+    "height": 5.000120000000001,
+    "color": 13551281,
+    "material": "Lambert",
+    "placeholderObj": false,
+    "segmentsWidth": 1,
+    "segmentsDepth": 1,
+    "segmentsHeight": 1,
+    "position": {
+      "x": 16.5,
+      "y": 4.5,
+      "z": 10
+    },
+    "scale": {
+      "x": 1,
+      "y": 1,
+      "z": 1
+    },
+    "rotation": {
+      "x": 0,
+      "y": 0,
+      "z": 0
+    }
+  },
+  {
+    "uuid": "95f610ba-146d-4849-9f95-0e1c0cf8a353",
+    "geometry": "BoxGeometry",
+    "name": "object-Cube",
+    "width": 5.000120000000001,
+    "depth": 1.00012,
+    "height": 3.00012,
+    "color": 4494506,
+    "material": "Lambert",
+    "placeholderObj": false,
+    "segmentsWidth": 1,
+    "segmentsDepth": 1,
+    "segmentsHeight": 1,
+    "position": {
+      "x": 10.5,
+      "y": 4.5,
+      "z": 10
+    },
+    "scale": {
+      "x": 1,
+      "y": 1,
+      "z": 0.09999999999999998
+    },
+    "rotation": {
+      "x": 0,
+      "y": 0,
+      "z": 0
+    }
+  },
+  {
+    "uuid": "e5d30d64-0c7b-4e42-af1d-26fe5b178511",
+    "geometry": "BoxGeometry",
+    "name": "object-Cube",
+    "width": 1.00012,
+    "depth": 1.00012,
+    "height": 3.00012,
+    "color": 14079702,
+    "material": "Lambert",
+    "placeholderObj": false,
+    "segmentsWidth": 1,
+    "segmentsDepth": 1,
+    "segmentsHeight": 1,
+    "position": {
+      "x": 13.5,
+      "y": 4.5,
+      "z": 10
+    },
+    "scale": {
+      "x": 1,
+      "y": 1,
+      "z": 1.4
+    },
+    "rotation": {
+      "x": 0,
+      "y": 0,
+      "z": 0
+    }
+  },
+  {
+    "uuid": "42e6afc5-dc90-4afd-b086-51202e35d94a",
+    "geometry": "BoxGeometry",
+    "name": "object-Cube",
+    "width": 1.00012,
+    "depth": 1.00012,
+    "height": 3.00012,
+    "color": 14079702,
+    "material": "Lambert",
+    "placeholderObj": false,
+    "segmentsWidth": 1,
+    "segmentsDepth": 1,
+    "segmentsHeight": 1,
+    "position": {
+      "x": 7.5,
+      "y": 4.5,
+      "z": 10
+    },
+    "scale": {
+      "x": 1,
+      "y": 1,
+      "z": 1.4
+    },
+    "rotation": {
+      "x": 0,
+      "y": 0,
+      "z": 0
+    }
+  },
+  {
+    "uuid": "8113935b-771d-4fb2-9f5b-680695d5df7e",
+    "geometry": "BoxGeometry",
+    "name": "object-Cube",
+    "width": 7.000120000000001,
+    "depth": 1.00012,
+    "height": 1.00012,
+    "color": 14079702,
+    "material": "Lambert",
+    "placeholderObj": false,
+    "segmentsWidth": 1,
+    "segmentsDepth": 1,
+    "segmentsHeight": 1,
+    "position": {
+      "x": 10.5,
+      "y": 6.5,
+      "z": 10
+    },
+    "scale": {
+      "x": 1,
+      "y": 1,
+      "z": 1.4
+    },
+    "rotation": {
+      "x": 0,
+      "y": 0,
+      "z": 0
+    }
+  },
+  {
+    "uuid": "03f0a373-e136-4813-a24e-e031615a6012",
+    "geometry": "BoxGeometry",
+    "name": "object-Cube",
+    "width": 7.000120000000001,
+    "depth": 1.00012,
+    "height": 1.00012,
+    "color": 14079702,
+    "material": "Lambert",
+    "placeholderObj": false,
+    "segmentsWidth": 1,
+    "segmentsDepth": 1,
+    "segmentsHeight": 1,
+    "position": {
+      "x": 10.5,
+      "y": 2.5,
+      "z": 10
+    },
+    "scale": {
+      "x": 1,
+      "y": 1,
+      "z": 1.4
+    },
+    "rotation": {
+      "x": 0,
+      "y": 0,
+      "z": 0
+    }
+  },
+  {
+    "uuid": "84380dfa-02be-4d63-8d45-2e7e60d22b2d",
+    "geometry": "BoxGeometry",
+    "name": "object-Cube",
+    "width": 7.000120000000001,
+    "depth": 1.00012,
+    "height": 1.00012,
+    "color": 14079702,
+    "material": "Lambert",
+    "placeholderObj": false,
+    "segmentsWidth": 1,
+    "segmentsDepth": 1,
+    "segmentsHeight": 1,
+    "position": {
+      "x": -10.5,
+      "y": 2.5,
+      "z": 10.016781718301226
+    },
+    "scale": {
+      "x": 1,
+      "y": 1,
+      "z": 1.44
+    },
+    "rotation": {
+      "x": 0,
+      "y": 0,
+      "z": 0
+    }
+  },
+  {
+    "uuid": "2fb9d10e-539f-4037-b1f3-4cc03d22fce8",
+    "geometry": "BoxGeometry",
+    "name": "object-Cube",
+    "width": 7.000120000000001,
+    "depth": 1.00012,
+    "height": 1.00012,
+    "color": 14079702,
+    "material": "Lambert",
+    "placeholderObj": false,
+    "segmentsWidth": 1,
+    "segmentsDepth": 1,
+    "segmentsHeight": 1,
+    "position": {
+      "x": -10.5,
+      "y": 6.5,
+      "z": 10.016781718301226
+    },
+    "scale": {
+      "x": 1,
+      "y": 1,
+      "z": 1.44
+    },
+    "rotation": {
+      "x": 0,
+      "y": 0,
+      "z": 0
+    }
+  },
+  {
+    "uuid": "4b24fd94-d961-4e0a-834d-a21c70fba2ae",
+    "geometry": "BoxGeometry",
+    "name": "object-Cube",
+    "width": 1.00012,
+    "depth": 1.00012,
+    "height": 3.00012,
+    "color": 14079702,
+    "material": "Lambert",
+    "placeholderObj": false,
+    "segmentsWidth": 1,
+    "segmentsDepth": 1,
+    "segmentsHeight": 1,
+    "position": {
+      "x": -7.5,
+      "y": 4.5,
+      "z": 10.016781718301226
+    },
+    "scale": {
+      "x": 1,
+      "y": 1,
+      "z": 1.44
+    },
+    "rotation": {
+      "x": 0,
+      "y": 0,
+      "z": 0
+    }
+  },
+  {
+    "uuid": "c4b5a0d3-c136-4856-93ef-f66f00c705b9",
+    "geometry": "BoxGeometry",
+    "name": "object-Cube",
+    "width": 1.00012,
+    "depth": 1.00012,
+    "height": 3.00012,
+    "color": 14079702,
+    "material": "Lambert",
+    "placeholderObj": false,
+    "segmentsWidth": 1,
+    "segmentsDepth": 1,
+    "segmentsHeight": 1,
+    "position": {
+      "x": -13.5,
+      "y": 4.5,
+      "z": 10.016781718301226
+    },
+    "scale": {
+      "x": 1,
+      "y": 1,
+      "z": 1.44
+    },
+    "rotation": {
+      "x": 0,
+      "y": 0,
+      "z": 0
+    }
+  }
+]

@@ -1058,10 +1058,10 @@ export class Menu {
 
             this.objObj.exportScene(cleanScene);
             break;
-          case "import":
+          case "import GLTF/OBJ":
             let gltf = false;
             const input = document.createElement("input");
-            const allowedTypes = [".gltf", ".obj"];
+            const allowedTypes = [".gltf", ".glb", ".obj"];
             input.type = "file";
 
             input.click();
@@ -1075,7 +1075,7 @@ export class Menu {
               }
 
               // if file is of gltf format
-              if (file.name.includes(".gltf")) {
+              if (file.name.includes(".gltf") || file.name.includes(".glb")) {
                 gltf = true;
               }
 
@@ -1263,12 +1263,7 @@ export class Menu {
         if (eventData.dataset?.name === "expand-shrink") {
           const depth = eventData.value.slice(-1);
           const parentElement = eventData.element.parentElement.parentElement;
-          // const children = document.querySelectorAll(
-          //   `.group-depth-${Number(depth) + 1}`
-          // );
           const children = [];
-
-          console.log(parentElement);
 
           parentElement.childNodes.forEach((child) => {
             if (
@@ -1281,47 +1276,11 @@ export class Menu {
             children.push(child);
           });
 
-          let childrenFlag = false;
-          let restShow;
-          let depthLevel = depth;
-
-          console.log(parentElement);
-          console.log(children);
-
-          // Array.prototype.forEach.call(parentElement.children, (child) => {
-          //   if (childrenFlag) {
-          //     // console.log(child);
-          //     if (child.style.display === "block") {
-          //       console.log(child);
-          //       restShow = "none";
-          //     }
-          //     if (eventData.element.textContent === "-" && restShow) {
-          //       child.style.display = restShow;
-          //     }
-          //   }
-          //   if (eventData.element.parentElement === child) {
-          //     childrenFlag = true;
-          //   }
-          // });
-          // console.log(eventData.element.children);
-
           eventData.element.textContent === "+"
             ? (eventData.element.textContent = "-")
             : (eventData.element.textContent = "+");
 
           children.forEach((child) => {
-            if (child.children.length > 0) {
-              // console.log(child.children);
-              // child.children.forEach((child) => {
-              //   if (child.style.display === "none") {
-              //     const padding = ((Number(depth) + 1) * 12).toString() + "px";
-              //     child.style.display = "block";
-              //     child.style.paddingLeft = padding;
-              //   } else {
-              //     child.style.display = "none";
-              //   }
-              // });
-            }
             if (child.style.display === "none") {
               const padding = ((Number(depth) + 1) * 16).toString() + "px";
 
@@ -1359,6 +1318,7 @@ export class Menu {
               // console.log("selected color not working on imported objects");
               object.material = new THREE.MeshLambertMaterial({
                 color: object.material?.color?.getHex(),
+                opacity: 1,
                 side: THREE.DoubleSide,
               });
             }

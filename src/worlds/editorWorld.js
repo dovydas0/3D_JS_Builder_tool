@@ -42,8 +42,8 @@ export class EditorWorld extends World {
 
   initWorld() {
     const floorObject = new Floor(200, 200);
-    const ambientLight = new THREE.AmbientLight(0xffffff, 5);
-    const dirLight = new THREE.DirectionalLight(0xffffff, 3);
+    const ambientLight = new THREE.AmbientLight(0xffffff, 3.5);
+    const dirLight = new THREE.DirectionalLight(0xfeffee, 4);
 
     // naming default objects in the scene
     floorObject.mesh.name = "void-obj-floor";

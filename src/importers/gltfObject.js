@@ -1,5 +1,6 @@
 import { GLTFLoader } from "three/addons/loaders/GLTFLoader.js";
 import { GLTFExporter } from "three/addons/exporters/GLTFExporter.js";
+import * as THREE from "three";
 
 export class gltfObject {
   constructor() {
@@ -40,50 +41,32 @@ export class gltfObject {
     this.loader.load(
       path,
       // called when the resource is loaded
-      async function (gltf) {
-        console.log(gltf.scene);
-        menu.currentWorld.scene.add(gltf.scene);
+      function (gltf) {
+        console.log(gltf);
+        const group = new THREE.Group();
+        group.name = "group-import";
 
-        // USE scene.traverse TO ADD EVERY MESH INTO THE SCENE
+        // Grabbing only objects from the whole scene and adding to the group
+        gltf.scene.traverse((object) => {
+          // Traversing the scene
+          // Checking if the object is of type mesh
+          if (object instanceof THREE.Mesh) {
+            // cloning the object otherwise the addition to scene doesn't work
+            const newObj = object.clone();
 
-        // menu.addObjectFully(gltf.scene.children[0]);
-        // menu.addObjectFully(gltf.scene.children[1]);
-        // menu.addObjectFully(gltf.scene.children[2]);
-        // console.log(gltf.scene.children[2]);
+            // If object's name already doesn't include "object" string, adding it
+            if (!newObj.name.includes("object")) {
+              newObj.name = "object-" + newObj.name;
+            }
 
-        // for (const element of gltf.scene.children) {
-        //   if (element.type.toLowerCase() === "mesh") {
-        //     // if (!element.name?.toLowerCase()?.includes("object-")) {
-        //     //   element.name = "object-" + element.name;
-        //     // }
-        //     console.log("ZZZZZ", element);
-
-        //     menu.addObjectFully(element);
-        //   }
-        // }
-        gltf.scene.children.forEach((element) => {
-          if (element.type.toLowerCase() === "mesh") {
-            menu.currentWorld.raycastableObjects.push(element);
+            // Adding object to the group
+            group.add(newObj);
           }
         });
 
-        if (gltf.asset.generator.toLowerCase().includes("three")) {
-          // Add it to the scene
-          menu.addToMenuScene(gltf.scene);
-          // console.log("three asset");
-        }
-
-        if (gltf.asset.generator.toLowerCase().includes("sketchfab")) {
-          // Add it to the scene
-          // console.log("sketchfab asset");
-        }
-
-        // console.log(gltf.animations); // Array<THREE.AnimationClip>
-        // console.log(gltf.scene); // THREE.Group
-        // console.log(gltf.scenes); // Array<THREE.Group>
-        // console.log(gltf.cameras); // Array<THREE.Camera>
-        // console.log(gltf.asset); // Object
-        // console.log(menu.currentWorld.scene);
+        // Adding group to the world and menu UI
+        menu.currentWorld.addObject(group);
+        menu.addObjectFully(group);
       },
       // called while loading is progressing
       function (xhr) {

@@ -1,5 +1,6 @@
 import { OBJLoader } from "three/addons/loaders/OBJLoader.js";
 import { OBJExporter } from "three/addons/exporters/OBJExporter.js";
+import * as THREE from "three";
 
 export class objObject {
   constructor() {
@@ -16,35 +17,20 @@ export class objObject {
     this.loader.load(
       path,
       // called when the resource is loaded
-      function (gltf) {
-        menu.currentWorld.scene.add(gltf.scene);
+      function (obj) {
+        const group = new THREE.Group();
+        group.name = "group-import";
 
-        // USE scene.traverse TO ADD EVERY MESH INTO THE SCENE
+        obj.children.forEach((element) => {
+          const object = element.clone();
+          if (!object.name.includes("object")) {
+            object.name = "object-" + object.name;
+          }
+          group.add(object);
+        });
 
-        // console.log(gltf.scene.children[0].children);
-        // gltf.scene.children[0].children.forEach((element) => {
-        //   element.name = "object-" + element.name;
-        //   menu.currentWorld.addRaycastableObject(element);
-        //   menu.addToMenuScene(element);
-        // });
-
-        if (gltf.asset.generator.toLowerCase().includes("three")) {
-          // Add it to the scene
-          menu.addToMenuScene(gltf.scene);
-          // console.log("three asset");
-        }
-
-        if (gltf.asset.generator.toLowerCase().includes("sketchfab")) {
-          // Add it to the scene
-          // console.log("sketchfab asset");
-        }
-
-        // console.log(gltf.animations); // Array<THREE.AnimationClip>
-        // console.log(gltf.scene); // THREE.Group
-        // console.log(gltf.scenes); // Array<THREE.Group>
-        // console.log(gltf.cameras); // Array<THREE.Camera>
-        // console.log(gltf.asset); // Object
-        // console.log(menu.currentWorld.scene);
+        menu.currentWorld.addObject(group);
+        menu.addObjectFully(group);
       },
       // called while loading is progressing
       function (xhr) {
