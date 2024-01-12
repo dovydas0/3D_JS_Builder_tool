@@ -40,11 +40,11 @@ export class Cube extends Entity {
     );
     this.materialProperties;
 
-    const texture = new THREE.TextureLoader().load("/texture1.jpg");
+    // const texture = new THREE.TextureLoader().load("/white-texture.jpg");
 
     // texture.wrapS = THREE.RepeatWrapping;
     // texture.wrapT = THREE.RepeatWrapping;
-    // texture.repeat.set( 4, 4 );
+    // texture.repeat.set(1, 1);
 
     const threeMaterial = {
       Basic: THREE.MeshBasicMaterial,
@@ -68,9 +68,8 @@ export class Cube extends Entity {
       height + 0.00006
     );
     this.material = new finalMaterial(this.materialProperties);
-    // this.material.color.get
-    // this.material.map = texture
-    // console.log(this.material);
+
+    // this.material.map = texture;
 
     this.mesh = new THREE.Mesh(this.geometry, this.material);
     this.mesh.name = name;
@@ -89,8 +88,5 @@ export class Cube extends Entity {
     }
   }
 
-  update(deltaTime) {
-    // this.mesh.rotation.x += 0.6 * deltaTime;
-    // this.mesh.rotation.y += 0.6 * deltaTime;
-  }
+  update(deltaTime) {}
 }

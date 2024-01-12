@@ -23,10 +23,12 @@ import {
   grabPredefinedData,
   populatePredefinedModels,
 } from "../utilities/populatePredefinedModels";
+import { tutorial } from "../tutorials/tutorial";
+import { androidTut } from "../tutorials/android-tut";
 
 export class Menu {
   constructor(worldObject, placeholderObject, newEditor, boxHelper, modelData) {
-    // STORE ALL BLOCKS IN AN ARRAY HERE
+    this.tutorial = new tutorial(androidTut);
     this.modelData = modelData;
     this.savedModel = [];
     this.newEditor = newEditor;
@@ -1176,6 +1178,11 @@ export class Menu {
                 modelLoader(data, this);
               };
             };
+            break;
+          case "android tutorial":
+            this.tutorial.inProgress = true;
+
+            this.tutorial.displayInstruction();
             break;
         }
 
