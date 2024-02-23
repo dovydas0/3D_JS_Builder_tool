@@ -117,6 +117,7 @@ export const changeInfo = (mode) => {
             scene) to JSON file
           </p>
           <p><span>Load Model</span> - Loads saved model from JSON file</p>
+          <p><span>Android Tutorial</span> - Loads up a tutorials for building a predefined android robot model</p>
         </div>
       `;
       break;

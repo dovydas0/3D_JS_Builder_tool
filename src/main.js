@@ -21,7 +21,7 @@ import { BoxHelper } from "./helpers/boxHelper.js";
 // Performance monitor
 const stats = new Stats();
 stats.dom.classList.add("stats-data");
-document.body.appendChild(stats.dom);
+// document.body.appendChild(stats.dom);
 
 const modelData = populatePredefinedModels();
 

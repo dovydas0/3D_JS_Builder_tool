@@ -70,17 +70,10 @@ export const onPointerDown = (
 
     if (intersects.length > 0) {
       const intersect = intersects[0];
-      // const selectedObject = intersects[0].object
-      // addSelectedObject( selectedObject );
-      // outline.selectedObjects = selectedObjects;
 
       let intersectLoc = intersect.point;
       // Slight change in parameters to prevent visual inadequacy
       intersectLoc.y += 0.0000001;
-
-      // ~~~ IMPLEMENT A CHECK FOR EXISTING BLOCKS IN THE PLACEHOLDER'S AREA
-      // Step 1: Iterate through every object in the world
-      // Step 2: check if object's x, y, z locations aren't within intersectLoc locations
 
       if (event.shiftKey) {
         // Removing an object
@@ -251,17 +244,6 @@ export const onPointerDown = (
                 .add(positionVector);
               break;
             case "SphereGeometry":
-              // INVISIBLE CUBE FOR BETTER OBJECT PLACEMENT AROUND SPHERE
-
-              // const size = menu.currentObject.radius
-              // const hiddenNewObject = new Cube("object", size * 2, size * 2, size * 2, 0x5544AA, "Lambert")
-              // const hiddenPositionVector = new THREE.Vector3( 0.5, size, 0.5)
-
-              // hiddenNewObject.mesh.position.copy(intersectLoc)
-              // hiddenNewObject.mesh.position.divideScalar(1).floor().add(hiddenPositionVector)
-              // hiddenNewObject.mesh.visible = false
-              // menu.currentWorld.addRaycastableObject(hiddenNewObject.mesh)
-
               newObject.mesh.position
                 .divideScalar(1)
                 .floor()
@@ -274,17 +256,6 @@ export const onPointerDown = (
                 );
               break;
             case "CylinderGeometry":
-              // INVISIBLE CUBE FOR BETTER OBJECT PLACEMENT AROUND SPHERE
-
-              // const size = menu.currentObject.radius
-              // const hiddenNewObject = new Cube("object", size * 2, size * 2, size * 2, 0x5544AA, "Lambert")
-              // const hiddenPositionVector = new THREE.Vector3( 0.5, size, 0.5)
-
-              // hiddenNewObject.mesh.position.copy(intersectLoc)
-              // hiddenNewObject.mesh.position.divideScalar(1).floor().add(hiddenPositionVector)
-              // hiddenNewObject.mesh.visible = false
-              // menu.currentWorld.addRaycastableObject(hiddenNewObject.mesh)
-
               newObject.mesh.position
                 .divideScalar(1)
                 .floor()
@@ -298,17 +269,6 @@ export const onPointerDown = (
                 );
               break;
             case "CapsuleGeometry":
-              // INVISIBLE CUBE FOR BETTER OBJECT PLACEMENT AROUND SPHERE
-
-              // const size = menu.currentObject.radius
-              // const hiddenNewObject = new Cube("object", size * 2, size * 2, size * 2, 0x5544AA, "Lambert")
-              // const hiddenPositionVector = new THREE.Vector3( 0.5, size, 0.5)
-
-              // hiddenNewObject.mesh.position.copy(intersectLoc)
-              // hiddenNewObject.mesh.position.divideScalar(1).floor().add(hiddenPositionVector)
-              // hiddenNewObject.mesh.visible = false
-              // menu.currentWorld.addRaycastableObject(hiddenNewObject.mesh)
-
               newObject.mesh.position
                 .divideScalar(1)
                 .floor()
@@ -408,7 +368,6 @@ export const raycasterIntersections = (
             );
           break;
         case "CylinderGeometry":
-          // console.log(worldObject.placeholderObject.geometry.parameters);
           worldObject.placeholderObject.mesh.position
             .divideScalar(1)
             .floor()
@@ -421,7 +380,6 @@ export const raycasterIntersections = (
             );
           break;
         case "CapsuleGeometry":
-          // console.log(worldObject.placeholderObject.geometry.parameters);
           worldObject.placeholderObject.mesh.position
             .divideScalar(1)
             .floor()

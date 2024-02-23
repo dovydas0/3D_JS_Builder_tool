@@ -8,7 +8,7 @@ export const nonRepeatingName = (name, menu, sceneObjects) => {
     }
   }
   for (const obj of sceneObjects.children) {
-    if (obj.dataset.obj === name + nameRepetitions) {
+    if (obj.dataset.obj === name + nameRepetitions.toString()) {
       nameRepetitions += 1;
     }
   }
