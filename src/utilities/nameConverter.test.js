@@ -21,7 +21,7 @@ describe("name converter", () => {
     expect(nameConverter("CapsuleGeometry")).toBe("capsule");
   });
 
-  it("Random value to nothing", () => {
+  it("Random values with random data types to undefined", () => {
     expect(nameConverter("dww0")).toBe(undefined);
     expect(nameConverter(550)).toBe(undefined);
     expect(nameConverter(true)).toBe(undefined);

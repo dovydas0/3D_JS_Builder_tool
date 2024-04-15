@@ -14,6 +14,7 @@ export class Canvas {
 
     this.renderer.setSize(window.innerWidth, window.innerHeight);
     this.renderer.outputColorSpace = THREE.SRGBColorSpace;
+    this.renderer.domElement.id = "canvas-el";
     document.body.appendChild(this.renderer.domElement);
   }
 }
